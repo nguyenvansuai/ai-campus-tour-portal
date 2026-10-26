@@ -14,6 +14,7 @@
 - Ghi nhận tay có thể thu hồi (ghi lý do, có nhật ký).
 
 ## Miễn trắc nghiệm
+- Đã chốt: suai.vn chỉ báo 1 lần khi SV hoàn thành cả khóa (không báo theo từng bài học).
 - M2: miễn hẳn. M3: miễn với khối A/B; **khối C không miễn**.
 - M1: phần **an toàn dữ liệu vẫn bắt buộc** → SV được miễn làm bài ngắn `M1-SAFE` (4 câu, đạt ≥ 75%).
 - Trang học và điều kiện chứng nhận dùng chung quy tắc này.

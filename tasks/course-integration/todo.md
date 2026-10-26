@@ -8,4 +8,5 @@
 - [x] Task 6: Plugin WordPress `integrations/wordpress/aict-bridge` (hook tutor_course_complete_after, hàng đợi gửi lại, trang cài đặt, nút kiểm tra kết nối)
 - [x] Sửa kèm: biến môi trường để trống trong .env được coi như chưa đặt (tránh lỗi khởi động trên VPS)
 - [x] Checkpoint: lint, typecheck, test (320), build, E2E (16)
-- [ ] Ngoài phạm vi (cần đội Sự AI xác nhận): báo theo từng bài học, SSO 1 chạm, ghi danh tự động
+- Đã chốt (26/10/2026): chỉ báo 1 lần khi hoàn thành cả khóa, không báo theo từng bài học.
+- [ ] Ngoài phạm vi: SSO 1 chạm, ghi danh tự động
