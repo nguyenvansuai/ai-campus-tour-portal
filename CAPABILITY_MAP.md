@@ -12,7 +12,7 @@
 5. **Test:** Vitest (unit/integration, dùng Postgres thật trong Docker) + Playwright (luồng chính). Có bộ test riêng cho **ma trận phân quyền**.
 6. **Trình quản lý gói:** pnpm. **Deploy:** Docker Compose + Caddy trên VPS, CI bằng GitHub Actions.
 7. **Email:** gửi qua SMTP; nhắc nhở bắn webhook sang n8n.
-8. **File minh chứng:** lưu trên ổ VPS, có giới hạn dung lượng; khuyến khích SV nộp link.
+8. **File minh chứng: lưu trên Google Drive** [Chốt]. SV nộp link (Drive/Docs/Sheets/GitHub…) hoặc tải file lên portal; portal đẩy file vào Drive của dự án qua Google Drive API và chỉ lưu `fileId`. Code đi qua một lớp lưu trữ trừu tượng (`StorageProvider`), để sau này đổi nơi lưu không phải sửa nghiệp vụ.
 
 ## Các module
 

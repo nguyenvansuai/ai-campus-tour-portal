@@ -19,7 +19,7 @@
 | 6 | **SV đăng ký tự do** (miễn phí), không bắt buộc mã workshop | Mã workshop chỉ dùng để ghi nguồn; cần cơ chế kiểm soát tải chấm |
 | 7 | Chứng nhận: SV **trường đã kết nối** → **Trường + Viện ĐT Bách Khoa**; SV trường khác → **Viện ĐT Bách Khoa** | Mẫu chứng nhận có 2 biến thể; cờ "trường đã kết nối" trên School |
 | 8 | Tutor LMS **Free**: hoàn thành khóa video → suai.vn **gọi API portal**. Khóa trên meet.suai.vn: **nhân viên portal xác nhận thủ công** | Bỏ SSO/webhook tiến độ từng bài khỏi phạm vi bắt buộc; thêm API nhận hoàn thành khóa + màn xác nhận tay |
-| 9 | Domain portal: **aicampustour.suai.vn** · **tự host trên VPS** của Johnny | DNS: bản ghi A trỏ về IP VPS; email gửi thông báo từ cùng domain (cần cấu hình SPF/DKIM) |
+| 9 | Domain portal: **aicampustour.suai.vn** · **tự host trên VPS** của Johnny · **file minh chứng lưu Google Drive** | DNS: bản ghi A trỏ về IP VPS; email gửi thông báo từ cùng domain (cần cấu hình SPF/DKIM) |
 
 > Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
 
@@ -318,7 +318,7 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 | Phân quyền | Lớp phân quyền tập trung trong code (mọi truy vấn đều lọc theo trường/lớp/người được gán) + test tự động cho ma trận quyền | Không có Supabase thì RLS kém tiện; tập trung một chỗ dễ kiểm tra hơn |
 | Auth | **Better Auth**: email OTP/magic link, Google | Tự host, không phụ thuộc dịch vụ ngoài |
 | Email | SMTP (dịch vụ gửi mail giao dịch hoặc mail server sẵn có) từ `@aicampustour.suai.vn` hoặc `@suai.vn` | Cần cấu hình SPF/DKIM để không vào spam |
-| File | Lưu trên ổ VPS (volume Docker), qua lớp lưu trữ trừu tượng để sau này chuyển sang S3/R2 dễ dàng | Đơn giản; khuyến khích SV nộp link thay vì file nặng |
+| File minh chứng | **Google Drive** [Chốt] qua Drive API, sau lớp `StorageProvider`. Chi tiết ở mục 9.4 | Không tốn ổ VPS; đội quen dùng Drive |
 | Job nền | Worker Node chạy lịch (tính hạn, đánh dấu quá hạn, kiểm tra link) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
 | Reverse proxy | **Caddy** (HTTPS tự động) | Cấp chứng chỉ SSL cho `aicampustour.suai.vn` |
 | Triển khai | **Docker Compose** · GitHub Actions build image → GHCR → SSH vào VPS chạy `docker compose pull && up -d` | Deploy 1 lệnh, rollback được |
@@ -330,6 +330,37 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 - **Không nên chạy chung với Jitsi** (meet.suai.vn): Jitsi ngốn CPU và băng thông khi có lớp, có thể làm portal chậm đúng lúc SV nộp bài. Chạy chung với WordPress/n8n thì được nếu đủ RAM.
 - Cấu hình tối thiểu gợi ý cho portal: 2 vCPU, 4 GB RAM, 40 GB SSD (giả định, sẽ điều chỉnh theo số SV thực tế).
 - Thời điểm tải cao nhất là 300–500 SV kích hoạt trong ~5 phút. Cần chạy thử tải trước workshop đầu.
+
+### 9.4 Lưu file minh chứng trên Google Drive [Chốt hướng, chi tiết là Đề xuất]
+
+**SV nộp bằng 2 cách:**
+
+| Cách nộp | Áp dụng | Cách xử lý |
+|---|---|---|
+| **Dán link** (Google Docs/Sheets/Slides/Drive, Canva, GitHub, link deploy…) | Mặc định cho hầu hết bài | Portal kiểm tra link mở được không; nhắc SV đặt quyền "Bất kỳ ai có đường liên kết – Người xem" |
+| **Tải file lên portal** (ảnh chụp, .xlsx, .docx, .pdf; tối đa 10 MB) | Ảnh minh chứng, file không có sẵn link | Portal đẩy file vào **Drive của dự án**, lưu `fileId`, không lưu file trên VPS |
+
+**Cấu trúc thư mục trên Drive:** `AI Campus Tour / <Trường> / <MSSV – Họ tên> / <M1…M5> / <buổi>_<tên file>`
+
+**Quyền truy cập:**
+- File do portal tải lên **không bật chia sẻ công khai**.
+- Mentor, TA, GV xem file **qua portal**: portal kiểm tra quyền rồi lấy file từ Drive trả về. GV trường không cần tài khoản Google, và không ai nhìn thấy cả kho.
+- Chỉ Admin truy cập thẳng thư mục Drive.
+
+**Chống sửa bài sau khi đã chấm:**
+- File tải lên portal thì SV không sửa được, vì portal là chủ sở hữu.
+- Với bài nộp dạng link, khi mentor bấm "Đạt", portal lưu lại thời điểm sửa cuối của file (nếu đọc được). **Dự án cuối bắt buộc tải bản PDF lên** để lưu bằng chứng cố định cho trang xác thực chứng nhận.
+
+**Điều kiện kỹ thuật (cần chốt):**
+
+| Phương án | Cần gì | Lưu ý |
+|---|---|---|
+| **A. Shared Drive (Google Workspace)** (khuyến nghị) | Gói Workspace có Shared Drive + service account | Dung lượng dùng chung của tổ chức; không phụ thuộc tài khoản cá nhân; nhân sự nghỉ không mất dữ liệu |
+| **B. Drive cá nhân** | Một tài khoản Google + OAuth (refresh token) | Service account **không có dung lượng riêng**, nên phải ghi vào Drive của người thật. Gói miễn phí chỉ 15 GB, sẽ phải mua thêm Google One |
+
+**Ước tính dung lượng [Giả định]:** 10.000 SV/năm × ~5 file tải lên × ~1 MB ≈ **50 GB/năm**. Nếu khuyến khích nộp link tốt thì ít hơn nhiều.
+
+**Pháp lý:** file minh chứng có dữ liệu cá nhân (CV, ảnh). Lưu trên Google, tức máy chủ ở nước ngoài, là **chuyển dữ liệu cá nhân ra nước ngoài**. Cần ghi rõ trong điều khoản đồng ý của SV và hỏi tư vấn pháp lý về hồ sơ cần lập theo quy định bảo vệ dữ liệu cá nhân hiện hành.
 
 ### 9.2 Phương án thay thế: dựng luôn trên Tutor LMS
 
