@@ -23,13 +23,19 @@ export function OtpSignInForm({ sendOtp, verifyOtp, onSignedIn }: OtpSignInFormP
   const [code, setCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
-  const [resendIn, setResendIn] = useState(0);
+  const [resendAt, setResendAt] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+  const resendIn = Math.max(0, Math.ceil((resendAt - now) / 1000));
 
+  // Đếm theo mốc thời gian: vẫn đúng khi điện thoại tắt màn hình hoặc chuyển ứng dụng.
   useEffect(() => {
-    if (resendIn <= 0) return;
-    const timer = setTimeout(() => setResendIn((seconds) => seconds - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [resendIn]);
+    if (resendAt <= Date.now()) return;
+    const timer = setInterval(() => {
+      setNow(Date.now());
+      if (Date.now() >= resendAt) clearInterval(timer);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendAt]);
 
   async function requestCode() {
     const normalized = email.trim().toLowerCase();
@@ -48,7 +54,8 @@ export function OtpSignInForm({ sendOtp, verifyOtp, onSignedIn }: OtpSignInFormP
     setEmail(normalized);
     setCode("");
     setStep("code");
-    setResendIn(RESEND_AFTER_SECONDS);
+    setNow(Date.now());
+    setResendAt(Date.now() + RESEND_AFTER_SECONDS * 1000);
   }
 
   async function submitEmail(event: FormEvent) {

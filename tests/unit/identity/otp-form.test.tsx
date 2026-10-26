@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { OtpSignInForm } from "@/modules/identity/ui/otp-sign-in-form";
@@ -57,6 +57,32 @@ describe("OtpSignInForm", () => {
     await user.type(screen.getByLabelText("Email"), "sv@example.com");
     await user.click(screen.getByRole("button", { name: "Gửi mã" }));
     expect(await screen.findByRole("button", { name: /Gửi lại mã sau \d+ giây/ })).toBeDisabled();
+  });
+
+  it("đếm ngược giảm dần mỗi giây rồi mở lại nút gửi lại mã", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const props = {
+        sendOtp: vi.fn().mockResolvedValue({ error: null }),
+        verifyOtp: vi.fn().mockResolvedValue({ error: null }),
+        onSignedIn: vi.fn(),
+      };
+      render(<OtpSignInForm {...props} />);
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      await user.type(screen.getByLabelText("Email"), "sv@example.com");
+      await user.click(screen.getByRole("button", { name: "Gửi mã" }));
+      await screen.findByRole("button", { name: /Gửi lại mã sau/ });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(3000);
+      });
+      expect(screen.getByRole("button", { name: /Gửi lại mã sau 5[0-7] giây/ })).toBeDisabled();
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(60_000);
+      });
+      expect(screen.getByRole("button", { name: "Gửi lại mã" })).toBeEnabled();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("cho quay lại sửa email", async () => {
