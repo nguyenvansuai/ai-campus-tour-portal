@@ -1,6 +1,7 @@
-import { and, asc, count, desc, eq, exists, gt, ilike, inArray, isNull, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, exists, gt, gte, ilike, inArray, isNull, lte, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import { recordAudit } from "@/lib/audit";
+import { auditLog } from "@/lib/audit-schema";
 import { db } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
@@ -268,4 +269,39 @@ export async function revokeAllSessions(actor: Actor, targetUserId: string) {
     await tx.delete(session).where(eq(session.userId, targetUserId));
     await recordAudit({ actorId: actor.userId, action: "session.revoked_all", targetType: "user", targetId: targetUserId }, tx);
   });
+}
+
+// ---------------------------------------------------------------------------
+// Nhật ký
+
+export type AuditQuery = { action?: string; actorEmail?: string; from?: Date; to?: Date; page: number; pageSize: number };
+
+export async function listAuditLogs(actor: Actor, query: AuditQuery) {
+  authorize(actor, "audit.view", { kind: "audit_log" });
+  const conditions = [];
+  if (query.action) conditions.push(eq(auditLog.action, query.action));
+  if (query.actorEmail?.trim()) conditions.push(ilike(user.email, `%${query.actorEmail.trim().toLowerCase()}%`));
+  if (query.from) conditions.push(gte(auditLog.createdAt, query.from));
+  if (query.to) conditions.push(lte(auditLog.createdAt, query.to));
+  const where = conditions.length ? and(...conditions) : undefined;
+
+  const [{ total }] = await db.select({ total: count() }).from(auditLog).leftJoin(user, eq(user.id, auditLog.actorId)).where(where);
+  const items = await db
+    .select({
+      id: auditLog.id,
+      action: auditLog.action,
+      targetType: auditLog.targetType,
+      targetId: auditLog.targetId,
+      metadata: auditLog.metadata,
+      ip: auditLog.ip,
+      createdAt: auditLog.createdAt,
+      actorEmail: user.email,
+    })
+    .from(auditLog)
+    .leftJoin(user, eq(user.id, auditLog.actorId))
+    .where(where)
+    .orderBy(desc(auditLog.createdAt))
+    .limit(query.pageSize)
+    .offset((query.page - 1) * query.pageSize);
+  return { items, total: Number(total), page: query.page, pageSize: query.pageSize };
 }

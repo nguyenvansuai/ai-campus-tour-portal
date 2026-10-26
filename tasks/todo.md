@@ -220,11 +220,11 @@
 **Description:** `/admin/nhat-ky`: danh sách audit log, lọc theo người thực hiện, hành động, khoảng thời gian; phân trang. Chỉ `super_admin` và `admin` xem được.
 
 **Acceptance criteria:**
-- [ ] Mọi thao tác trong danh sách audit của spec hiện trên màn này
-- [ ] Vai trò khác truy cập → 403
+- [x] Mọi thao tác trong danh sách audit của spec hiện trên màn này
+- [x] Vai trò khác truy cập → 403
 
 **Verification:**
-- [ ] Integration test quyền + E2E lọc nhật ký
+- [x] Integration test quyền + E2E lọc nhật ký
 
 **Dependencies:** Task 8
 

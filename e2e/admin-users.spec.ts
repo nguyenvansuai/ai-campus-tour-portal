@@ -26,3 +26,13 @@ test("Super Admin tìm sinh viên, khóa tài khoản; sinh viên bị đăng xu
   await student.goto("/hoc");
   await expect(student).toHaveURL(/\/dang-nhap$/);
 });
+
+test("Super Admin xem nhật ký và lọc theo hành động", async ({ page }) => {
+  const bossEmail = `boss-audit-${Date.now()}@example.com`;
+  makeSuperAdmin(bossEmail);
+  await signInWithOtp(page, bossEmail);
+  await page.goto("/admin/nhat-ky");
+  await page.getByLabel("Hành động").selectOption("role.granted");
+  await page.getByRole("button", { name: "Lọc" }).click();
+  await expect(page.locator("li").getByText("Cấp vai trò").first()).toBeVisible();
+});
