@@ -19,7 +19,7 @@
 | 6 | **SV đăng ký tự do** (miễn phí), không bắt buộc mã workshop | Mã workshop chỉ dùng để ghi nguồn; cần cơ chế kiểm soát tải chấm |
 | 7 | Chứng nhận: SV **trường đã kết nối** → **Trường + Viện ĐT Bách Khoa**; SV trường khác → **Viện ĐT Bách Khoa** | Mẫu chứng nhận có 2 biến thể; cờ "trường đã kết nối" trên School |
 | 8 | Tutor LMS **Free**: hoàn thành khóa video → suai.vn **gọi API portal**. Khóa trên meet.suai.vn: **nhân viên portal xác nhận thủ công** | Bỏ SSO/webhook tiến độ từng bài khỏi phạm vi bắt buộc; thêm API nhận hoàn thành khóa + màn xác nhận tay |
-| 9 | Domain portal: **aicampustour.suai.vn** | DNS: CNAME về hosting (Vercel); email gửi thông báo từ cùng domain (cần cấu hình SPF/DKIM) |
+| 9 | Domain portal: **aicampustour.suai.vn** · **tự host trên VPS** của Johnny | DNS: bản ghi A trỏ về IP VPS; email gửi thông báo từ cùng domain (cần cấu hình SPF/DKIM) |
 
 > Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
 
@@ -75,7 +75,7 @@ Portal **AI Campus Tour** đồng hành với sinh viên trong 30 ngày sau khi 
 | Xuất báo cáo | ✅ | ✅ | | | ✅ | ✅ | |
 | Cấp / thu hồi chứng nhận | ✅ | ✅ | | | duyệt đồng cấp | | tải về |
 
-Phạm vi dữ liệu được áp ở tầng database (Row Level Security), không chỉ ẩn ở giao diện.
+Phạm vi dữ liệu được áp ở **lớp phân quyền phía server** (mọi truy vấn đều lọc theo phạm vi), có test tự động; không chỉ ẩn ở giao diện.
 
 ---
 
@@ -309,19 +309,27 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 
 ## 9. Kiến trúc kỹ thuật
 
-### 9.1 Khuyến nghị: portal riêng (Next.js + Supabase) + plugin cầu nối trên suai.vn
+### 9.1 Khuyến nghị: portal riêng, tự host trên VPS [Chốt: deploy lên VPS của Johnny]
 
 | Lớp | Lựa chọn | Lý do |
 |---|---|---|
-| Web + API | **Next.js (App Router, TypeScript)**, Tailwind, shadcn/ui | Một codebase cho SV, nhân sự, trường, trang công khai |
-| Database | **PostgreSQL (Supabase)** + RLS | Dữ liệu quan hệ; phân quyền theo trường ngay trong DB |
-| Auth | Supabase Auth (email OTP, Google) | Đăng ký nhanh tại workshop |
-| File | Supabase Storage / Cloudflare R2 | Bài nộp, PDF chứng nhận; ưu tiên SV nộp link |
-| Job nền | Supabase cron (tính hạn, đánh dấu quá hạn) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
+| Web + API | **Next.js (App Router, TypeScript)**, Tailwind, shadcn/ui; build ở chế độ `standalone` | Một codebase cho SV, nhân sự, trường, trang công khai; chạy gọn trong Docker |
+| Database | **PostgreSQL 16** (container) + **Drizzle ORM** | Dữ liệu quan hệ, migration có kiểm soát |
+| Phân quyền | Lớp phân quyền tập trung trong code (mọi truy vấn đều lọc theo trường/lớp/người được gán) + test tự động cho ma trận quyền | Không có Supabase thì RLS kém tiện; tập trung một chỗ dễ kiểm tra hơn |
+| Auth | **Better Auth**: email OTP/magic link, Google | Tự host, không phụ thuộc dịch vụ ngoài |
+| Email | SMTP (dịch vụ gửi mail giao dịch hoặc mail server sẵn có) từ `@aicampustour.suai.vn` hoặc `@suai.vn` | Cần cấu hình SPF/DKIM để không vào spam |
+| File | Lưu trên ổ VPS (volume Docker), qua lớp lưu trữ trừu tượng để sau này chuyển sang S3/R2 dễ dàng | Đơn giản; khuyến khích SV nộp link thay vì file nặng |
+| Job nền | Worker Node chạy lịch (tính hạn, đánh dấu quá hạn, kiểm tra link) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
+| Reverse proxy | **Caddy** (HTTPS tự động) | Cấp chứng chỉ SSL cho `aicampustour.suai.vn` |
+| Triển khai | **Docker Compose** · GitHub Actions build image → GHCR → SSH vào VPS chạy `docker compose pull && up -d` | Deploy 1 lệnh, rollback được |
+| Sao lưu | `pg_dump` hằng ngày + thư mục file → đẩy ra **ngoài VPS** (Google Drive/S3), giữ 14 bản | VPS hỏng không mất dữ liệu SV |
+| Giám sát | Uptime check (vd. Uptime Kuma) + log; Sentry (tùy chọn) | Bắt lỗi lúc tải cao khi kích hoạt |
 | Tích hợp | `aict-bridge` (PHP) trên suai.vn; JWT cho meet.suai.vn | Xem mục 5 |
-| PDF / QR | Render phía server | Chứng nhận theo lô |
-| Hosting | Vercel + Supabase (region Singapore) | Ít phải vận hành |
-| Giám sát | Sentry | Bắt lỗi lúc tải cao khi kích hoạt |
+
+**Lưu ý về VPS [Đề xuất]:**
+- **Không nên chạy chung với Jitsi** (meet.suai.vn): Jitsi ngốn CPU và băng thông khi có lớp, có thể làm portal chậm đúng lúc SV nộp bài. Chạy chung với WordPress/n8n thì được nếu đủ RAM.
+- Cấu hình tối thiểu gợi ý cho portal: 2 vCPU, 4 GB RAM, 40 GB SSD (giả định, sẽ điều chỉnh theo số SV thực tế).
+- Thời điểm tải cao nhất là 300–500 SV kích hoạt trong ~5 phút. Cần chạy thử tải trước workshop đầu.
 
 ### 9.2 Phương án thay thế: dựng luôn trên Tutor LMS
 
@@ -335,7 +343,7 @@ Tutor LMS (bản Pro) đã có sẵn assignment, chứng chỉ, mở bài theo n
 | Hàng đợi chấm, hạn phản hồi, vai trò TA | **Làm chuẩn được** | Rất hạn chế |
 | Dashboard cho trường, chứng nhận đồng cấp + QR verify | **Làm chuẩn được** | Phải tùy biến |
 | Thương hiệu AI Campus Tour tách khỏi Sự AI | **Tách rõ** | Nằm trong suai.vn → trái nguyên tắc thương hiệu |
-| Tải hệ thống lúc 500 SV kích hoạt cùng lúc | Ổn | WordPress cần tối ưu cache |
+| Tải hệ thống lúc 500 SV kích hoạt cùng lúc | Ổn (cần chạy thử tải) | WordPress cần tối ưu cache |
 
 → **Chọn portal riêng.** Lý do chính: phân quyền theo trường, quy trình chấm do người làm, và thương hiệu AI Campus Tour tách khỏi Sự AI là 3 yêu cầu cốt lõi mà Tutor làm yếu.
 
@@ -343,7 +351,8 @@ Tutor LMS (bản Pro) đã có sẵn assignment, chứng chỉ, mở bài theo n
 
 ```
 apps/web/                 # Next.js: (public) (student) (staff) (school) (admin)
-packages/db/              # schema, migrations, RLS, seed lộ trình 12 buổi
+packages/db/              # schema Drizzle, migrations, seed lộ trình 12 buổi
+deploy/                   # docker-compose, Caddyfile, script backup
 packages/integrations/    # tutor-bridge client, jitsi-jwt, notify-webhook
 wordpress/aict-bridge/    # plugin cầu nối cài trên suai.vn
 docs/
@@ -355,7 +364,7 @@ docs/
 
 - **NĐ 13/2023:** có màn đồng ý khi đăng ký. Đồng ý chia sẻ hồ sơ với doanh nghiệp/nhà tài trợ là mục riêng, mặc định **không**. Có chức năng xuất và xóa dữ liệu theo yêu cầu.
 - Chỉ đồng bộ sang suai.vn những gì cần (email, tên) và **chỉ khi SV bấm vào khóa học**. Điều này phải ghi rõ trong điều khoản.
-- Bật RLS cho mọi bảng có dữ liệu SV; ghi audit log khi xuất dữ liệu, cấp/thu hồi chứng nhận, gia hạn, đổi quyền.
+- Mọi truy vấn dữ liệu SV đi qua lớp phân quyền phía server, có test tự động cho ma trận quyền; ghi audit log khi xuất dữ liệu, cấp/thu hồi chứng nhận, gia hạn, đổi quyền.
 - Cầu nối WP: ký HMAC, chống replay (timestamp + nonce), giới hạn IP nếu được. Secret của JWT Jitsi chỉ lưu ở server.
 - Mã chứng nhận khó đoán; trang verify không lộ email/SĐT.
 - Sao lưu hằng ngày; staging tách khỏi production.
