@@ -9,7 +9,7 @@
 
 | Mục | Nội dung |
 |---|---|
-| Tên tour | **AI Ready Campus Tour** [Chốt] (một số tài liệu cũ ghi "AI Campus Tour") |
+| Tên tour | **AI Campus Tour** [Chốt 26/10/2026 — thay cho "AI Ready Campus Tour"]; Sự AI là người sáng lập |
 | Tên workshop | **Kỹ năng AI ứng dụng thực chiến cho sinh viên trước ngưỡng cửa sự nghiệp** |
 | Thông điệp | "Không thua AI, chỉ thua người biết dùng AI" |
 | Đối tượng | Sinh viên năm cuối / sắp ra trường |

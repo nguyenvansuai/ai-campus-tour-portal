@@ -1,319 +1,397 @@
-# Phác thảo dự án: Portal tự học AI 30 ngày
+# Phác thảo dự án: Portal tự học AI 30 ngày — AI Campus Tour
 
-> Bản phác thảo v0.1 (26/10/2026), dựa trên `docs/AI_Campus_Tour_PROJECT.md` và đề cương chương trình.
-> Quy ước: **[Tài liệu]** = có trong tài liệu dự án · **[Đề xuất]** = Claude đề xuất, cần chốt · **[Giả định]** = chưa có dữ kiện.
-
----
-
-## 0. Tóm tắt
-
-Portal là **nền tảng đồng hành 30 ngày sau workshop**: sinh viên học theo lộ trình 12 buổi, nộp báo cáo, được đội ngũ mentor/trợ giảng chấm và hỗ trợ, rồi nhận chứng nhận có QR xác thực. Trường xem tiến độ sinh viên của mình. Portal kết nối với các khóa học của Sự AI (video, Zoom) để làm nguồn học và cấp voucher.
-
-**3 điểm thiết kế cốt lõi:**
-
-1. **Đa trường (multi-tenant):** mỗi trường là một không gian riêng. Giáo viên trường A không thấy dữ liệu của trường B.
-2. **Theo đợt (cohort):** mỗi workshop tạo một đợt, có lịch 30 ngày riêng và mã kích hoạt riêng.
-3. **Chấm bài có tầng:** AI sơ duyệt → trợ giảng → mentor quyết định. Không có tầng này thì đội mentor sẽ bị quá tải (xem mục 9).
+> **v0.2 (26/10/2026)**: cập nhật theo phản hồi của Johnny. Nguồn: `docs/AI_Campus_Tour_PROJECT.md`, đề cương chương trình, kiểm tra trực tiếp suai.vn.
+> Quy ước: **[Chốt]** = Johnny đã xác nhận · **[Tài liệu]** = có trong tài liệu · **[Đã kiểm tra]** = Claude đã xem trên hệ thống thật · **[Đề xuất]** = cần chốt · **[Giả định]** = chưa có dữ kiện.
 
 ---
 
-## 1. Mục tiêu và phạm vi
+## 0. Quyết định đã chốt
 
-| Mục tiêu | Đo bằng |
-|---|---|
-| SV hoàn thành lộ trình, có sản phẩm thật để ghi vào CV | % SV đạt chứng nhận / SV kích hoạt |
-| Nhà trường thấy giá trị và mời tour quay lại | Dashboard tiến độ theo lớp/khoa, báo cáo tổng kết đợt |
-| Chứng nhận đáng tin với nhà tuyển dụng | Trang xác thực QR công khai |
-| Tạo kênh dẫn tới khóa học Sự AI (tùy chọn, không bắt buộc) | Số voucher đã dùng, tỷ lệ chuyển đổi |
-| Vận hành được 15–20 trường/năm với đội ngũ nhỏ | Thời gian chấm trung bình, số bài mỗi mentor chấm/ngày |
+| # | Quyết định | Hệ quả thiết kế |
+|---|---|---|
+| 1 | **Đa trường**: SV nhiều trường học chung trên một hệ thống; **không chia đợt**. Lộ trình 30 ngày tính **từ ngày từng SV đăng ký** | Mỗi SV có lịch riêng; hạn nộp tính theo ngày học thứ N, không theo Chủ nhật cố định |
+| 2 | **Con người duyệt toàn bộ**, không dùng AI chấm hay sơ duyệt | Bỏ toàn bộ tính năng AI khỏi phạm vi; tập trung làm công cụ chấm thật nhanh cho mentor |
+| 3 | Thương hiệu **AI Campus Tour**; Sự AI là **người sáng lập** | Domain/giao diện mang tên AI Campus Tour; có dòng "Sáng lập bởi Sự AI" |
+| 4 | Khóa video chạy trên **Tutor LMS (WordPress, suai.vn)**; lớp trực tuyến qua **meet.suai.vn (Jitsi)** | Tích hợp qua 1 plugin cầu nối trên suai.vn và JWT của Jitsi |
+| 5 | Lộ trình dùng **nhiều nguồn học (N1–N11)**; khóa Sự AI chỉ là 1 trong số đó | Có thư viện nguồn học chung; tiến độ tính theo sản phẩm SV nộp, không theo nguồn đã học |
 
-**Không thuộc phạm vi (giai đoạn đầu):** tự host video bài giảng (đã có nền tảng khóa học riêng), mạng xã hội/diễn đàn đầy đủ, app native.
+> Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
+
+---
+
+## 1. Tóm tắt
+
+Portal **AI Campus Tour** đồng hành với sinh viên trong 30 ngày sau khi đăng ký:
+
+- SV học theo lộ trình 12 buổi, nộp 4 báo cáo tuần và 1 dự án cuối.
+- Đội mentor/trợ giảng của Sự AI chấm và hỗ trợ.
+- SV đạt sẽ nhận chứng nhận có QR xác thực.
+- Giáo viên các trường theo dõi được sinh viên của trường mình.
+- Mỗi buổi học gợi ý nhiều nguồn (11 nguồn N1–N11, gồm khóa miễn phí của Anthropic Academy, Microsoft và các công cụ). Khóa Sự AI chỉ là 1 nguồn tùy chọn.
+- Portal tích hợp sâu với suai.vn (Tutor LMS) và meet.suai.vn (Jitsi), vì đây là hệ thống của đội.
+
+**3 trụ cột thiết kế:**
+
+1. **Lịch học cá nhân:** đồng hồ 30 ngày chạy riêng cho từng SV; có gia hạn và bảo lưu.
+2. **Phân quyền theo trường:** dữ liệu SV gắn với trường; giáo viên chỉ thấy trường/khoa/lớp được gán.
+3. **Hàng đợi chấm do người làm:** sắp theo hạn phản hồi, có rubric và mẫu nhận xét, để mỗi bài chấm được trong 2–3 phút.
 
 ---
 
 ## 2. Vai trò và phân quyền
 
-### 2.1 Danh sách vai trò
-
 | Vai trò | Thuộc về | Mô tả |
 |---|---|---|
-| **Super Admin** | Sự AI | Toàn quyền hệ thống, cấu hình tích hợp, quản lý admin |
-| **Admin vận hành** | Sự AI | Tạo trường, đợt, mã kích hoạt; phân công mentor/TA; cấp/thu hồi chứng nhận |
+| **Super Admin** | Sự AI | Toàn quyền, cấu hình tích hợp, quản lý admin |
+| **Admin vận hành** | Sự AI | Quản lý trường, sự kiện, mã kích hoạt, lộ trình, phân công, gia hạn, cấp/thu hồi chứng nhận |
 | **Mentor** | Sự AI | Chấm chính thức báo cáo (Đạt/Cần sửa) và dự án cuối (rubric 100 điểm) |
-| **Trợ giảng (TA)** | Sự AI hoặc cộng tác viên | Trả lời hỏi đáp, sơ chấm, nhắc SV chậm tiến độ; không quyết định kết quả cuối |
-| **Quản lý trường** | Trường / Viện ĐT Bách Khoa | Xem toàn bộ trường mình, xuất báo cáo, duyệt ký chứng nhận đồng cấp |
-| **Giáo viên trường** | Trường | Xem tiến độ các lớp/khoa được gán; có thể nhận xét, khuyến khích SV |
-| **Sinh viên** | Trường | Học, tích buổi, nộp bài, hỏi đáp, nhận chứng nhận |
-| **Nhà tài trợ** [Đề xuất, P3] | Doanh nghiệp | Xem số liệu tổng hợp ẩn danh; xem hồ sơ SV Xuất sắc **chỉ khi SV đồng ý** |
-| **Khách (nhà tuyển dụng)** | Công khai | Không cần tài khoản; chỉ xem trang xác thực chứng nhận |
+| **Trợ giảng (TA)** | Sự AI / cộng tác viên | Hỏi đáp, giờ hỗ trợ trực tuyến, nhắc SV chậm tiến độ, kiểm tra hồ sơ trước khi mentor chấm |
+| **Quản lý trường** | Trường / Viện ĐT Bách Khoa | Xem toàn bộ SV trường mình, xuất báo cáo, duyệt chứng nhận đồng cấp |
+| **Giáo viên trường** | Trường | Xem tiến độ khoa/lớp được gán, động viên SV |
+| **Sinh viên** | Trường bất kỳ | Học, tích buổi, nộp bài, hỏi đáp, nhận chứng nhận |
+| **Khách** | Công khai | Xem trang xác thực chứng nhận |
 
-> **[Giả định]** Phân biệt Mentor và TA như trên. Nếu đội bạn không tách hai vai trò này thì gộp lại; hệ thống vẫn nên giữ 2 role để sau này mở rộng.
+> **[Giả định]** Vẫn tách Mentor và TA, vì khối lượng chấm lớn (xem mục 8). Nếu đội bạn chỉ có một loại nhân sự thì gán cả hai role cho cùng một người.
+> **[Đề xuất]** Viện ĐT Bách Khoa có tài khoản Quản lý **cấp hệ thống**, xem được mọi trường, vì Viện đồng cấp chứng nhận cho tất cả.
 
-### 2.2 Ma trận quyền (rút gọn)
+### Ma trận quyền (rút gọn)
 
 | Chức năng | Super Admin | Admin VH | Mentor | TA | QL trường | GV trường | SV |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Quản lý trường, đợt, mã kích hoạt | ✅ | ✅ | | | | | |
-| Soạn/sửa lộ trình, bài học, nguồn học | ✅ | ✅ | đề xuất | | | | |
-| Phân công mentor/TA cho đợt | ✅ | ✅ | | | | | |
-| Xem bài nộp | ✅ | ✅ | đợt được gán | đợt được gán | trường mình | lớp được gán | của mình |
-| Sơ chấm, gợi ý nhận xét | | | ✅ | ✅ | | | |
-| Chấm chính thức (Đạt/Cần sửa, rubric) | | | ✅ | | | | |
-| Trả lời hỏi đáp | | | ✅ | ✅ | | ✅ | |
-| Dashboard tiến độ | toàn hệ thống | toàn hệ thống | đợt được gán | đợt được gán | trường mình | lớp được gán | cá nhân |
-| Xuất báo cáo Excel/PDF | ✅ | ✅ | | | ✅ | ✅ | |
+| Quản lý trường, sự kiện, mã kích hoạt | ✅ | ✅ | | | | | |
+| Soạn lộ trình, bài học, nguồn học | ✅ | ✅ | đề xuất | | | | |
+| Phân công mentor/TA | ✅ | ✅ | | | | | |
+| Gia hạn / bảo lưu cho SV | ✅ | ✅ | | đề xuất | | | yêu cầu |
+| Xem bài nộp | tất cả | tất cả | SV được gán | SV được gán | trường mình | lớp được gán | của mình |
+| Chấm chính thức | | | ✅ | | | | |
+| Hỏi đáp, giờ hỗ trợ | | | ✅ | ✅ | | ✅ | ✅ |
+| Dashboard tiến độ | toàn hệ thống | toàn hệ thống | SV được gán | SV được gán | trường mình | lớp được gán | cá nhân |
+| Xuất báo cáo | ✅ | ✅ | | | ✅ | ✅ | |
 | Cấp / thu hồi chứng nhận | ✅ | ✅ | | | duyệt đồng cấp | | tải về |
-| Cấu hình tích hợp (khóa học, Zoom, Zalo) | ✅ | | | | | | |
 
-Phạm vi dữ liệu được áp ở **tầng database** (Row Level Security), không chỉ ẩn ở giao diện.
+Phạm vi dữ liệu được áp ở tầng database (Row Level Security), không chỉ ẩn ở giao diện.
 
 ---
 
-## 3. Cấu trúc tổ chức và mô hình dữ liệu
+## 3. Mô hình dữ liệu
 
 ```mermaid
 erDiagram
   SCHOOL ||--o{ FACULTY : has
   FACULTY ||--o{ CLASS : has
-  SCHOOL ||--o{ COHORT : hosts
-  PROGRAM ||--o{ PROGRAM_VERSION : versions
+  SCHOOL ||--o{ EVENT : "workshop"
+  EVENT ||--o{ ACTIVATION_CODE : issues
   PROGRAM_VERSION ||--o{ LESSON : "12 buổi"
   LESSON ||--o{ LESSON_RESOURCE : "N1..N11"
-  COHORT }o--|| PROGRAM_VERSION : uses
-  COHORT ||--o{ ACTIVATION_CODE : issues
-  COHORT ||--o{ STAFF_ASSIGNMENT : "mentor/TA"
-  USER ||--o{ ENROLLMENT : joins
-  COHORT ||--o{ ENROLLMENT : contains
+  USER ||--o{ ENROLLMENT : registers
+  ENROLLMENT }o--|| PROGRAM_VERSION : "khóa phiên bản"
+  ENROLLMENT }o--o| ACTIVATION_CODE : "nguồn"
+  ENROLLMENT ||--o{ DEADLINE : "tính từ ngày ĐK"
   ENROLLMENT ||--o{ LESSON_PROGRESS : ticks
   ENROLLMENT ||--o{ SUBMISSION : submits
   SUBMISSION ||--o{ SUBMISSION_VERSION : revisions
-  SUBMISSION ||--o{ REVIEW : graded
+  SUBMISSION ||--o{ REVIEW : "người chấm"
   ENROLLMENT ||--o| CERTIFICATE : earns
-  ENROLLMENT ||--o{ VOUCHER : receives
-  ENROLLMENT ||--o{ QUESTION : asks
+  ENROLLMENT ||--o{ COURSE_GRANT : "voucher / ghi danh"
+  USER ||--o| WP_LINK : "tài khoản suai.vn"
 ```
 
 | Thực thể | Ghi chú |
 |---|---|
-| **School / Faculty / Class** | Đơn vị tổ chức; SV tự chọn khoa/lớp khi kích hoạt, hoặc import từ danh sách trường |
-| **Program / ProgramVersion** | Lộ trình 30 ngày có **phiên bản**. Sửa nội dung không làm hỏng đợt đang chạy |
-| **Lesson** | 12 buổi; buổi 7–9 có 3 nhánh A/B/C; mỗi buổi gắn tuần, mục workshop, sản phẩm yêu cầu |
-| **LessonResource** | Nguồn học N1–N11; N1 trỏ tới bài cụ thể trong khóa Sự AI (mapping 35 bài) |
-| **Cohort (đợt)** | Một workshop tại một trường: ngày bắt đầu, lịch hạn nộp tính tự động (Chủ nhật 23:59, ngày 30) |
-| **ActivationCode** | Mã/QR phát tại workshop; có hạn dùng, giới hạn số lượt, gắn với đợt |
-| **Enrollment** | SV × đợt: khối ngành A/B/C, trạng thái (đang học / đạt / không đạt / bỏ dở), % tiến độ |
-| **Submission** | Loại: BC tuần 1–4, dự án cuối; nhiều phiên bản (khi "Cần sửa") |
-| **Review** | Người chấm, vai trò (AI / TA / mentor), kết quả, điểm rubric, nhận xét |
-| **Certificate** | Mã số, QR, xếp loại, ngày cấp, trạng thái (hiệu lực / thu hồi), đơn vị đồng cấp |
-| **Voucher** | Mã khóa học: miễn phí (20 suất/đợt) hoặc giảm 50%; trạng thái đã cấp / đã dùng |
-| **Question** | Hỏi đáp của SV; ai trả lời (AI / TA / mentor / GV) |
-| **AuditLog / Consent** | Lưu vết thao tác nhạy cảm; đồng ý xử lý dữ liệu theo NĐ 13/2023 |
+| **School / Faculty / Class** | Có cờ **trường đối tác** (đã đăng cai/ký hợp tác) hay không. SV trường chưa đối tác vẫn học được |
+| **Event** | Một buổi workshop tại một trường. Dùng để **ghi nguồn** và phát mã, **không** phải đợt học |
+| **ActivationCode** | Mã/QR theo sự kiện; có hạn dùng và giới hạn lượt |
+| **ProgramVersion / Lesson / LessonResource** | Lộ trình có phiên bản; buổi 7–9 có nhánh A/B/C; mỗi buổi gắn nhiều nguồn từ **ResourceCatalog** (N1–N11, xem 5.0) |
+| **Enrollment** | `start_date` = ngày kích hoạt; khối ngành; trạng thái: *đang học / bảo lưu / hoàn thành / quá hạn / bỏ dở*; mentor phụ trách |
+| **Deadline** | Sinh tự động khi đăng ký: BC tuần 1–4 vào cuối ngày 7/14/21/28, dự án vào ngày 30. Gia hạn hay bảo lưu thì dời các mốc còn lại |
+| **Submission / Version / Review** | Mỗi lần "Cần sửa" tạo một phiên bản mới; review ghi người chấm, kết quả, điểm rubric, nhận xét |
+| **Certificate** | Mã số, QR, xếp loại, đơn vị đồng cấp, trạng thái hiệu lực/thu hồi |
+| **CourseGrant** | Quyền lợi khóa học: ghi danh miễn phí (20 suất) hoặc mã giảm 50%; trạng thái đồng bộ với suai.vn |
+| **WpLink** | Liên kết tài khoản portal ↔ user WordPress trên suai.vn |
+
+### Quy tắc lịch học cá nhân [Đề xuất]
+
+| Quy tắc | Đề xuất |
+|---|---|
+| Hạn báo cáo | 23:59 ngày 7 / 14 / 21 / 28 tính từ ngày đăng ký; dự án cuối 23:59 ngày 30 |
+| Nộp trễ | Vẫn nộp được, có đánh dấu "trễ"; trễ quá 7 ngày cần TA duyệt |
+| Gia hạn | Tối đa 1 lần, +7 ngày, SV gửi lý do |
+| Bảo lưu | Tối đa 14 ngày (thi cử, thực tập); đồng hồ dừng lại |
+| Quá hạn | Quá ngày 30 + gia hạn mà chưa đủ điều kiện → "quá hạn"; được đăng ký học lại từ đầu 1 lần |
+
+> Đề cương cũ ghi hạn "Chủ nhật 23:59". Với lịch cá nhân, hạn chuyển thành "cuối ngày 7/14/21/28". Cần sửa lại đề cương và kịch bản mục 2.6 cho khớp.
 
 ---
 
 ## 4. Luồng nghiệp vụ chính
 
-### 4.1 Vòng đời một đợt
+### 4.1 Vòng đời một sinh viên
 
 ```mermaid
 flowchart LR
-  A[Admin tạo đợt<br/>+ mã kích hoạt] --> B[Workshop:<br/>SV quét QR kích hoạt]
-  B --> C[Onboarding:<br/>chọn khoa/lớp,<br/>đồng ý dữ liệu]
-  C --> D[Tuần 1–4:<br/>học 12 buổi,<br/>nộp 4 báo cáo]
-  D --> E[Ngày 29–30:<br/>nộp dự án cuối]
-  E --> F[Chấm rubric]
-  F -->|≥70| G[Trường duyệt<br/>→ cấp chứng nhận QR]
-  F -->|<70| H[Không đạt /<br/>mời học đợt sau]
-  G --> I[Báo cáo tổng kết<br/>gửi trường & nhà tài trợ]
+  A[Quét QR tại workshop<br/>hoặc đăng ký mở] --> B[Onboarding:<br/>trường/khoa/lớp,<br/>đồng ý dữ liệu]
+  B --> C[Ngày 1–28:<br/>12 buổi + 4 báo cáo]
+  C --> D[Ngày 29–30:<br/>dự án cuối]
+  D --> E[Mentor chấm rubric]
+  E -->|≥70| F[Duyệt đồng cấp<br/>→ chứng nhận QR]
+  E -->|<70| G[Sửa 1 lần<br/>hoặc học lại]
+  C -.bảo lưu/gia hạn.-> C
 ```
 
-### 4.2 Kích hoạt tại workshop (thời điểm tải cao nhất)
+### 4.2 Đăng ký
 
-- 300–500 SV quét QR **trong cùng 5 phút** (mục 2.6 của workshop). Form phải ngắn: họ tên, email hoặc SĐT, MSSV, khoa/lớp, tick đồng ý. Đăng nhập bằng OTP hoặc Google.
-- Ngay sau khi kích hoạt: hiện buổi 1 kèm thông điệp "bắt đầu tối nay", gửi email/Zalo chào mừng.
-- **[Đề xuất]** Cho phép kích hoạt tới hết ngày 3 với SV về muộn; sau mốc đó chuyển sang đợt sau.
+- **Có mã (từ workshop):** quét QR → form ngắn (họ tên, email, SĐT, MSSV, trường/khoa/lớp, tick đồng ý). Trường được điền sẵn theo sự kiện. Thời điểm tải cao nhất là 300–500 SV quét trong khoảng 5 phút.
+- **Đăng ký mở [Đề xuất, cần chốt]:** SV trường chưa có workshop tự đăng ký và chọn trường từ danh sách. Admin bật/tắt được, và có thể giới hạn số lượng để không quá tải mentor.
+- Đăng nhập: email OTP hoặc Google. Tài khoản suai.vn được tạo/liên kết tự động khi SV cần vào khóa học (xem mục 5).
 
-### 4.3 Học và nộp bài
+### 4.3 Học, nộp bài, chấm (100% người chấm)
 
-1. SV mở buổi → xem mục tiêu, nguồn học (deep link sang khóa Sự AI hoặc nguồn miễn phí), bài tự luyện.
-2. Tích hoàn thành, có thể đính kèm sản phẩm nhỏ (ảnh/link). **[Đề xuất]** Bắt buộc đính kèm để chống tích khống.
-3. Cuối tuần nộp báo cáo theo mẫu 5 trường **[Tài liệu]**.
-4. Quy trình chấm:
-   `Nộp → AI sơ duyệt (đủ trường? có sản phẩm? dấu hiệu chép nguyên văn?) → TA xem và gợi ý → Mentor chốt Đạt/Cần sửa → SV sửa (nếu cần) → chấm lại`
-5. SLA phản hồi: **[Đề xuất]** ≤3 ngày **[Tài liệu ghi là câu hỏi mở]**; dashboard nội bộ cảnh báo bài sắp quá hạn chấm.
+1. SV mở buổi học: xem mục tiêu, nguồn học (link thẳng tới bài trên suai.vn hoặc nguồn miễn phí), bài tự luyện.
+2. Tích hoàn thành, kèm sản phẩm nhỏ (ảnh/link). **[Đề xuất]** Bắt buộc có minh chứng.
+3. Nộp báo cáo tuần theo mẫu 5 trường **[Tài liệu]**.
+4. **TA kiểm hồ sơ:** đủ trường chưa, link mở được không. Nếu thiếu thì trả lại ngay, không tốn lượt của mentor.
+5. **Mentor chấm:** Đạt/Cần sửa + nhận xét (chọn từ thư viện mẫu, chỉnh lại cho từng bài).
+6. SV sửa và nộp lại → quay về hàng đợi, được ưu tiên.
 
 ### 4.4 Chứng nhận
 
-- Tự kiểm điều kiện: đủ 12/12 buổi, 4/4 báo cáo Đạt, dự án cuối ≥70 **[Tài liệu]**.
-- **[Đề xuất]** Dự án dự kiến Xuất sắc (≥90) do 2 mentor chấm chéo, vì kết quả này dẫn tới việc giới thiệu sang doanh nghiệp.
-- Quản lý trường duyệt danh sách theo lô → hệ thống sinh PDF có mã số + QR.
-- Trang xác thực công khai `/verify/{mã}`: tên SV, đơn vị cấp, ngày cấp, xếp loại, tên và mô tả dự án. SV chọn có cho hiện link dự án hay không.
+- Điều kiện: 12/12 buổi, 4/4 báo cáo Đạt, dự án ≥70/100 **[Tài liệu]**.
+- **[Đề xuất]** Dự án ≥90 (Xuất sắc) do 2 mentor chấm chéo, vì kết quả này dùng để giới thiệu SV sang doanh nghiệp.
+- **Đơn vị đồng cấp [Đề xuất, cần chốt]:**
+  - SV thuộc **trường đối tác**: Viện ĐT Bách Khoa + Trường đó. Quản lý trường duyệt theo lô.
+  - SV thuộc **trường chưa đối tác**: Viện ĐT Bách Khoa + AI Campus Tour.
+- Trang xác thực công khai `/verify/{mã}`: tên SV, trường, đơn vị cấp, ngày cấp, xếp loại, tên dự án (SV chọn có hiện link dự án hay không).
 
 ---
 
-## 5. Cổng kết nối khóa học (video và Zoom)
+## 5. Nguồn học và tích hợp
 
-Thiết kế theo dạng **adapter**: portal định nghĩa một giao diện chung, mỗi nền tảng khóa học là một adapter. Đổi hoặc thêm nền tảng không phải sửa lõi portal.
+### 5.0 Thư viện nguồn học (đa nguồn)
 
-| Năng lực | Mức 1 (MVP) | Mức 2 | Mức 3 |
-|---|---|---|---|
-| **Liên kết bài học** | Deep link từ buổi học sang đúng bài trong khóa N1 | — | — |
-| **Voucher** | Admin import lô mã → portal tự phân phối cho SV đủ điều kiện | Portal gọi API tạo mã trên nền tảng khóa học | — |
-| **Tài khoản** | SV tự đăng ký bên khóa học | SSO: đăng nhập portal là vào được khóa học | — |
-| **Đồng bộ tiến độ** | — | Nền tảng khóa học gửi webhook "đã xem bài X" → portal gợi ý tích buổi tương ứng | Tự động tích (vẫn cần sản phẩm) |
-| **Zoom** | Link lớp Zoom cố định hiển thị trên lịch | Đăng ký buổi Zoom qua API, gửi nhắc lịch | Lấy báo cáo điểm danh Zoom → ghi nhận tham gia |
-| **Đo chuyển đổi** | Mã voucher có gắn đợt/trường | Dashboard: voucher đã cấp → đã dùng → mua khóa | — |
+Lộ trình 30 ngày dùng **11 nguồn học (N1–N11)** **[Tài liệu: Đề cương, mục 4]**. Khóa Sự AI (N1) chỉ là **một trong số đó**. Mỗi kiến thức có ít nhất 2 nơi học, và SV chỉ cần chọn 1 nguồn.
 
-**[Giả định]** Chưa biết khóa video đang chạy trên nền tảng nào (WordPress + plugin LMS trên suai.vn, Teachable, Kajabi, hay hệ thống tự build?). Đây là thông tin quyết định Mức 2 làm được tới đâu.
+| Mã | Nguồn | Loại | Buổi | Mức tích hợp |
+|---|---|---|---|---|
+| N1 | Khóa Ứng dụng AI cho văn phòng – Sự AI (video / trực tuyến) | Khóa học (tiếng Việt) | 1–9, 11 | **Sâu**: deep link, SSO, ghi danh, voucher, đồng bộ tiến độ (5.1–5.3) |
+| N2 | AI Fluency for Students – Anthropic Academy | Khóa học miễn phí (EN) | 1 | Link + SV tự xác nhận |
+| N3 | AI Capabilities and Limitations – Anthropic Academy | Khóa học miễn phí (EN) | 1 | Link + SV tự xác nhận |
+| N4 | AI Fluency: Framework & Foundations – Anthropic Academy | Khóa học miễn phí (EN) | 2 | Link + SV tự xác nhận |
+| N5 | Claude 101 – Anthropic Academy | Khóa học miễn phí (EN) | 3 | Link + SV tự xác nhận |
+| N6 | ChatGPT / Gemini chế độ giọng nói | Công cụ | 6 | Link + hướng dẫn dùng |
+| N7 | LinkedIn, TopCV, VietnamWorks | Nền tảng tuyển dụng | 4, 5, 12 | Link |
+| N8 | Kaggle Datasets | Dữ liệu mẫu | 7, 8 | Link (có thể gợi ý sẵn bộ dữ liệu cho từng khối) |
+| N9 | Introduction to agent skills – Anthropic Academy | Khóa học miễn phí (EN) | 9, 11 | Link + SV tự xác nhận |
+| N10 | NotebookLM, Perplexity | Công cụ kiểm chứng | 2 (mọi buổi) | Link + hướng dẫn dùng |
+| N11 | Generative AI for Beginners (Microsoft) | Khóa mã nguồn mở, có bản tiếng Việt | 7–9, 11 (khối C) | Link tới bài cụ thể |
 
-**Lưu ý thương hiệu [Tài liệu]:** tour không mang thương hiệu Sự AI, và N1 chỉ là **1 nguồn tùy chọn**. Trên portal, khóa Sự AI nên được trình bày ngang hàng với các nguồn miễn phí, không đặt làm điều kiện để hoàn thành lộ trình. Như vậy nhà trường không thấy portal là kênh bán hàng.
+**Thiết kế:**
+- **ResourceCatalog** là danh mục nguồn chung, Admin quản lý gồm: mã, tên, loại, nhà cung cấp, ngôn ngữ, chi phí, URL. Mỗi buổi gắn **nhiều** nguồn, có thứ tự gợi ý. Thay hay thêm nguồn không phải sửa code.
+- Màn buổi học hiển thị các nguồn **ngang hàng**; SV chọn nguồn mình học và ghi lại lựa chọn (dùng để thống kê nguồn nào được chọn nhiều).
+- Tiến độ chỉ dựa trên **sản phẩm tự luyện mà SV nộp**, không phụ thuộc việc SV học nguồn nào. Nhờ vậy SV học nguồn miễn phí vẫn hoàn thành đủ, không bị thiệt so với người học khóa Sự AI.
+- Với nguồn bên ngoài (Anthropic Academy, Microsoft…), portal **không tích hợp API** được: chỉ có link, SV tự xác nhận và có thể đính kèm ảnh/chứng chỉ hoàn thành.
+- **Kiểm tra link định kỳ** (job hằng tuần báo link hỏng cho Admin), vì đề cương có lưu ý "kiểm tra lại link trước khi in".
+- Tích hợp sâu (5.1–5.3) chỉ áp dụng cho suai.vn và meet.suai.vn, vì đây là hệ thống của đội. Lý do là khả năng kỹ thuật, không phải ưu tiên N1 về nội dung.
 
----
+### 5.1 Hiện trạng suai.vn [Đã kiểm tra]
 
-## 6. Tính năng AI trong portal
-
-Một portal dạy dùng AI thì bản thân nó nên dùng AI. Các tính năng dưới đây đều **hỗ trợ con người, không tự quyết thay**.
-
-| Tính năng | Giá trị | Giai đoạn |
+| Khóa trên Tutor LMS | ID | Liên quan portal |
 |---|---|---|
-| **Trợ lý hỏi đáp 24/7** (RAG trên nội dung lộ trình, FAQ, hướng dẫn công cụ) | Gánh phần lớn câu hỏi lặp lại; câu khó chuyển lên TA | P2 |
-| **AI sơ duyệt báo cáo** | Kiểm đủ 5 trường, có sản phẩm, gợi ý nhận xét cho mentor | P1–P2 |
-| **Phát hiện chép nguyên văn / trùng lặp** | So khớp giữa các bài trong đợt; đánh dấu văn phong AI để mentor xem kỹ | P2 |
-| **Chấm nháp dự án theo rubric** | Mentor nhận bản nháp điểm + lý do, chỉnh rồi chốt | P2 |
-| **Tóm tắt tiến độ cho trường** | Báo cáo tuần bằng lời cho giáo viên/quản lý | P2 |
-| **Nhắc nhở cá nhân hóa** | Nội dung nhắc dựa trên chỗ SV đang vướng | P3 |
+| Khóa học AI cho văn phòng (Học online qua Video) | 3584 | **N1 bản video**: link bài học, 20 suất miễn phí, mã giảm 50% |
+| Khóa học AI văn phòng (Học online qua Zoom) | 3599 | **N1 bản trực tuyến** (học trên meet.suai.vn): mã giảm 50% |
+| Khóa tạo Video bằng AI (Zoom) · Vibe code · n8n (lớp tại Bình Tân) | 3709, 3597, 3598 | Gợi ý học tiếp sau khi hoàn thành |
 
-Ràng buộc: không gửi dữ liệu định danh SV lên AI khi không cần; ghi rõ trong điều khoản; kết quả chấm chính thức luôn do mentor quyết định.
+Bài học có URL ổn định dạng `/courses/khoa-hoc-ai-cho-van-phong-online/lessons/{slug}/`, nên link thẳng từ buổi học sang đúng bài được ngay.
+
+### 5.2 Plugin cầu nối `aict-bridge` trên suai.vn [Đề xuất]
+
+Đây là một plugin WordPress nhỏ do đội tự viết, nói chuyện với portal qua API có ký HMAC. Chọn cách này thay vì phụ thuộc REST API của Tutor (bản Free/Pro khác nhau và dễ đổi giữa các phiên bản).
+
+| Chức năng | Chiều | Cách làm |
+|---|---|---|
+| **Tạo/liên kết tài khoản** | Portal → WP | Tìm user theo email; chưa có thì tạo. Trả về `wp_user_id` |
+| **Đăng nhập 1 chạm (SSO)** | Portal → WP | Portal sinh token ký, hạn 60 giây → `suai.vn/?aict_sso=…` → plugin xác thực, đăng nhập rồi chuyển tới đúng bài học |
+| **Ghi danh miễn phí** (20 suất) | Portal → WP | Plugin gọi hàm ghi danh của Tutor cho khóa 3584. **Không cần mã giảm giá** |
+| **Mã giảm 50%** | Portal → WP | Tạo coupon dùng 1 lần cho từng SV, qua hệ thống bán hàng đang dùng (WooCommerce hoặc thanh toán sẵn của Tutor, **cần xác nhận**) |
+| **Đồng bộ tiến độ** | WP → Portal | Hook hoàn thành bài học của Tutor → webhook về portal. Portal hiện "Đã học bài X trên suai.vn" và gợi ý tích buổi tương ứng; SV vẫn phải nộp sản phẩm |
+| **Đồng bộ mua khóa** | WP → Portal | Đơn hàng hoàn tất → ghi nhận chuyển đổi để đo hiệu quả voucher |
+
+> Tên hook/hàm của Tutor phải kiểm lại theo đúng phiên bản đang cài trên suai.vn trước khi code.
+
+### 5.3 meet.suai.vn (Jitsi)
+
+| Nhu cầu | Cách làm |
+|---|---|
+| **Giờ hỗ trợ trực tuyến cho SV portal** [Đề xuất] | TA/mentor mở phòng cố định (vd. tối thứ 3 và thứ 6) để SV hỏi trực tiếp. Lịch hiển thị trên portal |
+| **Chỉ người được phép mới vào** | Bật **xác thực JWT** của Jitsi (Prosody token auth). Portal sinh JWT gồm: phòng, tên hiển thị, quyền moderator (mentor/TA) |
+| **Vào phòng** | Nút "Tham gia" mở meet.suai.vn kèm JWT, hoặc nhúng ngay trong portal bằng Jitsi IFrame API |
+| **Điểm danh** | Mức 1: ghi sự kiện vào/ra phòng từ IFrame API. Mức 2: module event_sync của Prosody đẩy webhook về portal (tin cậy hơn) |
+| **Lớp N1 bản trực tuyến** | Nếu lớp trả phí cũng chạy trên meet.suai.vn, có thể dùng chung cơ chế JWT để chỉ học viên đã mua mới vào được |
+
+> **[Giả định]** Chưa biết meet.suai.vn đã bật JWT hay đang mở tự do (môi trường này không truy cập được meet.suai.vn để kiểm tra). Bật JWT là việc cấu hình phía server.
+
+### 5.4 Nguyên tắc trình bày
+
+N1 là **một nguồn tùy chọn** **[Tài liệu]**, hiển thị ngang hàng với các nguồn miễn phí và không phải điều kiện hoàn thành. Như vậy portal giữ được hình ảnh dự án cộng đồng của AI Campus Tour.
 
 ---
 
-## 7. Thông báo và nhắc nhở
+## 6. Thông báo và nhắc nhở
+
+Mọi mốc đều tính theo lịch cá nhân của SV.
 
 | Sự kiện | Kênh | Người nhận |
 |---|---|---|
-| Kích hoạt thành công, mở buổi mới | In-app, email | SV |
-| Còn 24h tới hạn nộp báo cáo / chưa nộp | Email, Zalo | SV |
-| Trễ hạn hoặc **7 ngày không tích buổi nào** [Tài liệu] | Email, Zalo; sau 10 ngày báo TA | SV, TA |
-| Bài được chấm / bị yêu cầu sửa | In-app, email | SV |
-| Bài chờ chấm sắp quá SLA | In-app, email | Mentor, Admin |
-| Báo cáo tiến độ tuần | Email (PDF/link) | QL trường, GV |
+| Đăng ký thành công, mở buổi mới | In-app, email | SV |
+| Còn 24h tới hạn báo cáo | Email, Zalo | SV |
+| Trễ hạn hoặc **7 ngày không tích buổi nào** [Tài liệu] | Email, Zalo; 10 ngày thì báo TA | SV, TA |
+| Bài được chấm / cần sửa | In-app, email | SV |
+| Bài chờ chấm sắp quá hạn phản hồi | In-app | Mentor, Admin |
+| Nhắc giờ hỗ trợ trực tuyến | Email, Zalo | SV đăng ký tham gia |
+| Báo cáo tiến độ hằng tuần | Email | QL trường, GV |
 | Đạt chứng nhận | Email, Zalo | SV |
 
-**Zalo:** dùng Zalo OA + ZNS. ZNS cần duyệt mẫu tin và **tính phí mỗi tin** [cần kiểm tra bảng giá hiện hành], và bắt buộc có SĐT của SV.
-**[Đề xuất]** Logic nhắc nhở và gửi tin chạy qua **n8n** (đội bạn đã dùng n8n): portal bắn webhook sự kiện, n8n lo gửi email/Zalo/Sheets. Đổi kênh hay nội dung không cần sửa code portal.
+Kênh Zalo: Zalo OA + ZNS. Mẫu tin phải được duyệt và **tính phí theo tin** [cần kiểm tra giá hiện hành].
+**[Đề xuất]** Portal bắn webhook sự kiện, **n8n** lo gửi email/Zalo. Đổi nội dung hay kênh gửi không cần sửa code.
 
 ---
 
-## 8. Màn hình theo vai trò
+## 7. Màn hình theo vai trò
 
 | Vai trò | Màn hình chính |
 |---|---|
-| **SV** | Trang chủ (buổi tiếp theo, % tiến độ, hạn nộp) · Lộ trình 12 buổi · Nộp báo cáo · Dự án cuối · Hỏi đáp · Chứng nhận & voucher · Hồ sơ |
-| **Mentor/TA** | Hàng đợi chấm (lọc theo đợt, hạn SLA, kết quả AI sơ duyệt) · Màn chấm (bài nộp + rubric + mẫu nhận xét) · Hỏi đáp · SV có nguy cơ bỏ dở |
-| **GV / QL trường** | Dashboard theo khoa/lớp (kích hoạt, % hoàn thành, nộp đúng hạn, đạt) · Danh sách SV · Duyệt chứng nhận · Xuất Excel/PDF |
-| **Admin** | Trường, đợt, mã kích hoạt · Lộ trình & phiên bản · Phân công nhân sự · Voucher · Tích hợp · Nhật ký hệ thống · Báo cáo toàn tour |
-| **Công khai** | Trang giới thiệu tour · Trang xác thực chứng nhận · Trang kích hoạt |
+| **SV** | Trang chủ (ngày thứ N/30, buổi tiếp theo, hạn gần nhất) · Lộ trình 12 buổi · Nộp báo cáo · Dự án · Hỏi đáp & giờ hỗ trợ · Khóa học & voucher · Chứng nhận · Yêu cầu gia hạn/bảo lưu |
+| **Mentor** | Hàng đợi chấm (sắp theo hạn phản hồi, lọc theo loại bài/khối ngành) · Màn chấm (bài + rubric + thư viện nhận xét + lịch sử phiên bản) · SV phụ trách |
+| **TA** | Hàng đợi kiểm hồ sơ · Hỏi đáp · Danh sách SV có nguy cơ bỏ dở · Lịch giờ hỗ trợ |
+| **GV / QL trường** | Dashboard theo khoa/lớp (đăng ký, đang học, % hoàn thành, đạt) · Danh sách SV · Duyệt chứng nhận · Xuất Excel/PDF |
+| **Admin** | Trường & sự kiện & mã · Lộ trình & phiên bản · Phân công · Gia hạn/bảo lưu · Quyền lợi khóa học · Tích hợp · Nhật ký · Báo cáo toàn hệ thống |
+| **Công khai** | Trang giới thiệu AI Campus Tour (ghi "Sáng lập bởi Sự AI") · Đăng ký · Xác thực chứng nhận |
 
-Yêu cầu chung: **mobile-first** (phần lớn SV dùng điện thoại, và tài liệu có nêu rủi ro "SV không có laptop"), giao diện tiếng Việt, tải được trên mạng 4G yếu.
+Yêu cầu chung: **mobile-first**, tiếng Việt, chạy tốt trên 4G.
+
+### Công cụ giúp mentor chấm nhanh (thay cho AI)
+
+- Rubric dạng checklist: bấm chọn, điểm tự cộng.
+- Thư viện nhận xét mẫu theo từng buổi/lỗi hay gặp, chèn bằng phím tắt.
+- Xem bài ngay trong trang, không phải tải file.
+- Phím tắt Đạt / Cần sửa / bài tiếp theo.
+- Phân bài tự động cho mentor theo khối ngành và tải hiện tại.
 
 ---
 
-## 9. Ước tính tải vận hành (điểm cần phản biện)
+## 8. Tải chấm bài (vẫn là rủi ro lớn nhất)
 
-**[Giả định]** Một đợt 500 SV kích hoạt, 50% duy trì tới cuối:
+Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một workshop vẫn đăng ký cùng ngày, nên cùng nộp báo cáo tuần 1 vào ngày 7.
 
-| Hạng mục | Số lượng / đợt |
+**[Giả định]** 1 workshop có 500 SV đăng ký, 50% theo tới cuối, 20% bài bị yêu cầu sửa:
+
+| | Số lượt |
 |---|---|
-| Báo cáo tuần cần chấm | ~500 (tuần 1) giảm dần còn ~250 (tuần 4) → ~1.500 bài |
-| Bài phải chấm lại (giả định 20% "Cần sửa") | ~300 |
+| Báo cáo tuần (giảm dần 500 → 250) | ~1.500 |
+| Chấm lại | ~300 |
 | Dự án cuối | ~250 |
-| **Tổng lượt chấm** | **~2.000 trong 30 ngày** |
+| **Tổng / workshop** | **~2.000 lượt** |
 
-Nếu mỗi bài mất 5 phút thì tổng là ~170 giờ chấm/đợt. Mùa cao điểm có 2 đợt/tháng chồng nhau → **~340 giờ/tháng**, tương đương **2 người làm toàn thời gian chỉ để chấm**.
+- Chấm 3 phút/bài (đã có công cụ ở mục 7) → **~100 giờ/workshop**.
+- Riêng **ngày 7–10** sau workshop có ~500 bài, tức ~25 giờ chấm dồn trong 3 ngày → cần **3–4 người** nếu muốn giữ hạn phản hồi ≤3 ngày.
+- Mùa cao điểm 2 workshop/tháng → ~200 giờ/tháng, tương đương **khoảng 1,2 người làm toàn thời gian**.
 
-→ Hệ quả thiết kế:
-- AI sơ duyệt + mẫu nhận xét có sẵn để rút thời gian chấm xuống ~2 phút/bài.
-- TA lo báo cáo tuần; mentor tập trung vào dự án cuối và các ca khó.
-- **[Đề xuất]** Cân nhắc cho báo cáo tuần 1–2 tự động Đạt nếu đủ trường + AI không phát hiện bất thường (TA kiểm xác suất 20%); mentor chấm kỹ từ tuần 3. Cần chốt vì ảnh hưởng uy tín chứng nhận.
-- Chi phí nhân sự chấm phải được tính vào gói tài trợ.
+→ Đề xuất:
+- TA lọc hồ sơ thiếu trước khi đến tay mentor.
+- Có danh sách mentor cộng tác theo giờ cho các đợt dồn bài.
+- Đưa chi phí chấm vào gói tài trợ.
+- Đặt trần số SV đăng ký mở mỗi tuần.
 
 ---
 
-## 10. Kiến trúc kỹ thuật đề xuất
+## 9. Kiến trúc kỹ thuật
 
-**Khuyến nghị: Next.js + Supabase**, phù hợp đội nhỏ cần ra MVP nhanh và multi-tenant chặt.
+### 9.1 Khuyến nghị: portal riêng (Next.js + Supabase) + plugin cầu nối trên suai.vn
 
 | Lớp | Lựa chọn | Lý do |
 |---|---|---|
-| Frontend + API | **Next.js (App Router, TypeScript)**, Tailwind, shadcn/ui | Một codebase cho web SV, dashboard, trang công khai; SSR cho trang xác thực |
-| Database | **PostgreSQL (Supabase)** | Dữ liệu quan hệ rõ ràng; **RLS** áp phân quyền theo trường/đợt ngay trong DB |
-| Auth | Supabase Auth: email OTP, Google; SĐT OTP (tốn phí SMS) | Kích hoạt nhanh tại workshop |
-| Lưu file | Supabase Storage / Cloudflare R2 | Bài nộp, chứng nhận PDF; giới hạn dung lượng, ưu tiên nộp link |
-| Job nền & lịch | Supabase cron + **n8n** (webhook) | Nhắc hạn, gửi Zalo/email, đồng bộ khóa học, báo cáo tuần |
-| AI | Claude API (sơ duyệt, chấm nháp, trợ lý RAG với pgvector) | Hệ sinh thái đội đang dùng |
-| PDF / QR | Render PDF phía server + thư viện QR | Chứng nhận tự động theo lô |
-| Hosting | Vercel (web) + Supabase Cloud (region Singapore) | Ít vận hành; sau có thể chuyển sang VPS nếu cần |
-| Giám sát | Sentry + log của Supabase | Bắt lỗi ở thời điểm kích hoạt tải cao |
+| Web + API | **Next.js (App Router, TypeScript)**, Tailwind, shadcn/ui | Một codebase cho SV, nhân sự, trường, trang công khai |
+| Database | **PostgreSQL (Supabase)** + RLS | Dữ liệu quan hệ; phân quyền theo trường ngay trong DB |
+| Auth | Supabase Auth (email OTP, Google) | Đăng ký nhanh tại workshop |
+| File | Supabase Storage / Cloudflare R2 | Bài nộp, PDF chứng nhận; ưu tiên SV nộp link |
+| Job nền | Supabase cron (tính hạn, đánh dấu quá hạn) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
+| Tích hợp | `aict-bridge` (PHP) trên suai.vn; JWT cho meet.suai.vn | Xem mục 5 |
+| PDF / QR | Render phía server | Chứng nhận theo lô |
+| Hosting | Vercel + Supabase (region Singapore) | Ít phải vận hành |
+| Giám sát | Sentry | Bắt lỗi lúc tải cao khi kích hoạt |
 
-**Khung thư mục dự kiến**
+### 9.2 Phương án thay thế: dựng luôn trên Tutor LMS
+
+Tutor LMS (bản Pro) đã có sẵn assignment, chứng chỉ, mở bài theo ngày đăng ký (content drip) và báo cáo. Vì vậy phương án này đáng cân nhắc nếu thời gian rất gấp.
+
+| | Portal riêng | Dựng trên Tutor LMS |
+|---|---|---|
+| Thời gian ra bản đầu | Lâu hơn | **Nhanh hơn** |
+| Tài khoản SV | Portal + liên kết suai.vn | **Một tài khoản suai.vn** |
+| Phân quyền GV theo trường/khoa/lớp | **Làm chuẩn được** | Phải code PHP tùy biến nhiều |
+| Hàng đợi chấm, hạn phản hồi, vai trò TA | **Làm chuẩn được** | Rất hạn chế |
+| Dashboard cho trường, chứng nhận đồng cấp + QR verify | **Làm chuẩn được** | Phải tùy biến |
+| Thương hiệu AI Campus Tour tách khỏi Sự AI | **Tách rõ** | Nằm trong suai.vn → trái nguyên tắc thương hiệu |
+| Tải hệ thống lúc 500 SV kích hoạt cùng lúc | Ổn | WordPress cần tối ưu cache |
+
+→ **Chọn portal riêng.** Lý do chính: phân quyền theo trường, quy trình chấm do người làm, và thương hiệu AI Campus Tour tách khỏi Sự AI là 3 yêu cầu cốt lõi mà Tutor làm yếu.
+
+### 9.3 Khung repo
 
 ```
-apps/web/            # Next.js: (public) (student) (staff) (school) (admin)
-packages/db/         # schema, migrations, RLS policies, seed lộ trình 12 buổi
-packages/integrations/  # adapter: course-provider, zoom, zalo, email
-packages/ai/         # prompt sơ duyệt, chấm rubric, RAG
-docs/                # tài liệu dự án
+apps/web/                 # Next.js: (public) (student) (staff) (school) (admin)
+packages/db/              # schema, migrations, RLS, seed lộ trình 12 buổi
+packages/integrations/    # tutor-bridge client, jitsi-jwt, notify-webhook
+wordpress/aict-bridge/    # plugin cầu nối cài trên suai.vn
+docs/
 ```
 
 ---
 
-## 11. Bảo mật và tuân thủ
+## 10. Bảo mật và tuân thủ
 
-- **NĐ 13/2023 về bảo vệ dữ liệu cá nhân:** có màn đồng ý khi kích hoạt; tách riêng mục đồng ý chia sẻ hồ sơ với nhà tài trợ (mặc định **không**); có chức năng xuất và xóa dữ liệu theo yêu cầu.
-- Tối thiểu hóa dữ liệu: không thu CCCD hay ngày sinh khi không cần.
-- RLS cho mọi bảng có dữ liệu SV; ghi audit log khi xuất dữ liệu, cấp/thu hồi chứng nhận, đổi quyền.
-- Bài nộp: giới hạn loại và dung lượng file; link riêng tư có thời hạn.
-- Chứng nhận: mã khó đoán; trang verify không lộ email/SĐT.
-- Sao lưu hằng ngày; có môi trường staging tách khỏi production.
+- **NĐ 13/2023:** có màn đồng ý khi đăng ký. Đồng ý chia sẻ hồ sơ với doanh nghiệp/nhà tài trợ là mục riêng, mặc định **không**. Có chức năng xuất và xóa dữ liệu theo yêu cầu.
+- Chỉ đồng bộ sang suai.vn những gì cần (email, tên) và **chỉ khi SV bấm vào khóa học**. Điều này phải ghi rõ trong điều khoản.
+- Bật RLS cho mọi bảng có dữ liệu SV; ghi audit log khi xuất dữ liệu, cấp/thu hồi chứng nhận, gia hạn, đổi quyền.
+- Cầu nối WP: ký HMAC, chống replay (timestamp + nonce), giới hạn IP nếu được. Secret của JWT Jitsi chỉ lưu ở server.
+- Mã chứng nhận khó đoán; trang verify không lộ email/SĐT.
+- Sao lưu hằng ngày; staging tách khỏi production.
 
 ---
 
-## 12. Lộ trình triển khai
-
-Gợi ý chia giai đoạn theo hạn của đợt đầu: **P0 phải xong trước ngày workshop**, còn P1 chỉ cần xong trước ngày 29 của đợt đầu.
+## 11. Lộ trình triển khai
 
 | Giai đoạn | Phạm vi | Hạn |
 |---|---|---|
-| **P0 – MVP chạy đợt đầu** | Auth + kích hoạt bằng mã/QR · Lộ trình 12 buổi (nhánh A/B/C) + nguồn học · Tích buổi · Nộp báo cáo tuần · Mentor chấm Đạt/Cần sửa · Dashboard trường cơ bản · Nhắc hạn qua email · Admin tạo trường/đợt | Trước workshop ĐH Công Thương (**ngày chưa chốt**) |
-| **P1 – Hoàn tất vòng 30 ngày** | Dự án cuối + rubric · Chứng nhận PDF + QR + trang verify · Trường duyệt đồng cấp · Phân phối voucher · Xuất báo cáo · Vai trò TA + hàng đợi chấm có SLA | Trước ngày 29 của đợt đầu |
-| **P2 – Mở rộng vận hành** | AI sơ duyệt & chấm nháp · Trợ lý hỏi đáp · Zalo ZNS · Tích hợp khóa học Mức 2 (SSO/webhook) · Zoom API · Báo cáo tổng kết đợt tự động | Trước khi chạy 2 đợt/tháng |
-| **P3 – Hệ sinh thái** | Cổng nhà tài trợ · Kho hồ sơ SV Xuất sắc (có đồng ý) · PWA/thông báo đẩy · Phân tích xuyên đợt, so sánh trường | Năm 2 |
+| **P0 – Chạy được workshop đầu** | Đăng ký bằng mã/QR · Lịch cá nhân 30 ngày · 12 buổi (nhánh A/B/C) + link nguồn học (gồm deep link bài Tutor) · Tích buổi · Nộp báo cáo · Mentor chấm Đạt/Cần sửa · Dashboard trường cơ bản · Nhắc hạn qua email · Admin trường/sự kiện/mã | Trước workshop ĐH Công Thương (**ngày chưa chốt**) |
+| **P1 – Hoàn tất vòng 30 ngày** | Dự án + rubric · Chứng nhận PDF/QR + trang verify · Duyệt đồng cấp · Vai trò TA + hàng đợi kiểm hồ sơ · Gia hạn/bảo lưu · Xuất báo cáo · `aict-bridge`: tạo tài khoản + ghi danh 20 suất miễn phí | Trước **ngày 28 kể từ workshop đầu** |
+| **P2 – Vận hành nhiều trường** | SSO sang suai.vn · Mã giảm 50% · Webhook tiến độ Tutor · Jitsi JWT + giờ hỗ trợ + điểm danh · Zalo ZNS · Đăng ký mở · Thư viện nhận xét, phân bài tự động | Trước mùa cao điểm (T3/2027) |
+| **P3 – Mở rộng** | Cổng nhà tài trợ · Kho hồ sơ SV Xuất sắc (có đồng ý) · PWA/thông báo đẩy · Phân tích xuyên trường | Năm 2 |
 
 ---
 
-## 13. Chỉ số theo dõi (KPI)
+## 12. KPI
 
 | Nhóm | Chỉ số |
 |---|---|
-| Phễu SV | Tham dự workshop → kích hoạt → hoạt động tuần 1 → nộp BC tuần 4 → nộp dự án → đạt chứng nhận |
-| Chất lượng | % Xuất sắc, điểm rubric trung bình, % bài phải "Cần sửa" |
-| Vận hành | Thời gian chấm trung bình, % bài chấm đúng SLA, số câu hỏi AI tự trả lời được |
-| Trường & tài trợ | Số trường mời lại, số SV được giới thiệu sang doanh nghiệp |
-| Khóa học | Voucher đã cấp / đã dùng, tỷ lệ chuyển đổi sang khóa trả phí |
+| Phễu SV | Tham dự → đăng ký → hoạt động ngày 7 → nộp BC tuần 4 → nộp dự án → đạt chứng nhận (theo trường, theo sự kiện) |
+| Chất lượng | % Xuất sắc, điểm rubric trung bình, % bài "Cần sửa" |
+| Vận hành | Thời gian phản hồi trung bình, % bài chấm đúng hạn, số bài/mentor/ngày |
+| Trường | Số trường đối tác, số trường mời lại, số SV đăng ký mở theo trường |
+| Khóa học | Suất miễn phí đã dùng, mã 50% đã dùng, đơn hàng phát sinh trên suai.vn |
 
 ---
 
-## 14. Điểm cần chốt trước khi code
+## 13. Câu hỏi còn mở
 
 | # | Câu hỏi | Ảnh hưởng |
 |---|---|---|
-| 1 | Tên và thương hiệu portal: "Portal Sự AI" (theo đề cương) hay "AI Ready Campus Tour" (tour không mang thương hiệu Sự AI)? | Domain, giao diện, cảm nhận của trường |
-| 2 | Khóa video/Zoom đang chạy trên nền tảng nào? Có API/webhook không? | Phạm vi tích hợp Mức 2 |
-| 3 | Mentor và TA có tách vai trò không? Quy mô đội ngũ dự kiến? | Phân quyền, quy trình chấm |
-| 4 | SLA chấm và tỷ lệ mentor/SV | Số nhân sự cần, cam kết với trường |
-| 5 | Có chấp nhận auto-Đạt có kiểm xác suất cho BC tuần 1–2 không? | Tải chấm, uy tín chứng nhận |
-| 6 | Giáo viên trường được nhận xét bài hay chỉ xem? | Phân quyền, trải nghiệm |
-| 7 | SV đăng nhập bằng gì: email, Google, SĐT (Zalo)? | Chi phí SMS/ZNS, tỷ lệ kích hoạt |
-| 8 | Ngày workshop đầu tiên | Hạn P0 |
-| 9 | Ai sở hữu dữ liệu SV (Sự AI / trường / pháp nhân ký hợp đồng)? | Điều khoản, hợp đồng với trường |
-| 10 | Ngân sách hạ tầng/tháng và ai phát triển (bạn tự build cùng AI hay thuê đội)? | Chọn stack, phạm vi P0 |
+| 1 | Có cho **đăng ký mở** (không cần mã workshop) không? Có giới hạn số lượng không? | Tải chấm, phạm vi P0 |
+| 2 | Chứng nhận cho SV **trường chưa đối tác** do ai đồng cấp? | Mẫu chứng nhận, quy trình duyệt |
+| 3 | Có tách Mentor và TA không? Đội ngũ chấm dự kiến bao nhiêu người? | Phân quyền, hạn phản hồi cam kết |
+| 4 | suai.vn bán khóa qua **WooCommerce** hay **thanh toán sẵn của Tutor**? Tutor đang dùng bản Free hay Pro, phiên bản nào? | Cách tạo mã giảm 50%, hook đồng bộ |
+| 5 | meet.suai.vn đã bật xác thực JWT chưa? Ai quản trị server Jitsi? | Kiểm soát vào phòng, điểm danh |
+| 6 | Giáo viên trường chỉ xem, hay được nhận xét bài? | Phân quyền |
+| 7 | Quy tắc gia hạn/bảo lưu ở mục 3 có ổn không? | Logic lịch cá nhân |
+| 8 | Domain portal (vd. aicampustour.vn)? | Thương hiệu, email gửi đi |
+| 9 | Ngày workshop đầu tiên | Hạn P0 |
+| 10 | Ai phát triển (bạn tự build cùng Claude hay thuê đội) và ngân sách hạ tầng/tháng? | Phạm vi P0, lựa chọn dịch vụ |
