@@ -184,12 +184,12 @@
 **Description:** `/admin/nguoi-dung`: tìm theo email/tên, lọc theo vai trò, xem chi tiết, thu hồi vai trò, khóa/mở tài khoản (khóa thì thu hồi mọi phiên).
 
 **Acceptance criteria:**
-- [ ] Khóa tài khoản → request kế tiếp của người đó bị từ chối
-- [ ] Thu hồi vai trò có hiệu lực ngay, có ghi audit
-- [ ] Phân trang danh sách (dự kiến hàng chục nghìn SV)
+- [x] Khóa tài khoản → request kế tiếp của người đó bị từ chối
+- [x] Thu hồi vai trò có hiệu lực ngay, có ghi audit
+- [x] Phân trang danh sách (dự kiến hàng chục nghìn SV)
 
 **Verification:**
-- [ ] Integration test khóa/thu hồi; E2E thao tác admin
+- [x] Integration test khóa/thu hồi; E2E thao tác admin
 
 **Dependencies:** Task 9
 

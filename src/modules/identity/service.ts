@@ -1,4 +1,4 @@
-import { and, eq, gt, isNull } from "drizzle-orm";
+import { and, asc, count, desc, eq, exists, gt, ilike, inArray, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
 import { recordAudit } from "@/lib/audit";
 import { db } from "@/lib/db";
@@ -6,7 +6,7 @@ import { sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { ROLE_LABELS, SCOPE_LABELS } from "./labels";
 import { authorize, ROLES, SCOPE_TYPES, type Actor, type Role } from "./policy";
-import { roleAssignment, staffInvitation, user } from "./schema";
+import { roleAssignment, session, staffInvitation, user } from "./schema";
 
 const INVITATION_DAYS = 14;
 const SCOPED_ROLES: ReadonlySet<Role> = new Set(["school_manager", "teacher"]);
@@ -128,5 +128,119 @@ export async function acceptPendingInvitations(userId: string, email: string) {
       });
       await tx.update(staffInvitation).set({ acceptedAt: new Date() }).where(eq(staffInvitation.id, invitation.id));
     }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Quản trị người dùng
+
+export type UserListQuery = { q?: string; role?: Role; page: number; pageSize: number };
+
+export async function listUsers(actor: Actor, query: UserListQuery) {
+  authorize(actor, "user.view_list", { kind: "user_admin" });
+  const conditions = [];
+  if (query.q?.trim()) {
+    const pattern = `%${query.q.trim().toLowerCase()}%`;
+    conditions.push(or(ilike(user.email, pattern), ilike(user.name, pattern)));
+  }
+  if (query.role) {
+    conditions.push(
+      exists(
+        db
+          .select({ one: sql`1` })
+          .from(roleAssignment)
+          .where(and(eq(roleAssignment.userId, user.id), eq(roleAssignment.role, query.role), isNull(roleAssignment.revokedAt))),
+      ),
+    );
+  }
+  const where = conditions.length ? and(...conditions) : undefined;
+  const [{ total }] = await db.select({ total: count() }).from(user).where(where);
+  const rows = await db
+    .select({ id: user.id, email: user.email, name: user.name, status: user.status, createdAt: user.createdAt })
+    .from(user)
+    .where(where)
+    .orderBy(desc(user.createdAt), asc(user.email))
+    .limit(query.pageSize)
+    .offset((query.page - 1) * query.pageSize);
+
+  const grants = rows.length
+    ? await db
+        .select({ userId: roleAssignment.userId, role: roleAssignment.role, scopeType: roleAssignment.scopeType, scopeId: roleAssignment.scopeId })
+        .from(roleAssignment)
+        .where(and(inArray(roleAssignment.userId, rows.map((row) => row.id)), isNull(roleAssignment.revokedAt)))
+    : [];
+  const items = rows.map((row) => ({
+    ...row,
+    roles: grants.filter((grant) => grant.userId === row.id).map(({ role, scopeType, scopeId }) => ({ role, scopeType, scopeId })),
+  }));
+  return { items, total: Number(total), page: query.page, pageSize: query.pageSize };
+}
+
+async function activeGrantsOf(userId: string) {
+  return db
+    .select({ id: roleAssignment.id, role: roleAssignment.role, scopeType: roleAssignment.scopeType, scopeId: roleAssignment.scopeId, createdAt: roleAssignment.createdAt })
+    .from(roleAssignment)
+    .where(and(eq(roleAssignment.userId, userId), isNull(roleAssignment.revokedAt)))
+    .orderBy(asc(roleAssignment.createdAt));
+}
+
+export async function getUserDetail(actor: Actor, userId: string) {
+  authorize(actor, "user.view_list", { kind: "user_admin" });
+  const [account] = await db
+    .select({ id: user.id, email: user.email, name: user.name, phone: user.phone, status: user.status, createdAt: user.createdAt })
+    .from(user)
+    .where(eq(user.id, userId));
+  if (!account) return null;
+  const roles = await activeGrantsOf(userId);
+  const [{ activeSessions }] = await db
+    .select({ activeSessions: count() })
+    .from(session)
+    .where(and(eq(session.userId, userId), gt(session.expiresAt, new Date())));
+  return { ...account, roles, activeSessions: Number(activeSessions) };
+}
+
+/** Quyền "user.manage" trên một tài khoản cụ thể (admin không thao tác được trên Super Admin). */
+async function authorizeManage(actor: Actor, targetUserId: string) {
+  const targetRoles = (await activeGrantsOf(targetUserId)).map((grant) => grant.role);
+  authorize(actor, "user.manage", { kind: "user_admin", targetRoles });
+}
+
+export async function setUserStatus(actor: Actor, targetUserId: string, status: "active" | "suspended") {
+  if (targetUserId === actor.userId) throw new Error("Không thể tự khóa hoặc mở khóa chính mình.");
+  await authorizeManage(actor, targetUserId);
+  await db.transaction(async (tx) => {
+    await tx.update(user).set({ status, updatedAt: new Date() }).where(eq(user.id, targetUserId));
+    if (status === "suspended") await tx.delete(session).where(eq(session.userId, targetUserId));
+    await recordAudit(
+      { actorId: actor.userId, action: status === "suspended" ? "user.suspended" : "user.reactivated", targetType: "user", targetId: targetUserId },
+      tx,
+    );
+  });
+}
+
+export async function revokeRole(actor: Actor, assignmentId: string) {
+  const [grant] = await db.select().from(roleAssignment).where(and(eq(roleAssignment.id, assignmentId), isNull(roleAssignment.revokedAt)));
+  if (!grant) throw new Error("Vai trò không tồn tại hoặc đã bị thu hồi.");
+  await authorizeManage(actor, grant.userId);
+  if (grant.role === "super_admin") {
+    authorize(actor, "role.grant_super_admin", { kind: "user_admin" });
+    const [{ remaining }] = await db
+      .select({ remaining: count() })
+      .from(roleAssignment)
+      .where(and(eq(roleAssignment.role, "super_admin"), isNull(roleAssignment.revokedAt)));
+    if (Number(remaining) <= 1) throw new Error("Không thể thu hồi Super Admin cuối cùng.");
+  }
+  await db.transaction(async (tx) => {
+    await tx.update(roleAssignment).set({ revokedAt: new Date() }).where(eq(roleAssignment.id, assignmentId));
+    await recordAudit(
+      {
+        actorId: actor.userId,
+        action: "role.revoked",
+        targetType: "user",
+        targetId: grant.userId,
+        metadata: { role: grant.role, scopeType: grant.scopeType, scopeId: grant.scopeId },
+      },
+      tx,
+    );
   });
 }
