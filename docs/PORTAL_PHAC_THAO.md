@@ -1,5 +1,7 @@
 # Phác thảo dự án: Portal tự học AI 30 ngày — AI Campus Tour
 
+> Thiết kế chi tiết chương trình học, module, quy trình xác nhận: xem [`THIET_KE_CHUONG_TRINH.md`](THIET_KE_CHUONG_TRINH.md).
+
 > **v0.2 (26/10/2026)**: cập nhật theo phản hồi của Johnny. Nguồn: `docs/AI_Campus_Tour_PROJECT.md`, đề cương chương trình, kiểm tra trực tiếp suai.vn.
 > Quy ước: **[Chốt]** = Johnny đã xác nhận · **[Tài liệu]** = có trong tài liệu · **[Đã kiểm tra]** = Claude đã xem trên hệ thống thật · **[Đề xuất]** = cần chốt · **[Giả định]** = chưa có dữ kiện.
 
@@ -14,6 +16,9 @@
 | 3 | Thương hiệu **AI Campus Tour**; Sự AI là **người sáng lập** | Domain/giao diện mang tên AI Campus Tour; có dòng "Sáng lập bởi Sự AI" |
 | 4 | Khóa video chạy trên **Tutor LMS (WordPress, suai.vn)**; lớp trực tuyến qua **meet.suai.vn (Jitsi)** | Tích hợp qua 1 plugin cầu nối trên suai.vn và JWT của Jitsi |
 | 5 | Lộ trình dùng **nhiều nguồn học (N1–N11)**; khóa Sự AI chỉ là 1 trong số đó | Có thư viện nguồn học chung; tiến độ tính theo sản phẩm SV nộp, không theo nguồn đã học |
+| 6 | **SV đăng ký tự do** (miễn phí), không bắt buộc mã workshop | Mã workshop chỉ dùng để ghi nguồn; cần cơ chế kiểm soát tải chấm |
+| 7 | Chứng nhận do **Trường + Viện ĐT Bách Khoa** cấp | Trường chưa hợp tác: xem `THIET_KE_CHUONG_TRINH.md` mục 9 |
+| 8 | Tutor LMS **Free**: hoàn thành khóa video → suai.vn **gọi API portal**. Khóa trên meet.suai.vn: **nhân viên portal xác nhận thủ công** | Bỏ SSO/webhook tiến độ từng bài khỏi phạm vi bắt buộc; thêm API nhận hoàn thành khóa + màn xác nhận tay |
 
 > Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
 
