@@ -13,3 +13,5 @@ e2e
 tests
 *.md
 !AGENTS.md
+playwright.config.ts
+vitest.config.mts
