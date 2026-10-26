@@ -8,6 +8,9 @@ export default function AdminHomePage() {
     <main className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Quản trị</h1>
       <nav className="flex flex-col gap-2">
+        <Link href="/nhan-su" className="text-primary underline-offset-4 hover:underline">
+          Hàng đợi chấm bài
+        </Link>
         <Link href="/admin/nguoi-dung" className="text-primary underline-offset-4 hover:underline">
           Người dùng
         </Link>

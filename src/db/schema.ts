@@ -7,3 +7,4 @@ export * from "@/modules/org/schema";
 export * from "@/modules/enrollment/schema";
 export * from "@/modules/learning/schema";
 export * from "@/lib/settings-schema";
+export * from "@/modules/review/schema";
