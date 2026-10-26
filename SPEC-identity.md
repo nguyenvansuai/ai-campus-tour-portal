@@ -1,7 +1,7 @@
 # Spec: `identity` (tài khoản, đăng nhập, vai trò, phân quyền)
 
 > Module đầu tiên trong `CAPABILITY_MAP.md` (giai đoạn P0). Các module sau đều dựa vào module này.
-> Trạng thái: **chờ duyệt**.
+> Trạng thái: **đã duyệt (26/10/2026)**. Các câu hỏi mở đã được Johnny trả lời.
 
 ## Objective
 
@@ -20,7 +20,7 @@ Cho mọi người dùng portal **đăng nhập nhanh trên điện thoại**, k
 **User stories:**
 
 1. Là SV, tôi nhập email → nhận mã 6 số qua email → nhập mã → vào portal. Hoặc bấm "Tiếp tục với Google".
-2. Là SV, tôi đăng nhập lại trên cùng điện thoại mà không phải nhập mã trong 30 ngày.
+2. Là SV, tôi đăng nhập lại trên cùng điện thoại mà không phải nhập mã trong 30 ngày. Là nhân sự, tôi không bị tự đăng xuất.
 3. Là Admin, tôi mời `thaycuong@...` làm **Quản lý trường** của *ĐH Công Thương*. Người đó đăng nhập lần đầu bằng email được mời thì tự có vai trò đó.
 4. Là Admin, tôi gán cho một người cả vai trò Mentor và TA.
 5. Là GV được gán *Khoa Kế toán – ĐH Công Thương*, tôi **không** xem được SV khoa khác, trường khác, kể cả khi tự sửa URL.
@@ -77,12 +77,12 @@ Các module sau tự đăng ký loại tài nguyên và hành động của mìn
 
 | Hạng mục | Quy định |
 |---|---|
-| Cách đăng nhập | **Email OTP 6 số** (hiệu lực 10 phút, gửi qua Brevo) và **Google**. Không dùng mật khẩu |
+| Cách đăng nhập | **Email OTP 6 số** (hiệu lực 10 phút, gửi qua Brevo từ `no-reply@suai.vn`) và **Google** (OAuth client trong Google Cloud project dùng chung với Drive API). Không dùng mật khẩu |
 | Gộp tài khoản | Cùng email = cùng tài khoản, dù vào bằng OTP hay Google |
-| Phiên | Cookie httpOnly. SV: 30 ngày. Nhân sự: 7 ngày. Khóa tài khoản thì thu hồi mọi phiên |
+| Phiên | Cookie httpOnly. **SV: 30 ngày. Nhân sự: không tự hết hạn** (tự gia hạn khi còn dùng) [Chốt]. Bù lại: nhân sự xem và đăng xuất từng thiết bị; admin thu hồi được mọi phiên của một người; khóa tài khoản thì thu hồi mọi phiên |
 | Giới hạn | Mỗi email: 5 lần xin mã/15 phút, 5 lần nhập sai/mã. **Giới hạn theo IP phải đặt cao** (≥ 600 lần/15 phút), vì 500 SV dùng chung wifi hội trường sẽ có cùng một IP |
 | Mời nhân sự | Admin tạo lời mời (email, vai trò, phạm vi, hạn 14 ngày). Người được mời đăng nhập bằng đúng email đó thì vai trò được kích hoạt |
-| Super Admin đầu tiên | Tạo bằng lệnh CLI trên server (`pnpm admin:create <email>`), không có giao diện tự phong |
+| Super Admin đầu tiên | `nguyenvansutt@gmail.com`, tạo bằng lệnh CLI trên server (`pnpm admin:create <email>`), không có giao diện tự phong |
 
 ### Dữ liệu (Drizzle, PostgreSQL)
 
@@ -209,7 +209,7 @@ export async function inviteStaff(input: unknown) {
 ## Success Criteria
 
 1. SV đăng nhập bằng OTP hoặc Google thành công trên màn hình 375px; luồng OTP ≤ 3 màn hình.
-2. Đăng nhập lại trong 30 ngày không cần mã (SV); nhân sự hết phiên sau 7 ngày.
+2. SV đăng nhập lại trong 30 ngày không cần mã; phiên nhân sự không tự hết hạn và thu hồi được từ trang quản lý phiên.
 3. Cùng một email, vào bằng OTP hay Google đều ra **cùng một tài khoản**.
 4. Lời mời nhân sự kích hoạt đúng vai trò và phạm vi khi đăng nhập; lời mời hết hạn sau 14 ngày thì không dùng được.
 5. Bảng ma trận quyền (≥ 40 ca) pass 100%, gồm các ca vượt phạm vi trường/khoa/lớp.
@@ -218,9 +218,9 @@ export async function inviteStaff(input: unknown) {
 8. Mọi thao tác trong danh sách audit đều có bản ghi `audit_log`.
 9. `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` đều chạy sạch.
 
-## Open Questions
+## Quyết định đã chốt (thay cho Open Questions)
 
-1. **Google OAuth:** tạo OAuth client trong cùng Google Cloud project với Drive API? Cần bạn tạo project và cấp `client_id`/`client_secret` (đặt trên VPS, không gửi qua chat).
-2. **Brevo:** email gửi đi dùng địa chỉ nào (`no-reply@aicampustour.suai.vn` hay `no-reply@suai.vn`)? Ai có quyền thêm bản ghi DNS (SPF/DKIM) cho `suai.vn`?
-3. Danh sách **Super Admin ban đầu** (email).
-4. Thời hạn phiên SV 30 ngày, nhân sự 7 ngày: có ổn không?
+1. Google OAuth: dùng chung Google Cloud project với Drive API. Johnny tạo client và đặt secret trên VPS.
+2. Email gửi đi: `no-reply@suai.vn`. Johnny có quyền thêm DNS (SPF/DKIM/DMARC) cho `suai.vn`.
+3. Super Admin ban đầu: `nguyenvansutt@gmail.com`.
+4. Phiên: SV 30 ngày; nhân sự không tự hết hạn.
