@@ -4,6 +4,7 @@
 |---|---|
 | [PORTAL_PHAC_THAO.md](PORTAL_PHAC_THAO.md) | **Phác thảo toàn diện portal tự học 30 ngày** |
 | [THIET_KE_CHUONG_TRINH.md](THIET_KE_CHUONG_TRINH.md) | **Thiết kế chương trình: module, bài học, minh chứng, xác nhận, thời gian** |
+| [DIEU_KHOAN_DU_LIEU.md](DIEU_KHOAN_DU_LIEU.md) | Bản nháp điều khoản xử lý dữ liệu SV và các ô đồng ý (chờ tư vấn pháp lý) |
 | [NGUON_HOC_BO_SUNG.md](NGUON_HOC_BO_SUNG.md) | Nguồn học bổ sung buổi 4–6, 9; đường miễn phí; cách đưa nguồn vào portal |
 | [AI_Campus_Tour_PROJECT.md](AI_Campus_Tour_PROJECT.md) | Hồ sơ tổng hợp toàn dự án (context chính) |
 | [md/De_cuong_full_chuong_trinh_AI_campus_tour.md](md/De_cuong_full_chuong_trinh_AI_campus_tour.md) | Đề cương đầy đủ: workshop, lộ trình 30 ngày, **đặc tả portal**, chứng nhận |

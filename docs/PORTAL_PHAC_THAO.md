@@ -356,7 +356,14 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 | Phương án | Cần gì | Lưu ý |
 |---|---|---|
 | **A. Shared Drive (Google Workspace)** (khuyến nghị) | Gói Workspace có Shared Drive + service account | Dung lượng dùng chung của tổ chức; không phụ thuộc tài khoản cá nhân; nhân sự nghỉ không mất dữ liệu |
-| **B. Drive cá nhân** | Một tài khoản Google + OAuth (refresh token) | Service account **không có dung lượng riêng**, nên phải ghi vào Drive của người thật. Gói miễn phí chỉ 15 GB, sẽ phải mua thêm Google One |
+| **B. Drive cá nhân** ✅ **[Chốt: Gmail cá nhân, đã mua 200 GB]** | Một tài khoản Google + OAuth (refresh token) | Service account **không có dung lượng riêng**, nên phải ghi vào Drive của người thật |
+
+**Lưu ý khi triển khai phương án B:**
+- OAuth app trên Google Cloud phải chuyển sang **"In production"**. Ở chế độ "Testing", refresh token **hết hạn sau 7 ngày**, portal sẽ đột ngột không tải file lên được.
+- Chỉ xin scope `drive.file`: portal chỉ thấy file do chính portal tạo, không đọc được phần còn lại của Drive cá nhân.
+- Refresh token lưu trong biến môi trường trên VPS, không commit vào repo. Nếu đổi mật khẩu hoặc thu hồi quyền tài khoản Google, phải cấp lại token.
+- Thêm cảnh báo trên trang admin khi dung lượng Drive dùng quá 80%.
+- Rủi ro: dữ liệu SV nằm trong tài khoản cá nhân. Nên bật xác minh 2 bước và giới hạn người biết mật khẩu.
 
 **Ước tính dung lượng [Giả định]:** 10.000 SV/năm × ~5 file tải lên × ~1 MB ≈ **50 GB/năm**. Nếu khuyến khích nộp link tốt thì ít hơn nhiều.
 
