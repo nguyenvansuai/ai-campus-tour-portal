@@ -15,6 +15,7 @@ import * as schema from "./schema";
 const DAY = 60 * 60 * 24;
 
 export const OTP_EXPIRES_IN_SECONDS = 10 * 60;
+export const SESSION_COOKIE_DAYS = 400;
 /** Mỗi email: tối đa 5 lần xin mã trong 15 phút. */
 export const OTP_SEND_LIMIT = { max: 5, windowSeconds: 15 * 60 };
 /**
@@ -57,8 +58,9 @@ export function createAuth(options: CreateAuthOptions = {}) {
       accountLinking: { enabled: true, trustedProviders: ["google"] },
     },
     session: {
-      // Sinh viên: 30 ngày, tự gia hạn khi còn dùng.
-      expiresIn: 30 * DAY,
+      // Cookie phiên dài nhất trình duyệt cho phép (~400 ngày), tự gia hạn mỗi ngày khi còn dùng.
+      // Nhân sự: không bị đăng xuất theo thời gian. SV: portal tự hủy phiên không dùng quá 30 ngày (xem actor.ts).
+      expiresIn: SESSION_COOKIE_DAYS * DAY,
       updateAge: DAY,
     },
     rateLimit: {

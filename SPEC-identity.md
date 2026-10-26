@@ -79,7 +79,7 @@ Các module sau tự đăng ký loại tài nguyên và hành động của mìn
 |---|---|
 | Cách đăng nhập | **Email OTP 6 số** (hiệu lực 10 phút, gửi qua Brevo từ `no-reply@suai.vn`) và **Google** (OAuth client trong Google Cloud project dùng chung với Drive API). Không dùng mật khẩu |
 | Gộp tài khoản | Cùng email = cùng tài khoản, dù vào bằng OTP hay Google |
-| Phiên | Cookie httpOnly. **SV: 30 ngày. Nhân sự: không tự hết hạn** (tự gia hạn khi còn dùng) [Chốt]. Bù lại: nhân sự xem và đăng xuất từng thiết bị; admin thu hồi được mọi phiên của một người; khóa tài khoản thì thu hồi mọi phiên |
+| Phiên | Cookie httpOnly hạn ~400 ngày (tối đa trình duyệt cho phép), tự gia hạn mỗi ngày khi còn dùng. **SV: không dùng quá 30 ngày thì portal hủy phiên** (tính theo lần dùng cuối). **Nhân sự: không tự hết hạn** [Chốt]. Nhân sự xem và đăng xuất từng thiết bị; admin thu hồi mọi phiên của một người; khóa tài khoản thì thu hồi mọi phiên |
 | Giới hạn | Mỗi email: 5 lần xin mã/15 phút, 5 lần nhập sai/mã. **Giới hạn theo IP phải đặt cao** (≥ 600 lần/15 phút), vì 500 SV dùng chung wifi hội trường sẽ có cùng một IP |
 | Mời nhân sự | Admin tạo lời mời (email, vai trò, phạm vi, hạn 14 ngày). Người được mời đăng nhập bằng đúng email đó thì vai trò được kích hoạt |
 | Super Admin đầu tiên | `nguyenvansutt@gmail.com`, tạo bằng lệnh CLI trên server (`pnpm admin:create <email>`), không có giao diện tự phong |

@@ -42,7 +42,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 - [x] Task 8: `requireActor()`, thư viện audit log, lệnh `admin:create`
 - [x] Task 9: Mời nhân sự (service + màn admin + kích hoạt khi đăng nhập)
 - [x] Task 10: Danh sách người dùng: xem vai trò, thu hồi vai trò, khóa/mở tài khoản
-- [ ] Task 11: Quản lý phiên đăng nhập (nhân sự tự đăng xuất thiết bị; admin thu hồi mọi phiên)
+- [x] Task 11: Quản lý phiên đăng nhập (nhân sự tự đăng xuất thiết bị; admin thu hồi mọi phiên)
 - [ ] Task 12: Màn xem nhật ký `/admin/nhat-ky`
 - [ ] Task 13: Bảng `consent` + service ghi nhận/rút đồng ý theo phiên bản điều khoản
 

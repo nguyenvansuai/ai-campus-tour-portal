@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ROLE_LABELS, SCOPE_LABELS } from "@/modules/identity/labels";
 import { getUserDetail } from "@/modules/identity/service";
 import { requirePermission } from "@/modules/identity/session";
-import { RevokeRoleButton, UserStatusButton } from "@/modules/identity/ui/manage-buttons";
+import { RevokeAllSessionsButton, RevokeRoleButton, UserStatusButton } from "@/modules/identity/ui/manage-buttons";
 
 export const metadata: Metadata = { title: "Chi tiết người dùng · AI Campus Tour" };
 
@@ -47,6 +47,7 @@ export default async function UserDetailPage({ params }: PageProps<"/admin/nguoi
         <section className="flex flex-col gap-3">
           <h2 className="text-lg font-semibold">Tài khoản</h2>
           <UserStatusButton userId={detail.id} status={detail.status} />
+          {detail.activeSessions > 0 ? <RevokeAllSessionsButton userId={detail.id} /> : null}
         </section>
       ) : null}
     </main>

@@ -244,3 +244,28 @@ export async function revokeRole(actor: Actor, assignmentId: string) {
     );
   });
 }
+
+// ---------------------------------------------------------------------------
+// Phiên đăng nhập (thiết bị)
+
+/** Thiết bị đang đăng nhập của chính người dùng. Không trả token phiên ra ngoài. */
+export async function listMySessions(actor: Actor, currentSessionId: string | null) {
+  const rows = await db
+    .select({ id: session.id, userAgent: session.userAgent, ipAddress: session.ipAddress, createdAt: session.createdAt, updatedAt: session.updatedAt })
+    .from(session)
+    .where(and(eq(session.userId, actor.userId), gt(session.expiresAt, new Date())))
+    .orderBy(desc(session.updatedAt));
+  return rows.map((row) => ({ ...row, current: row.id === currentSessionId }));
+}
+
+export async function revokeMySession(actor: Actor, sessionId: string) {
+  await db.delete(session).where(and(eq(session.id, sessionId), eq(session.userId, actor.userId)));
+}
+
+export async function revokeAllSessions(actor: Actor, targetUserId: string) {
+  await authorizeManage(actor, targetUserId);
+  await db.transaction(async (tx) => {
+    await tx.delete(session).where(eq(session.userId, targetUserId));
+    await recordAudit({ actorId: actor.userId, action: "session.revoked_all", targetType: "user", targetId: targetUserId }, tx);
+  });
+}

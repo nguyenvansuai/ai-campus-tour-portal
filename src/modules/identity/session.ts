@@ -1,14 +1,13 @@
 import "server-only";
 import { headers } from "next/headers";
 import { forbidden, redirect } from "next/navigation";
-import { getActor } from "./actor";
-import { auth } from "./auth";
+import { getActor, getValidSession } from "./actor";
 import { can, type Action, type Actor, type Resource } from "./policy";
 
 export async function getCurrentSession() {
   // Đọc headers() trước để Next.js biết trang này render theo từng request (không prerender lúc build).
   const requestHeaders = await headers();
-  return auth.api.getSession({ headers: requestHeaders });
+  return getValidSession(requestHeaders);
 }
 
 /** Trang cần đăng nhập: chưa có phiên thì chuyển về /dang-nhap. */

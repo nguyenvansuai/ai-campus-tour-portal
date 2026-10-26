@@ -42,3 +42,15 @@ test("chưa đăng nhập thì không vào được trang học", async ({ page 
   await page.goto("/hoc");
   await expect(page).toHaveURL(/\/dang-nhap$/);
 });
+
+test("trang thiết bị liệt kê thiết bị đang dùng", async ({ page }) => {
+  const email = `thietbi-${Date.now()}@example.com`;
+  await page.goto("/dang-nhap");
+  await page.getByLabel("Email").fill(email);
+  await page.getByRole("button", { name: "Gửi mã" }).click();
+  await page.getByLabel("Mã 6 số").fill(await latestOtpFor(email));
+  await page.getByRole("button", { name: "Đăng nhập" }).click();
+  await expect(page).toHaveURL(/\/hoc$/);
+  await page.goto("/tai-khoan/thiet-bi");
+  await expect(page.getByText("(thiết bị này)")).toBeVisible();
+});

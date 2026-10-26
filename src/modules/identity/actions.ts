@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireActor } from "./session";
-import { inviteStaff, InviteStaffInput, revokeRole, setUserStatus } from "./service";
+import { inviteStaff, InviteStaffInput, revokeAllSessions, revokeMySession, revokeRole, setUserStatus } from "./service";
 import { ForbiddenError } from "./policy";
 
 export type InviteStaffState = { status: "idle" | "success" | "error"; message: string; fieldErrors?: Record<string, string> };
@@ -61,4 +61,18 @@ export async function revokeRoleAction(_prev: ManageState, formData: FormData): 
   const actor = await requireActor();
   const assignmentId = z.uuid().parse(formData.get("assignmentId"));
   return runManage(() => revokeRole(actor, assignmentId), "Đã thu hồi vai trò.");
+}
+
+export async function revokeMySessionAction(_prev: ManageState, formData: FormData): Promise<ManageState> {
+  const actor = await requireActor();
+  const sessionId = z.string().min(1).parse(formData.get("sessionId"));
+  await revokeMySession(actor, sessionId);
+  revalidatePath("/tai-khoan/thiet-bi");
+  return { status: "success", message: "Đã đăng xuất thiết bị." };
+}
+
+export async function revokeAllSessionsAction(_prev: ManageState, formData: FormData): Promise<ManageState> {
+  const actor = await requireActor();
+  const userId = z.string().min(1).parse(formData.get("userId"));
+  return runManage(() => revokeAllSessions(actor, userId), "Đã đăng xuất người dùng khỏi mọi thiết bị.");
 }

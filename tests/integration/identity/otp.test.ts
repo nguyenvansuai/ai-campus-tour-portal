@@ -91,12 +91,12 @@ describe("Đăng nhập bằng email OTP", () => {
     await expect(signIn("bikhoa@example.com", lastOtpFor("bikhoa@example.com"))).rejects.toThrow(/bị khóa/);
   });
 
-  it("phiên đăng nhập của sinh viên có hạn 30 ngày", async () => {
+  it("cookie phiên có hạn dài (400 ngày); thời hạn 30 ngày của SV do portal áp theo lần dùng cuối", async () => {
     await requestOtp("sv@example.com");
     await signIn("sv@example.com", lastOtpFor("sv@example.com"));
     const result = await db.execute<{ days: number }>(
       sql`select extract(epoch from (expires_at - created_at)) / 86400 as days from "session"`,
     );
-    expect(Math.round(Number(result.rows[0]?.days))).toBe(30);
+    expect(Math.round(Number(result.rows[0]?.days))).toBe(400);
   });
 });

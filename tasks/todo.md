@@ -202,12 +202,12 @@
 **Description:** Phiên nhân sự không tự hết hạn (tự gia hạn khi dùng). Trang `/tai-khoan/thiet-bi`: xem các thiết bị đang đăng nhập và đăng xuất từng thiết bị. Admin thu hồi mọi phiên của một người trong trang chi tiết người dùng.
 
 **Acceptance criteria:**
-- [ ] Phiên nhân sự không bị đăng xuất theo thời gian; phiên SV hết sau 30 ngày
-- [ ] Đăng xuất 1 thiết bị không ảnh hưởng thiết bị khác
-- [ ] Admin thu hồi → mọi thiết bị của người đó bị đăng xuất, có ghi audit
+- [x] Phiên nhân sự không bị đăng xuất theo thời gian; phiên SV hết sau 30 ngày
+- [x] Đăng xuất 1 thiết bị không ảnh hưởng thiết bị khác
+- [x] Admin thu hồi → mọi thiết bị của người đó bị đăng xuất, có ghi audit
 
 **Verification:**
-- [ ] Integration test cho 2 loại phiên và thao tác thu hồi
+- [x] Integration test cho 2 loại phiên và thao tác thu hồi
 
 **Dependencies:** Task 10
 
