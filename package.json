@@ -14,7 +14,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file-if-exists=.env.local scripts/migrate.ts",
     "db:studio": "drizzle-kit studio",
-    "test:coverage": "vitest run --coverage.enabled"
+    "test:coverage": "vitest run --coverage.enabled",
+    "admin:create": "tsx --env-file-if-exists=.env.local scripts/admin-create.ts"
   },
   "dependencies": {
     "better-auth": "1.7.13",

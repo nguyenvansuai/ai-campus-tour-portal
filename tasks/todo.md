@@ -149,11 +149,11 @@
 **Description:** `requireActor()` lấy phiên + vai trò còn hiệu lực. `src/lib/audit.ts` ghi `audit_log`. Script `pnpm admin:create <email>` tạo/gán `super_admin` (dùng cho `nguyenvansutt@gmail.com`). Khuôn chung cho server action (actor → Zod → authorize → service → audit).
 
 **Acceptance criteria:**
-- [ ] Chạy `admin:create` 2 lần không tạo trùng; có ghi audit
-- [ ] Request không có phiên → chuyển về `/dang-nhap`; có phiên nhưng thiếu quyền → trang 403 tiếng Việt
+- [x] Chạy `admin:create` 2 lần không tạo trùng; có ghi audit
+- [x] Request không có phiên → chuyển về `/dang-nhap`; có phiên nhưng thiếu quyền → trang 403 tiếng Việt
 
 **Verification:**
-- [ ] Integration test cho `requireActor`, `audit`, script
+- [x] Integration test cho `requireActor`, `audit`, script
 
 **Dependencies:** Task 3, Task 7
 

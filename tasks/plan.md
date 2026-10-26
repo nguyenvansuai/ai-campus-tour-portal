@@ -39,7 +39,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 
 ### Phase 3: Vai trò và quản trị
 - [x] Task 7: `role_assignment` + `policy.ts` + bảng ma trận quyền ≥ 40 ca
-- [ ] Task 8: `requireActor()`, thư viện audit log, lệnh `admin:create`
+- [x] Task 8: `requireActor()`, thư viện audit log, lệnh `admin:create`
 - [ ] Task 9: Mời nhân sự (service + màn admin + kích hoạt khi đăng nhập)
 - [ ] Task 10: Danh sách người dùng: xem vai trò, thu hồi vai trò, khóa/mở tài khoản
 - [ ] Task 11: Quản lý phiên đăng nhập (nhân sự tự đăng xuất thiết bị; admin thu hồi mọi phiên)
