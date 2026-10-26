@@ -77,3 +77,13 @@ jobs:
           name: playwright-report
           path: test-results/
           retention-days: 7
+
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image chạy production
+        run: docker build --target runner -t aicampustour:ci .
+      - name: Build image công cụ (migration, admin:create)
+        run: docker build --target tools -t aicampustour-tools:ci .

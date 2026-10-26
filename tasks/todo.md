@@ -260,8 +260,8 @@
 **Description:** Dockerfile build Next.js standalone; `deploy/docker-compose.yml` (app + Postgres + Caddy); Caddyfile cho `aicampustour.suai.vn`; `deploy/README.md` hướng dẫn trỏ DNS, đặt biến môi trường, chạy migration, tạo Super Admin. **Không tự deploy**: Johnny chạy trên VPS.
 
 **Acceptance criteria:**
-- [ ] `docker compose up` local chạy được app + DB
-- [ ] Không có secret nào trong file commit
+- [ ] `docker compose up` local chạy được app + DB (môi trường Claude không có Docker daemon: kiểm tra bằng job `docker` trên CI + Johnny chạy thử trên VPS)
+- [x] Không có secret nào trong file commit
 
 **Verification:**
 - [ ] Build image và chạy thử local
