@@ -47,8 +47,8 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 - [x] Task 13: Bảng `consent` + service ghi nhận/rút đồng ý theo phiên bản điều khoản
 
 ### Checkpoint 3 (hoàn tất module)
-- [ ] Đạt đủ 9 Success Criteria trong `SPEC-identity.md`
-- [ ] Review code (5 trục: đúng, dễ đọc, kiến trúc, bảo mật, hiệu năng)
+- [x] Đạt đủ 9 Success Criteria trong `SPEC-identity.md`
+- [x] Review code (5 trục: đúng, dễ đọc, kiến trúc, bảo mật, hiệu năng)
 
 ### Phase 4: Chuẩn bị deploy (không tự deploy)
 - [ ] Task 14: Dockerfile (standalone), `deploy/docker-compose.yml`, Caddyfile, hướng dẫn chạy trên VPS

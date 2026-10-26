@@ -3,7 +3,7 @@ import { z } from "zod";
 import { recordAudit } from "@/lib/audit";
 import { auditLog } from "@/lib/audit-schema";
 import { db } from "@/lib/db";
-import { sendEmail } from "@/lib/email";
+import { escapeHtml, sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { ROLE_LABELS, SCOPE_LABELS } from "./labels";
 import { authorize, ROLES, SCOPE_TYPES, type Actor, type Role } from "./policy";
@@ -64,7 +64,7 @@ function renderInvitationEmail(role: Role, scopeType: (typeof SCOPE_TYPES)[numbe
     `Đăng nhập tại ${url} bằng chính địa chỉ email này. Lời mời có hiệu lực ${INVITATION_DAYS} ngày.`,
   ].join("\n");
   const html = `<div style="font-family:system-ui,sans-serif;font-size:16px;line-height:1.5">
-<p>Bạn được mời tham gia portal AI Campus Tour với vai trò <strong>${ROLE_LABELS[role]}</strong>${where}.</p>
+<p>Bạn được mời tham gia portal AI Campus Tour với vai trò <strong>${ROLE_LABELS[role]}</strong>${escapeHtml(where)}.</p>
 <p><a href="${url}">Đăng nhập</a> bằng chính địa chỉ email này. Lời mời có hiệu lực ${INVITATION_DAYS} ngày.</p>
 </div>`;
   return { subject: "Lời mời tham gia AI Campus Tour", text, html };
@@ -111,7 +111,20 @@ export async function inviteStaff(actor: Actor, rawInput: InviteStaffInput) {
   return invitation;
 }
 
-/** Gọi sau khi người dùng đăng nhập: kích hoạt mọi lời mời còn hạn gửi tới email của họ. */
+/** Gọi sau khi tạo phiên đăng nhập: kích hoạt lời mời còn hạn, rồi ghi nhật ký nếu là nhân sự. */
+export async function onSignedIn(params: { userId: string; email: string; ip: string | null }) {
+  await acceptPendingInvitations(params.userId, params.email);
+  const [staffGrant] = await db
+    .select({ id: roleAssignment.id })
+    .from(roleAssignment)
+    .where(and(eq(roleAssignment.userId, params.userId), isNull(roleAssignment.revokedAt)))
+    .limit(1);
+  if (staffGrant) {
+    await recordAudit({ actorId: params.userId, action: "auth.staff_sign_in", targetType: "user", targetId: params.userId, ip: params.ip });
+  }
+}
+
+/** Kích hoạt mọi lời mời còn hạn gửi tới email của người dùng. */
 export async function acceptPendingInvitations(userId: string, email: string) {
   await db.transaction(async (tx) => {
     const pending = await tx

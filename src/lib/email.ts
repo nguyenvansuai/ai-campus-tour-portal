@@ -66,3 +66,8 @@ export function renderOtpEmail(otp: string): Omit<OutgoingEmail, "to"> {
 </div>`;
   return { subject: `Mã đăng nhập AI Campus Tour: ${otp}`, text, html };
 }
+
+/** Escape ký tự đặc biệt trước khi chèn dữ liệu do người dùng nhập vào HTML của email. */
+export function escapeHtml(value: string) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}

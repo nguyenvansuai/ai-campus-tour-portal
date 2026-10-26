@@ -103,3 +103,27 @@ describe("InviteStaffInput", () => {
     expect(InviteStaffInput.safeParse(input).success).toBe(ok);
   });
 });
+
+describe("An toàn email mời", () => {
+  it("escape HTML trong mã phạm vi do admin nhập", async () => {
+    const boss = await superAdmin();
+    await inviteStaff(boss, { email: "gv@example.com", role: "teacher", scopeType: "class", scopeId: "<script>x</script>" });
+    const mail = memoryOutbox.findLast((m) => m.to === "gv@example.com")!;
+    expect(mail.html).not.toContain("<script>");
+    expect(mail.html).toContain("&lt;script&gt;");
+  });
+});
+
+describe("Nhật ký đăng nhập nhân sự", () => {
+  it("ghi nhật ký khi nhân sự đăng nhập, không ghi với sinh viên", async () => {
+    const boss = await superAdmin();
+    await inviteStaff(boss, { email: "mentor@example.com", role: "mentor", scopeType: "global", scopeId: null });
+    await signIn("mentor@example.com"); // lần đầu: kích hoạt vai trò
+    await signIn("mentor@example.com"); // lần hai: đã là nhân sự
+    await signIn("sv@example.com");
+    const logins = await db.select().from(auditLog).where(eq(auditLog.action, "auth.staff_sign_in"));
+    expect(logins.length).toBeGreaterThanOrEqual(1);
+    const [mentorRow] = await db.select().from(user).where(eq(user.email, "mentor@example.com"));
+    expect(logins.every((row) => row.actorId === mentorRow!.id)).toBe(true);
+  });
+});

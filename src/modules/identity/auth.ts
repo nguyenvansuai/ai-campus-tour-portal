@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { renderOtpEmail, sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { consumeRateLimit } from "@/lib/rate-limit";
-import { acceptPendingInvitations } from "./service";
+import { onSignedIn } from "./service";
 import * as schema from "./schema";
 
 const DAY = 60 * 60 * 24;
@@ -103,7 +103,7 @@ export function createAuth(options: CreateAuthOptions = {}) {
               .select({ email: schema.user.email })
               .from(schema.user)
               .where(eq(schema.user.id, newSession.userId));
-            if (owner) await acceptPendingInvitations(newSession.userId, owner.email);
+            if (owner) await onSignedIn({ userId: newSession.userId, email: owner.email, ip: newSession.ipAddress ?? null });
           },
         },
       },

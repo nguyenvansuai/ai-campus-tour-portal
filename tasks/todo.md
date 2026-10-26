@@ -250,8 +250,8 @@
 **Estimated scope:** Small
 
 ### Checkpoint 3
-- [ ] Đủ 9 Success Criteria trong `SPEC-identity.md`
-- [ ] Review code 5 trục
+- [x] Đủ 9 Success Criteria trong `SPEC-identity.md`
+- [x] Review code 5 trục
 
 ## Phase 4: Chuẩn bị deploy
 
