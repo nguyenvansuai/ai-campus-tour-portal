@@ -1,6 +1,6 @@
 # Thiết kế chương trình học trên Portal AI Campus Tour
 
-> v0.1 (26/10/2026). Đi kèm `PORTAL_PHAC_THAO.md`. Nội dung buổi học lấy từ **Đề cương full chương trình** (12 buổi, nguồn N1–N11).
+> v0.2 (26/10/2026). Đi kèm `PORTAL_PHAC_THAO.md`. Nội dung buổi học lấy từ **Đề cương full chương trình** (12 buổi, nguồn N1–N11).
 > Quy ước: **[Tài liệu]** = có trong đề cương · **[Chốt]** = Johnny đã xác nhận · **[Đề xuất]** = Claude đề xuất, cần duyệt.
 
 ---
@@ -15,12 +15,11 @@
   1. Bài học: SV tự xác nhận + minh chứng bắt buộc, TA kiểm ngẫu nhiên.
   2. Báo cáo module: mentor chấm Đạt/Cần sửa theo tiêu chí cụ thể.
   3. Dự án cuối: mentor chấm rubric 100 điểm.
-  4. Chứng nhận: Trường + Viện ĐT Bách Khoa duyệt cấp.
-- **Mỗi module có 2 phần bắt buộc:**
-  - **Cổng kiến thức**, qua bằng 1 trong 2 cách:
-    - **Cách 1:** học các chủ đề tương ứng trong khóa Sự AI (35 chủ đề; video và Zoom cùng nội dung). Hệ thống khóa học tự báo đã qua.
-    - **Cách 2:** tự học từ nguồn miễn phí rồi làm trắc nghiệm, hoặc làm thêm bài tập ở module có kỹ năng thao tác.
-  - **Sản phẩm thực hành + báo cáo module**: mọi SV đều phải nộp.
+  4. Chứng nhận: Viện ĐT Bách Khoa (+ Trường nếu trường đã kết nối) duyệt cấp.
+- **Bám theo đề cương:** mỗi buổi giữ đúng 3 cột *Học gì · Tự luyện · Học ở đâu*. SV chọn **bất kỳ nguồn nào** trong cột "Học ở đâu" (N1, N2, N3…). **N1 (khóa Sự AI) chỉ là tham khảo** [Tài liệu].
+- **Hoàn thành buổi = nộp sản phẩm tự luyện**, bất kể SV học từ nguồn nào.
+- **Kiểm tra kiến thức M1–M3:** mọi SV làm 1 trắc nghiệm ngắn mỗi module. SV đã học các chủ đề tương ứng trong khóa N1 (video báo qua API, Zoom do nhân viên xác nhận) thì **được miễn** trắc nghiệm đó.
+- **Chứng nhận [Chốt]:** SV thuộc **trường đã kết nối** nhận chứng nhận **Trường + Viện ĐT Bách Khoa**. SV các trường khác nhận chứng nhận **Viện ĐT Bách Khoa**.
 
 ---
 
@@ -73,29 +72,42 @@ Portal nên hỗ trợ nhiều loại chương trình ngay từ thiết kế d�
 - Chọn **tạm** ở M0 (theo ngành học), được đổi tới **trước ngày 15**. Từ khi M3 mở thì khóa lựa chọn.
 - Buổi 7–9 hiển thị nội dung theo khối đã chọn. Các buổi khác giống nhau cho mọi khối.
 
-### 2.3 Cổng kiến thức của từng module
+### 2.3 12 buổi theo đề cương và nguồn học
 
-Khóa **Ứng dụng AI cho văn phòng** của Sự AI có 35 chủ đề; bản video (Tutor LMS) và bản Zoom (meet.suai.vn) **cùng kiến thức** [Chốt]. Dưới đây là đề xuất chia 35 chủ đề vào các module, bám theo nội dung từng buổi trong đề cương.
+Cột "Học ở đâu" giữ nguyên theo **Đề cương, mục 3–4** [Tài liệu]. Cột cuối chỉ chỉ ra **chủ đề tương ứng trong khóa N1** (35 chủ đề; bản video và Zoom cùng nội dung [Chốt]) để SV nào chọn N1 biết cần xem bài nào. Đây là thông tin tham khảo, không phải yêu cầu.
 
-| Module | Chủ đề khóa Sự AI (Cách 1) | Cách 2: không học khóa Sự AI |
-|---|---|---|
-| **M1 · Nền tảng** | **1–11**: Giới thiệu · Làn sóng cắt giảm nhân sự · Ai bị thay thế · Từ chi tiết đến chiến lược · AI làm được gì · AI chưa làm được gì · Nguyên tắc giao việc · Chọn AI nào · Global Instruction · Memory & Chat History · Chọn Model & Effort | Học N2–N5 (Anthropic Academy) → **trắc nghiệm M1** (15 câu, ≥80%) |
-| **M2 · Xin việc** | **12–15**: Tab trình duyệt trong Claude · AI trong Excel · AI trên Word · AI trên PowerPoint | Tự học theo hướng dẫn trên portal → **trắc nghiệm M2** (10 câu) + **bài tập thao tác**: ảnh chụp AI chạy trong Excel/Word/PowerPoint (TA duyệt) |
-| **M3 · Workflow ngành** (khối A, B) | **16–25**: Tổng quan kiểm soát quy trình & AI agent · Báo cáo với Artifact · Kết nối Gmail/Drive · Schedule · Tách nhỏ agent · Vận hành 3 nhân viên AI · Giải bài tập phần 1–4 | Học N9 + hướng dẫn trên portal → **trắc nghiệm M3** (10 câu) + **bài tập**: 1 agent chạy theo lịch, kèm ảnh cấu hình (TA duyệt) |
-| **M3 · khối C (CNTT)** | Khóa Sự AI **không phủ** spec/code/deploy. Chủ đề 16–17 dùng tham khảo | **Mọi SV khối C** làm trắc nghiệm M3-C (dựa trên N11) |
-| **M4 · Dự án** (nâng cao, **tùy chọn**) | **26–35**: Skill là gì · Cài skill Anthropic · Plugin · Plugin Data & dashboard · Skill Creator (4 bài) · Plugin Creator · Plugin Trợ lý hành chính | Không bắt buộc. Làm thì được huy hiệu "Nâng cao: Skill/Plugin" |
+| Buổi | Học gì [Tài liệu] | Học ở đâu [Tài liệu] | Nếu chọn N1: chủ đề [Đề xuất] |
+|---|---|---|---|
+| 1 | AI làm được gì, chưa làm được gì; việc nào dễ bị thay thế | N1 · **N2, N3** | 1–6 |
+| 2 | Giao việc cho AI (vai trò, bối cảnh, nhiệm vụ, định dạng, tiêu chí); kiểm chứng, phản biện | N1 · **N4, N10** | 7 |
+| 3 | Chọn AI, Global Instruction, Memory, chọn model; bảo mật dữ liệu, đạo văn | N1 · **N5** | 8–11 |
+| 4 | Cho AI đọc trang web (tin tuyển dụng), tách kỹ năng; AI trong Excel | N1 · **N7** | 12, 13 |
+| 5 | CV, thư xin việc với AI trong Word; AI đóng vai nhà tuyển dụng chấm CV | N1 · **N7** | 14 |
+| 6 | Slide giới thiệu bản thân với AI trong PowerPoint; luyện phỏng vấn giọng nói | N1 · **N6** | 15 |
+| 7 | A: nhận nhiệm vụ, AI nghiên cứu + nháp · B: làm sạch, đối chiếu dữ liệu · C: spec, kiến trúc | N1 · **N8, N11** | 16, 20 (khối A/B) |
+| 8 | A: báo cáo/slide bằng Artifact · B: phân tích, báo cáo quản trị · C: code, test, debug | N1 · **N8, N11** | 17 (khối A/B) |
+| 9 | A/B: tự động hóa 1 bước (Gmail/Drive, đặt lịch, tách agent) · C: deploy dịch vụ miễn phí | N1 · **N9, N11** | 18, 19, 21–25 (khối A/B) |
+| 10 | Chọn đề tài dự án | — | — |
+| 11 | Hoàn thiện dự án; nâng cao (tùy chọn): Skill/Plugin, dashboard | N1 · **N9, N11** | 26–35 (tùy chọn) |
+| 12 | Đóng gói hồ sơ: portfolio, dòng CV, câu trả lời phỏng vấn | **N7** | — |
 
-> M4 để tùy chọn vì đề cương ghi buổi 11 phần Skill/Plugin là "nâng cao (tùy chọn)" [Tài liệu]. Cách chia chủ đề ở trên là đề xuất; đội nội dung cần duyệt lại.
+Trên màn buổi học, các nguồn hiển thị **ngang hàng, đúng thứ tự trong đề cương**. N1 có nhãn "Tham khảo – tiếng Việt" và ghi số chủ đề cần xem.
 
-**Quy tắc của cổng kiến thức [Đề xuất]:**
+> **Lỗ hổng trong đề cương cần bổ sung [Đề xuất]:** đề cương ghi "mỗi kiến thức có ít nhất 2 nơi học", nhưng phần **AI trong Excel / Word / PowerPoint** (buổi 4–6) hiện chỉ có N1 dạy. N7 là trang tuyển dụng, N6 là chế độ giọng nói, nên SV không học N1 sẽ không có tài liệu cho phần này. Tương tự, buổi 9 (kết nối Gmail/Drive, đặt lịch) chỉ được N9 phủ một phần. Đề xuất thêm 1–2 nguồn miễn phí cho mỗi phần, ví dụ trang hướng dẫn chính thức của Microsoft/Anthropic về AI trong Office và connector. Cần kiểm tra link rồi cập nhật vào đề cương.
 
-- Cổng **không chặn** việc mở module sau, để SV học Zoom không bị kẹt khi nhân viên chưa kịp xác nhận. Cổng chỉ bắt buộc **trước khi xét chứng nhận**.
-- Trắc nghiệm rút ngẫu nhiên từ ngân hàng câu hỏi, được làm lại sau 30 phút, tối đa 3 lần/ngày. Chấm tự động theo đáp án cố định, không dùng AI.
-- Hai cách phải **tương đương về công sức**. Cách 2 hoàn toàn miễn phí và **không được khó hơn** Cách 1. Lý do:
-  - Đề cương đã chốt khóa Sự AI chỉ là nguồn tùy chọn.
-  - Chỉ có 20 suất miễn phí; SV còn lại phải trả phí (giảm 50%).
-  - Nếu Cách 2 nặng hơn rõ rệt, trường sẽ thấy portal đang ép mua khóa.
-- Portal trình bày hai cách ngang hàng ("Cách 1 / Cách 2"), không gọi Cách 2 là "bài bù".
+### 2.4 Kiểm tra kiến thức module (M1–M3)
+
+| Module | Nội dung kiểm tra | Hình thức | Được miễn khi |
+|---|---|---|---|
+| **M1** | Buổi 1–3: AI làm được/chưa làm được gì, nguyên tắc giao việc, kiểm chứng, Instruction/Memory, **an toàn dữ liệu** | Trắc nghiệm 15 câu, đạt ≥80% | Đã học chủ đề 1–11 của N1. **Riêng phần an toàn dữ liệu vẫn bắt buộc** cho mọi SV |
+| **M2** | Buổi 4–6: dùng AI đọc web, AI trong Excel/Word/PowerPoint, nguyên tắc viết CV không bịa | Trắc nghiệm 10 câu, đạt ≥80% | Đã học chủ đề 12–15 |
+| **M3** | Buổi 7–9 theo khối: A/B (quy trình, agent, tự động hóa) · C (spec, test, deploy) | Trắc nghiệm 10 câu theo khối | Khối A/B: đã học chủ đề 16–25. Khối C: **không miễn**, vì N1 không phủ nội dung CNTT |
+
+**Quy tắc [Đề xuất]:**
+- Không cần bài tập thêm, vì **sản phẩm tự luyện của từng buổi đã chứng minh kỹ năng thao tác** (bảng Excel, CV trong Word, slide PowerPoint, bước tự động hóa).
+- Trắc nghiệm rút ngẫu nhiên từ ngân hàng câu hỏi, chấm theo đáp án cố định (không dùng AI). Được làm lại sau 30 phút, tối đa 3 lần/ngày.
+- Kiểm tra **không chặn** việc mở module sau; chỉ bắt buộc trước khi xét chứng nhận.
+- Miễn kiểm tra chỉ giúp SV đỡ một bài trắc nghiệm, **không** thay sản phẩm hay báo cáo module. SV học từ N2, N3… vẫn hoàn thành đủ mà không cần N1.
 
 ---
 
@@ -106,7 +118,7 @@ Mọi bài theo cùng một khuôn để SV quen nhịp và mentor dễ chấm.
 | Khối | Nội dung | Thời gian |
 |---|---|---|
 | **Mục tiêu** | 1–2 câu: học xong làm được gì | — |
-| **Học** | Danh sách nguồn ngang hàng (khóa Sự AI, Anthropic Academy, Microsoft…). SV chọn 1 và đánh dấu đã chọn nguồn nào | 15–25' |
+| **Học** | Các nguồn trong cột "Học ở đâu" của đề cương, hiển thị ngang hàng (N1 ghi "tham khảo" + số chủ đề). SV chọn 1 và đánh dấu đã chọn nguồn nào | 15–25' |
 | **Thực hành** | Đề bài tự luyện cụ thể [Tài liệu], kèm ví dụ mẫu đạt chuẩn | 20–30' |
 | **Phản tư** | 2 câu bắt buộc: *AI đã sai/thiếu ở đâu?* · *Mình kiểm chứng/sửa thế nào?* | 5' |
 | **Minh chứng** | Loại minh chứng quy định riêng cho từng bài (mục 4). Không có minh chứng thì không tích được | — |
@@ -166,32 +178,32 @@ Mentor tick từng tiêu chí. **Đạt hết thì Đạt**; thiếu tiêu chí 
 | Cấp | Đối tượng | Ai xác nhận | Cơ chế |
 |---|---|---|---|
 | **0 · Tự động** | M0, trắc nghiệm an toàn | Hệ thống | Trắc nghiệm có đáp án cố định (không dùng AI). Đạt ≥80%, được làm lại |
-| **0b · Cổng kiến thức** | Phần kiến thức M1–M3 | Hệ thống khóa Sự AI (video: API; Zoom: nhân viên) **hoặc** trắc nghiệm portal + TA duyệt bài tập | Xem mục 2.3 và 5.1 |
+| **0b · Kiểm tra kiến thức** | M1–M3 | Trắc nghiệm tự chấm; được miễn nếu hệ thống khóa N1 xác nhận (video: API; Zoom: nhân viên) | Xem mục 2.4 và 5.1 |
 | **1 · Tự xác nhận + minh chứng** | 12 bài học | SV tích; **TA kiểm ngẫu nhiên 10–20%** | Minh chứng không hợp lệ → bỏ tích bài + nhắc nhở; tái phạm → khóa nộp, chờ admin |
 | **2 · Mentor chấm** | 4 báo cáo module | Mentor | Checklist tiêu chí Đạt/Cần sửa + nhận xét; hạn phản hồi ≤3 ngày [Đề xuất] |
 | **3 · Rubric** | Dự án cuối | Mentor (≥90 thì 2 mentor chấm chéo) | Điểm từng tiêu chí; được sửa 1 lần nếu <70 |
-| **4 · Cấp chứng nhận** | Hồ sơ đủ điều kiện | **Trường + Viện ĐT Bách Khoa** [Chốt] | Duyệt theo lô → PDF + QR |
+| **4 · Cấp chứng nhận** | Hồ sơ đủ điều kiện | **Trường đã kết nối:** Trường + Viện ĐT Bách Khoa · **Trường khác:** Viện ĐT Bách Khoa [Chốt] | Duyệt theo lô → PDF + QR |
 
 ### 5.1 Ghi nhận khóa học bên ngoài
 
 | Nguồn | Cách ghi nhận | Tác dụng trên portal |
 |---|---|---|
-| **Khóa video Sự AI (Tutor LMS Free)** [Chốt] | Plugin trên suai.vn gọi **API portal** (khớp theo email/mã liên kết) | **Qua cổng kiến thức** của module tương ứng; huy hiệu khi hoàn thành cả khóa |
+| **Khóa video Sự AI (Tutor LMS Free)** [Chốt] | Plugin trên suai.vn gọi **API portal** (khớp theo email/mã liên kết) | **Miễn trắc nghiệm** của module tương ứng; huy hiệu khi hoàn thành cả khóa |
 | **Khóa Zoom (meet.suai.vn)** [Chốt] | **Nhân viên portal xác nhận thủ công**. Nên xác nhận **theo lớp, hàng loạt**: chọn lớp Zoom → chọn phần đã dạy (chủ đề 1–11, 12–15…) → tick các SV đã tham gia | Như trên |
-| **Anthropic Academy, Microsoft…** | SV tải chứng chỉ/ảnh hoàn thành (không bắt buộc) | Huy hiệu trên hồ sơ; **vẫn phải làm trắc nghiệm** để qua cổng |
+| **Anthropic Academy, Microsoft…** | SV tải chứng chỉ/ảnh hoàn thành (không bắt buộc) | Huy hiệu trên hồ sơ; vẫn làm trắc nghiệm như bình thường |
 
-> **Nguyên tắc:** khóa Sự AI giúp **qua cổng kiến thức**, nhưng **không thay sản phẩm thực hành và báo cáo module**. Chứng nhận được cấp vì SV làm ra sản phẩm thật, không phải vì đã xem video. **[Giả định, cần bạn xác nhận]**
+> **Nguyên tắc:** N1 chỉ giúp **miễn trắc nghiệm**, **không thay sản phẩm tự luyện và báo cáo module**. Chứng nhận được cấp vì SV làm ra sản phẩm thật, không phải vì đã học nguồn nào.
 
 #### Vấn đề kỹ thuật: thời điểm khóa video báo "qua"
 
-Bạn mô tả là suai.vn gọi API **khi hoàn thành cả khóa**. Nếu chỉ có tín hiệu này thì SV phải học xong cả 35 chủ đề mới qua được cổng M1, trong khi M1 chỉ kéo dài 7 ngày. Hai cách xử lý:
+Bạn mô tả là suai.vn gọi API **khi hoàn thành cả khóa**. Nếu chỉ có tín hiệu này thì SV phải học xong cả 35 chủ đề mới được miễn trắc nghiệm M1, trong khi M1 chỉ kéo dài 7 ngày. Hai cách xử lý:
 
 | Phương án | Cách làm | Đánh giá |
 |---|---|---|
-| **A. Báo theo từng bài** (khuyến nghị) | Plugin bắt sự kiện hoàn thành **từng bài học** của Tutor (bản Free có hook này, cần kiểm lại tên hook theo phiên bản đang cài) và gửi về portal. Portal tự tính: xong đủ chủ đề 1–11 thì qua cổng M1 | Khớp nhịp từng module. Thêm khoảng 1 hook trong plugin |
-| **B. Chỉ báo khi xong cả khóa** | Cổng M1–M3 chờ tới khi khóa hoàn thành mới qua một lượt | Đơn giản, nhưng SV đi Cách 1 thấy "chưa qua" suốt nhiều tuần |
+| **A. Báo theo từng bài** (khuyến nghị) | Plugin bắt sự kiện hoàn thành **từng bài học** của Tutor (bản Free có hook này, cần kiểm lại tên hook theo phiên bản đang cài) và gửi về portal. Portal tự tính: xong đủ chủ đề 1–11 thì miễn trắc nghiệm M1 | Khớp nhịp từng module. Thêm khoảng 1 hook trong plugin |
+| **B. Chỉ báo khi xong cả khóa** | Chỉ miễn trắc nghiệm khi đã xong cả khóa. SV muốn qua sớm thì tự làm trắc nghiệm | Đơn giản, nhưng SV học N1 phải làm trắc nghiệm hoặc chờ lâu |
 
-**Nâng độ tin cậy của Cách 1 [Đề xuất]:** trên Tutor, "hoàn thành bài" chỉ là SV bấm nút. Nên thêm **1 quiz ngắn cuối mỗi phần** ngay trong khóa (Tutor Free có quiz), và chỉ coi là "qua" khi quiz đạt. Như vậy hai cách có độ tin cậy tương đương.
+**Nâng độ tin cậy khi miễn qua N1 [Đề xuất]:** trên Tutor, "hoàn thành bài" chỉ là SV bấm nút. Nên thêm **1 quiz ngắn cuối mỗi phần** ngay trong khóa (Tutor Free có quiz), và chỉ coi là "qua" khi quiz đạt. Như vậy việc miễn có độ tin cậy tương đương trắc nghiệm của portal.
 
 ### 5.2 Chống gian lận (không dùng AI)
 
@@ -237,7 +249,7 @@ stateDiagram-v2
   DangHoc --> TamDung: 21 ngày không hoạt động
   TamDung --> DangHoc: Quay lại học
   DangHoc --> ChoCapCN: Đủ 12 bài + 4 BC Đạt + dự án ≥70
-  ChoCapCN --> HoanThanh: Trường + Viện duyệt
+  ChoCapCN --> HoanThanh: Viện (+ Trường đã kết nối) duyệt
   DangHoc --> ChuaHoanThanh: Quá ngày 60
   TamDung --> ChuaHoanThanh: Quá ngày 60
   ChuaHoanThanh --> DangHoc: Đăng ký lại (1 lần)
@@ -270,7 +282,7 @@ stateDiagram-v2
 | Thư viện nhận xét mẫu theo tiêu chí | Mentor chấm nhanh |
 | Ngân hàng câu hỏi trắc nghiệm an toàn | Xác nhận tự động cấp 0 |
 | Ghi nhận khóa học thủ công (khóa Zoom), xác nhận hàng loạt theo lớp | [Chốt] |
-| Cấu hình cổng kiến thức: module ↔ danh sách bài Tutor (ID) ↔ trắc nghiệm/bài tập của Cách 2 | Đổi cách chia chủ đề không phải sửa code |
+| Cấu hình kiểm tra kiến thức: module ↔ ngân hàng trắc nghiệm ↔ danh sách bài Tutor (ID) được miễn | Đổi cách chia chủ đề không phải sửa code |
 | Cấu hình quy tắc thời gian (hạn, gia hạn, bảo lưu, hạn cứng) | Điều chỉnh sau đợt chạy đầu |
 
 ---
@@ -279,12 +291,12 @@ stateDiagram-v2
 
 | # | Vấn đề | Đề xuất |
 |---|---|---|
-| 1 | Đăng ký tự do [Chốt], nhưng chứng nhận do **Trường + Viện** cấp [Chốt]. Với SV của trường **chưa hợp tác** thì trường đó chưa đồng ý ký | Thêm trạng thái "Chờ trường xác nhận": SV vẫn học bình thường; khi trường ký hợp tác thì cấp theo lô. Hoặc tạm cấp bản chỉ có Viện. **Cần bạn chọn** |
+| 1 | ~~Chứng nhận cho SV trường chưa kết nối~~ | **Đã chốt:** chỉ Viện ĐT Bách Khoa cấp. Nếu trường kết nối sau, SV đã đạt có được cấp lại bản có tên trường không? (đề xuất: có, theo lô) |
 | 2 | Đăng ký tự do làm tăng số SV, và tải chấm tăng theo | Đặt trần số SV mới mỗi tuần, hoặc ưu tiên mentor chấm SV trường đối tác |
 | 3 | Lịch tính theo ngày đăng ký, nên hạn "Chủ nhật 23:59" trong đề cương không còn đúng | Sửa đề cương và kịch bản mục 2.6 thành "cuối ngày 7/14/21/28" |
 | 4 | Khuôn bài học, tiêu chí Đạt, trắc nghiệm an toàn ở trên là đề xuất | Đội mentor duyệt và chỉnh trước khi nhập lên portal |
 | 5 | Có cần kiểm tra đầu vào chặt hơn (bài thực hành nhỏ) thay cho tự đánh giá ở M0? | Giai đoạn đầu dùng tự đánh giá cho nhẹ |
-| 6 | SV học khóa Sự AI có **vẫn phải nộp sản phẩm + báo cáo module** không? | Có: khóa chỉ giúp qua cổng kiến thức (mục 5.1) |
+| 6 | Bổ sung nguồn miễn phí cho buổi 4–6 và buổi 9 vào đề cương (mục 2.3) | Đội nội dung chọn và kiểm tra link |
 | 7 | Plugin suai.vn báo **theo từng bài** hay **chỉ khi xong khóa**? | Theo từng bài (phương án A, mục 5.1) |
-| 8 | Thời lượng 35 chủ đề (file khóa học đang để 00:00) | Cần điền để kiểm tra Cách 1 có vừa 2–3 giờ/tuần không. Riêng M3 có 10 chủ đề, dễ quá tải |
-| 9 | Cách chia 35 chủ đề vào M1–M4 (mục 2.3) | Đội nội dung duyệt |
+| 8 | Thời lượng 35 chủ đề (file khóa học đang để 00:00) | Cần điền để kiểm tra SV chọn N1 có vừa 2–3 giờ/tuần không. Riêng buổi 9 có 7 chủ đề, dễ quá tải |
+| 9 | Cách gán 35 chủ đề N1 vào 12 buổi (mục 2.3) | Đội nội dung duyệt |

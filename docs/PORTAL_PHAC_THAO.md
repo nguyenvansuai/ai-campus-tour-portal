@@ -17,7 +17,7 @@
 | 4 | Khóa video chạy trên **Tutor LMS (WordPress, suai.vn)**; lớp trực tuyến qua **meet.suai.vn (Jitsi)** | Tích hợp qua 1 plugin cầu nối trên suai.vn và JWT của Jitsi |
 | 5 | Lộ trình dùng **nhiều nguồn học (N1–N11)**; khóa Sự AI chỉ là 1 trong số đó | Có thư viện nguồn học chung; tiến độ tính theo sản phẩm SV nộp, không theo nguồn đã học |
 | 6 | **SV đăng ký tự do** (miễn phí), không bắt buộc mã workshop | Mã workshop chỉ dùng để ghi nguồn; cần cơ chế kiểm soát tải chấm |
-| 7 | Chứng nhận do **Trường + Viện ĐT Bách Khoa** cấp | Trường chưa hợp tác: xem `THIET_KE_CHUONG_TRINH.md` mục 9 |
+| 7 | Chứng nhận: SV **trường đã kết nối** → **Trường + Viện ĐT Bách Khoa**; SV trường khác → **Viện ĐT Bách Khoa** | Mẫu chứng nhận có 2 biến thể; cờ "trường đã kết nối" trên School |
 | 8 | Tutor LMS **Free**: hoàn thành khóa video → suai.vn **gọi API portal**. Khóa trên meet.suai.vn: **nhân viên portal xác nhận thủ công** | Bỏ SSO/webhook tiến độ từng bài khỏi phạm vi bắt buộc; thêm API nhận hoàn thành khóa + màn xác nhận tay |
 
 > Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
@@ -162,9 +162,7 @@ flowchart LR
 
 - Điều kiện: 12/12 buổi, 4/4 báo cáo Đạt, dự án ≥70/100 **[Tài liệu]**.
 - **[Đề xuất]** Dự án ≥90 (Xuất sắc) do 2 mentor chấm chéo, vì kết quả này dùng để giới thiệu SV sang doanh nghiệp.
-- **Đơn vị đồng cấp [Đề xuất, cần chốt]:**
-  - SV thuộc **trường đối tác**: Viện ĐT Bách Khoa + Trường đó. Quản lý trường duyệt theo lô.
-  - SV thuộc **trường chưa đối tác**: Viện ĐT Bách Khoa + AI Campus Tour.
+- **Đơn vị cấp [Chốt]:** SV thuộc **trường đã kết nối** → Trường + Viện ĐT Bách Khoa (Quản lý trường duyệt theo lô). SV trường khác → Viện ĐT Bách Khoa.
 - Trang xác thực công khai `/verify/{mã}`: tên SV, trường, đơn vị cấp, ngày cấp, xếp loại, tên dự án (SV chọn có hiện link dự án hay không).
 
 ---
@@ -391,7 +389,7 @@ docs/
 | # | Câu hỏi | Ảnh hưởng |
 |---|---|---|
 | 1 | Có cho **đăng ký mở** (không cần mã workshop) không? Có giới hạn số lượng không? | Tải chấm, phạm vi P0 |
-| 2 | Chứng nhận cho SV **trường chưa đối tác** do ai đồng cấp? | Mẫu chứng nhận, quy trình duyệt |
+| 2 | ~~Chứng nhận cho SV trường chưa kết nối~~ | Đã chốt: Viện ĐT Bách Khoa cấp |
 | 3 | Có tách Mentor và TA không? Đội ngũ chấm dự kiến bao nhiêu người? | Phân quyền, hạn phản hồi cam kết |
 | 4 | suai.vn bán khóa qua **WooCommerce** hay **thanh toán sẵn của Tutor**? Tutor đang dùng bản Free hay Pro, phiên bản nào? | Cách tạo mã giảm 50%, hook đồng bộ |
 | 5 | meet.suai.vn đã bật xác thực JWT chưa? Ai quản trị server Jitsi? | Kiểm soát vào phòng, điểm danh |
