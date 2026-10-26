@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { safeNextPath } from "@/lib/safe-redirect";
 import { isGoogleEnabled } from "@/modules/identity/auth";
 import { getCurrentSession } from "@/modules/identity/session";
 import { SignInPanel } from "@/modules/identity/ui/sign-in-panel";
 
 export const metadata: Metadata = { title: "Đăng nhập · AI Campus Tour" };
 
-export default async function SignInPage() {
-  if (await getCurrentSession()) redirect("/hoc");
+export default async function SignInPage({ searchParams }: PageProps<"/dang-nhap">) {
+  const next = safeNextPath((await searchParams).next);
+  if (await getCurrentSession()) redirect(next);
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-4 py-12">
@@ -15,7 +17,7 @@ export default async function SignInPage() {
         <h1 className="text-2xl font-bold">Đăng nhập</h1>
         <p className="text-sm text-muted-foreground">Nhập email, chúng tôi sẽ gửi mã 6 số để bạn đăng nhập. Không cần mật khẩu.</p>
       </div>
-      <SignInPanel googleEnabled={isGoogleEnabled()} />
+      <SignInPanel googleEnabled={isGoogleEnabled()} next={next} />
     </main>
   );
 }

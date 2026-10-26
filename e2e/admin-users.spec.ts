@@ -24,7 +24,7 @@ test("Super Admin tìm sinh viên, khóa tài khoản; sinh viên bị đăng xu
   await expect(boss.getByRole("status")).toHaveText("Đã khóa tài khoản và đăng xuất mọi thiết bị.");
 
   await student.goto("/hoc");
-  await expect(student).toHaveURL(/\/dang-nhap$/);
+  await expect(student).toHaveURL(/\/dang-nhap/);
 });
 
 test("Super Admin xem nhật ký và lọc theo hành động", async ({ page }) => {

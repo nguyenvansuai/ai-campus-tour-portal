@@ -11,15 +11,13 @@ test("sinh viên đăng nhập bằng mã OTP trên điện thoại", async ({ p
   await page.getByLabel("Mã 6 số").fill(await latestOtpFor(email));
   await page.getByRole("button", { name: "Đăng nhập" }).click();
 
-  await expect(page).toHaveURL(/\/hoc$/);
-  await expect(page.getByRole("heading", { name: `Xin chào, ${email}` })).toBeVisible();
+  // SV mới chưa có hồ sơ học thì được đưa tới bước khởi động.
+  await expect(page).toHaveURL(/\/bat-dau$/);
+  await expect(page.getByRole("heading", { name: "Bắt đầu lộ trình 30 ngày" })).toBeVisible();
 
-  // Đã đăng nhập thì vào lại /dang-nhap sẽ được đưa thẳng tới trang học.
+  // Đã đăng nhập thì vào lại /dang-nhap sẽ được đưa thẳng đi tiếp.
   await page.goto("/dang-nhap");
-  await expect(page).toHaveURL(/\/hoc$/);
-
-  await page.getByRole("button", { name: "Đăng xuất" }).click();
-  await expect(page).toHaveURL(/\/dang-nhap$/);
+  await expect(page).toHaveURL(/\/bat-dau$/);
 });
 
 test("nhập sai mã thì hiện lỗi tiếng Việt", async ({ page }) => {
@@ -50,7 +48,7 @@ test("trang thiết bị liệt kê thiết bị đang dùng", async ({ page }) 
   await page.getByRole("button", { name: "Gửi mã" }).click();
   await page.getByLabel("Mã 6 số").fill(await latestOtpFor(email));
   await page.getByRole("button", { name: "Đăng nhập" }).click();
-  await expect(page).toHaveURL(/\/hoc$/);
+  await expect(page).toHaveURL(/\/bat-dau$/);
   await page.goto("/tai-khoan/thiet-bi");
   await expect(page.getByText("(thiết bị này)")).toBeVisible();
 });

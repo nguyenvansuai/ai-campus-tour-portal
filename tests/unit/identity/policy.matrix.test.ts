@@ -109,6 +109,11 @@ const matrix: Row[] = [
   ["Viện KHÔNG sửa danh mục trường", institute, "org.manage", { kind: "org" }, false],
   ["QL trường KHÔNG sửa danh mục trường", managerA, "org.manage", { kind: "org", schoolId: "school-a" }, false],
   ["SV KHÔNG sửa danh mục trường", student, "org.manage", { kind: "org" }, false],
+  // Gia hạn, bảo lưu
+  ["TA được phân công gia hạn cho SV", ta, "enrollment.adjust", studentRecord(), true],
+  ["TA KHÔNG gia hạn cho SV không được phân công", ta, "enrollment.adjust", studentRecord(unassigned), false],
+  ["GV KHÔNG gia hạn cho SV", teacherFacultyKt, "enrollment.adjust", studentRecord(), false],
+  ["SV KHÔNG tự gia hạn", student, "enrollment.adjust", studentRecord(), false],
   // Tài khoản bị khóa, nhiều vai trò
   ["super_admin bị khóa thì không làm gì được", actor([g("super_admin")], { status: "suspended" }), "student_record.view", studentRecord(), false],
   ["SV bị khóa không nộp được bài", actor([], { userId: "u-sv", status: "suspended" }), "submission.create", submission(), false],

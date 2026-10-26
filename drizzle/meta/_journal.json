@@ -43,6 +43,13 @@
       "when": 1793014498260,
       "tag": "0005_org",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793015431902,
+      "tag": "0006_enrollment",
+      "breakpoints": true
     }
   ]
 }

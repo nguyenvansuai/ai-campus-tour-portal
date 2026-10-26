@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getOpenEnrollment } from "@/modules/enrollment/service";
 import { requireSession } from "@/modules/identity/session";
 import { SignOutButton } from "@/modules/identity/ui/sign-out-button";
 
 export const metadata: Metadata = { title: "Lộ trình của tôi · AI Campus Tour" };
 
 export default async function StudentHomePage() {
-  const { user } = await requireSession();
+  const { user, actor } = await requireSession();
+  if (actor.roles.length === 0 && !(await getOpenEnrollment(user.id))) redirect("/bat-dau");
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-4 py-12">

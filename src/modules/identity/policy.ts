@@ -37,7 +37,8 @@ export type Action =
   | "submission.review"
   | "school_report.view"
   | "school_report.export"
-  | "org.manage";
+  | "org.manage"
+  | "enrollment.adjust";
 
 export type Resource = {
   kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org";
@@ -101,10 +102,11 @@ export function can(actor: Actor, action: Action, resource: Resource): boolean {
   const assigned = isAssigned(actor, resource);
   if (has(actor, "mentor") && assigned) {
     if (action === "submission.view" || action === "submission.review" || action === "submission.precheck") return true;
-    if (action === "student_record.view") return true;
+    if (action === "student_record.view" || action === "enrollment.adjust") return true;
   }
   if (has(actor, "ta") && assigned) {
     if (action === "submission.view" || action === "submission.precheck" || action === "student_record.view") return true;
+    if (action === "enrollment.adjust") return true;
   }
 
   if (SCOPED_ACTIONS.has(action) && withinScope(actor, resource)) return true;
