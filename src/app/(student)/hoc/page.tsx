@@ -5,7 +5,7 @@ import { LESSONS, MODULES } from "@/modules/curriculum/content/program";
 import { TRACK_LABELS, type Track } from "@/modules/curriculum/types";
 import { getLatestEnrollment, getOpenEnrollment } from "@/modules/enrollment/service";
 import { requireSession } from "@/modules/identity/session";
-import { dashboardFor, quizFor } from "@/modules/learning/service";
+import { dashboardFor, quizRequirementsFor } from "@/modules/learning/service";
 
 export const metadata: Metadata = { title: "Lộ trình của tôi · AI Campus Tour" };
 
@@ -40,7 +40,7 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
     );
   }
 
-  const { progress, schedule, nextLesson, pendingReport } = await dashboardFor(row);
+  const [{ progress, schedule, nextLesson, pendingReport }, quizzes] = await Promise.all([dashboardFor(row), quizRequirementsFor(row)]);
   const done = progress.completedLessons.size;
 
   return (
@@ -81,7 +81,7 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
 
       {MODULES.filter((m) => m.lessonNumbers.length > 0).map((m) => {
         const report = progress.reports.get(m.id as "M1");
-        const quiz = quizFor(row, m.id);
+        const quiz = m.id === "M1" || m.id === "M2" || m.id === "M3" ? quizzes[m.id] : null;
         const open = progress.unlocked[m.id];
         return (
           <section key={m.id} className="flex flex-col gap-3">
@@ -115,10 +115,14 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
               {open && quiz ? (
                 <li>
                   <Link href={`/hoc/trac-nghiem/${m.id}`} className="flex items-center justify-between gap-3 p-3">
-                    <span>Trắc nghiệm kiến thức {m.id}</span>
-                    <span className={progress.passedQuizzes.has(quiz.id) ? "text-green-700" : "text-muted-foreground"}>
-                      {progress.passedQuizzes.has(quiz.id) ? "Đạt" : "Chưa làm"}
-                    </span>
+                    <span>{quiz.quizId === "M1-SAFE" ? "Trắc nghiệm an toàn dữ liệu" : `Trắc nghiệm kiến thức ${m.id}`}</span>
+                    {quiz.quizId === null ? (
+                      <span className="text-green-700">Được miễn</span>
+                    ) : (
+                      <span className={progress.passedQuizzes.has(quiz.quizId) ? "text-green-700" : "text-muted-foreground"}>
+                        {progress.passedQuizzes.has(quiz.quizId) ? "Đạt" : "Chưa làm"}
+                      </span>
+                    )}
                   </Link>
                 </li>
               ) : null}
@@ -134,6 +138,10 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
           </section>
         );
       })}
+
+      <Link href="/hoc/khoa-su-ai" className="rounded-lg border border-border p-3 text-sm">
+        Đã học hoặc muốn học khóa Sự AI? Xem cách được miễn trắc nghiệm và nhận mã ưu đãi →
+      </Link>
 
       <section className="flex flex-col gap-2 rounded-xl border border-border p-4">
         <h2 className="font-semibold">M5 · Tốt nghiệp (ngày 29–30)</h2>

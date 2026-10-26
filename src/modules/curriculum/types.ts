@@ -85,7 +85,7 @@ export type QuizQuestion = {
 };
 
 export type QuizBank = {
-  id: "M1" | "M2" | "M3-AB" | "M3-C";
+  id: "M1" | "M1-SAFE" | "M2" | "M3-AB" | "M3-C";
   title: string;
   /** Số câu rút ngẫu nhiên mỗi lần làm. */
   drawCount: number;

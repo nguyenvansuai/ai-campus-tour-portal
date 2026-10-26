@@ -23,6 +23,13 @@ const EnvSchema = z.object({
   STORAGE_DRIVER: z.enum(["local", "drive"]).default("local"),
   UPLOAD_DIR: z.string().default(".uploads"),
   GOOGLE_DRIVE_ROOT_FOLDER: z.string().default("AI Campus Tour"),
+  /** Secret chung với plugin aict-bridge trên suai.vn (ký HMAC). Không đặt thì API nhận hoàn thành khóa bị tắt. */
+  SUAI_BRIDGE_SECRET: z.string().min(32, "phải dài ít nhất 32 ký tự (tạo bằng: openssl rand -hex 32)").optional(),
+  /** ID khóa Tutor LMS được tính là N1 (video 3584, trực tuyến 3599). */
+  SUAI_COURSE_IDS: z
+    .string()
+    .default("3584,3599")
+    .transform((value) => value.split(",").map((id) => id.trim()).filter(Boolean)),
 }).superRefine((value, ctx) => {
   if (value.APP_ENV === "production" && value.EMAIL_TRANSPORT !== "brevo") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "production phải dùng brevo" });
@@ -52,7 +59,9 @@ export type Env = z.infer<typeof EnvSchema>;
 
 /** Kiểm tra biến môi trường. Thông báo lỗi chỉ nêu tên biến, không in giá trị (có thể là secret). */
 export function parseEnv(source: Record<string, string | undefined>): Env {
-  const result = EnvSchema.safeParse(source);
+  // KEY= (để trống) trong file .env coi như chưa đặt, tránh lỗi "không phải URL" cho biến tùy chọn.
+  const cleaned = Object.fromEntries(Object.entries(source).filter(([, value]) => value !== ""));
+  const result = EnvSchema.safeParse(cleaned);
   if (result.success) return result.data;
 
   const lines = result.error.issues.map((issue) => {

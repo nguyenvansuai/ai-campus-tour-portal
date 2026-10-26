@@ -85,9 +85,17 @@ describe("Trắc nghiệm", () => {
     expect(quiz.questions.length).toBeGreaterThanOrEqual(quiz.drawCount);
   });
 
+  it("bài an toàn dữ liệu (cho SV được miễn M1) lấy đúng câu của M1 và làm hết", () => {
+    const safe = QUIZZES.find((q) => q.id === "M1-SAFE")!;
+    const m1 = QUIZZES.find((q) => q.id === "M1")!;
+    expect(safe.questions.length).toBe(safe.drawCount);
+    expect(safe.questions.every((q) => m1.questions.includes(q))).toBe(true);
+  });
+
   it("mỗi câu có 4 phương án, đáp án hợp lệ, có giải thích, id không trùng", () => {
     const ids = new Set<string>();
-    for (const quiz of QUIZZES) {
+    // M1-SAFE lấy lại câu an toàn dữ liệu của M1 nên không tính trùng.
+    for (const quiz of QUIZZES.filter((q) => q.id !== "M1-SAFE")) {
       for (const q of quiz.questions) {
         expect(q.options).toHaveLength(4);
         expect(q.answer).toBeGreaterThanOrEqual(0);

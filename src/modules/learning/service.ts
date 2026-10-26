@@ -8,6 +8,7 @@ import type { ModuleId, QuizBank, Track } from "@/modules/curriculum/types";
 import { vnDateOf, type ReportModuleId } from "@/modules/enrollment/schedule";
 import { enrollment } from "@/modules/enrollment/schema";
 import { getOpenEnrollment, scheduleOf, studentResource, touchActivity, type EnrollmentRow } from "@/modules/enrollment/service";
+import { creditedModules, quizRequirement, type QuizRequirement } from "@/modules/course-integration/service";
 import { authorize, type Actor } from "@/modules/identity/policy";
 import { user } from "@/modules/identity/schema";
 import { school } from "@/modules/org/schema";
@@ -167,15 +168,28 @@ function shuffle<T>(items: T[]) {
   return copy;
 }
 
-export function quizFor(row: EnrollmentRow, moduleId: ModuleId): QuizBank | null {
-  const id = quizIdFor(moduleId, row.track as Track);
-  return id ? (findQuiz(id) ?? null) : null;
+/** Trắc nghiệm SV thực sự phải đạt, sau khi tính miễn nhờ học khóa Sự AI (N1). */
+export async function quizRequirementsFor(row: EnrollmentRow) {
+  const [owner] = await db.select({ email: user.email }).from(user).where(eq(user.id, row.userId));
+  const credited = owner ? await creditedModules(owner.email) : new Set<never>();
+  const track = row.track as Track;
+  const result = {} as Record<"M1" | "M2" | "M3", QuizRequirement & { bank: QuizBank | null }>;
+  for (const moduleId of ["M1", "M2", "M3"] as const) {
+    const requirement = quizRequirement(moduleId, track, quizIdFor(moduleId, track), credited);
+    result[moduleId] = { ...requirement, bank: requirement.quizId ? (findQuiz(requirement.quizId) ?? null) : null };
+  }
+  return result;
+}
+
+async function requiredQuizBank(row: EnrollmentRow, moduleId: ModuleId) {
+  if (moduleId !== "M1" && moduleId !== "M2" && moduleId !== "M3") return null;
+  return (await quizRequirementsFor(row))[moduleId].bank;
 }
 
 export async function startQuiz(actor: Actor, moduleId: ModuleId) {
   const row = await requireOpenEnrollmentFor(actor);
-  const bank = quizFor(row, moduleId);
-  if (!bank) throw new LearningError("Module này không có trắc nghiệm.");
+  const bank = await requiredQuizBank(row, moduleId);
+  if (!bank) throw new LearningError("Module này không có trắc nghiệm hoặc bạn đã được miễn.");
 
   const startOfVnDay = new Date(`${vnDateOf(new Date())}T00:00:00+07:00`);
   const recent = await db

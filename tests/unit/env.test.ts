@@ -42,4 +42,16 @@ describe("parseEnv", () => {
       expect(String(error)).not.toContain("khong-phai-url-bi-mat-123");
     }
   });
+
+  it("biến để trống (KEY= trong file .env) được coi như chưa đặt", () => {
+    const env = parseEnv({ ...valid, NOTIFY_WEBHOOK_URL: "", GOOGLE_CLIENT_ID: "", GOOGLE_CLIENT_SECRET: "", SUAI_BRIDGE_SECRET: "" });
+    expect(env.NOTIFY_WEBHOOK_URL).toBeUndefined();
+    expect(env.SUAI_BRIDGE_SECRET).toBeUndefined();
+    expect(env.SUAI_COURSE_IDS).toEqual(["3584", "3599"]);
+  });
+
+  it("secret cầu nối suai.vn phải đủ dài", () => {
+    expect(() => parseEnv({ ...valid, SUAI_BRIDGE_SECRET: "ngan" })).toThrowError(/SUAI_BRIDGE_SECRET/);
+    expect(parseEnv({ ...valid, SUAI_COURSE_IDS: "3584, 9999" }).SUAI_COURSE_IDS).toEqual(["3584", "9999"]);
+  });
 });

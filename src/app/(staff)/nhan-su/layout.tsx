@@ -18,6 +18,7 @@ export default async function StaffLayout({ children }: LayoutProps<"/nhan-su">)
           </Link>
           <div className="flex items-center gap-3 text-sm">
             <Link href="/nhan-su/du-an">Dự án cuối</Link>
+            <Link href="/nhan-su/khoa-su-ai">Khóa Sự AI</Link>
             <Link href="/truong">Tiến độ SV</Link>
             {isAdmin ? <Link href="/admin">Quản trị</Link> : null}
             <SignOutButton compact />

@@ -4,14 +4,13 @@ import { db } from "@/lib/db";
 import { escapeHtml, sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { ALLOWED_UPLOAD_TYPES, MAX_UPLOAD_BYTES, storage } from "@/lib/storage";
-import { EXCELLENT_SCORE, FINAL_RUBRIC, LESSONS, PASS_SCORE, quizIdFor, SELF_ASSESSMENT } from "@/modules/curriculum/content/program";
-import type { Track } from "@/modules/curriculum/types";
+import { EXCELLENT_SCORE, FINAL_RUBRIC, LESSONS, PASS_SCORE, SELF_ASSESSMENT } from "@/modules/curriculum/content/program";
 import { enrollment } from "@/modules/enrollment/schema";
 import { getOpenEnrollment, scheduleOf, studentResource, touchActivity, type EnrollmentRow } from "@/modules/enrollment/service";
 import { authorize, can, ForbiddenError, scopeFilter, type Actor } from "@/modules/identity/policy";
 import { user } from "@/modules/identity/schema";
 import { storedFile } from "@/modules/learning/schema";
-import { folderPathFor, getProgress } from "@/modules/learning/service";
+import { folderPathFor, getProgress, quizRequirementsFor } from "@/modules/learning/service";
 import { generateActivationCode } from "@/modules/org/codes";
 import { school } from "@/modules/org/schema";
 import { FINAL_FIELDS, INSTITUTE_NAME } from "./fields";
@@ -247,11 +246,11 @@ export async function readFinalPdfForSecondReviewer(actor: Actor, fileId: string
 export type Eligibility = { eligible: boolean; checks: { label: string; ok: boolean }[] };
 
 export async function eligibilityOf(row: EnrollmentRow): Promise<Eligibility> {
-  const [progress, project] = await Promise.all([getProgress(row.id), getFinalProject(row.id)]);
-  const quizIds = (["M1", "M2", "M3"] as const).map((m) => quizIdFor(m, row.track as Track)!);
+  const [progress, project, quizzes] = await Promise.all([getProgress(row.id), getFinalProject(row.id), quizRequirementsFor(row)]);
   const lessonsDone = LESSONS.filter((l) => progress.completedLessons.has(l.number)).length;
   const reportsPassed = REPORT_MODULES.filter((m) => progress.reports.get(m)?.status === "passed").length;
-  const quizzesPassed = quizIds.filter((id) => progress.passedQuizzes.has(id)).length;
+  // Miễn hẳn (đã học khóa Sự AI) tính là đạt.
+  const quizzesPassed = Object.values(quizzes).filter((q) => q.quizId === null || progress.passedQuizzes.has(q.quizId)).length;
   const checks = [
     { label: `Hoàn thành ${LESSONS.length}/${LESSONS.length} buổi (hiện ${lessonsDone})`, ok: lessonsDone === LESSONS.length },
     { label: `4/4 báo cáo module Đạt (hiện ${reportsPassed})`, ok: reportsPassed === REPORT_MODULES.length },

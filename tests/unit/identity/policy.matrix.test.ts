@@ -125,6 +125,11 @@ const matrix: Row[] = [
   ["admin chấm lần 2", admin, "final.second_review", submission(unassigned), true],
   ["Viện KHÔNG thu hồi chứng nhận", institute, "certificate.revoke", { kind: "certificate" }, false],
   ["admin thu hồi chứng nhận", admin, "certificate.revoke", { kind: "certificate" }, true],
+  ["TA xác nhận SV học khóa meet", ta, "course.record", { kind: "system" }, true],
+  ["GV KHÔNG xác nhận khóa", teacherSchoolA, "course.record", { kind: "system" }, false],
+  ["SV KHÔNG tự xác nhận khóa", student, "course.record", { kind: "system" }, false],
+  ["mentor KHÔNG nhập mã ưu đãi", mentor, "course.manage_vouchers", { kind: "system" }, false],
+  ["admin nhập mã ưu đãi", admin, "course.manage_vouchers", { kind: "system" }, true],
   // Gia hạn, bảo lưu
   ["TA được phân công gia hạn cho SV", ta, "enrollment.adjust", studentRecord(), true],
   ["TA KHÔNG gia hạn cho SV không được phân công", ta, "enrollment.adjust", studentRecord(unassigned), false],

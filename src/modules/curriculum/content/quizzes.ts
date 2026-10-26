@@ -87,6 +87,16 @@ export const QUIZZES: QuizBank[] = [
   },
 ];
 
+/** SV được miễn M1 nhờ học N1 vẫn phải làm phần an toàn dữ liệu (THIET_KE_CHUONG_TRINH 2.4). */
+const SAFETY_IDS = ["m1-08", "m1-09", "m1-10", "m1-11"];
+QUIZZES.push({
+  id: "M1-SAFE",
+  title: "Trắc nghiệm an toàn dữ liệu (bắt buộc kể cả khi đã học khóa Sự AI)",
+  drawCount: SAFETY_IDS.length,
+  passPercent: 75,
+  questions: QUIZZES[0]!.questions.filter((q) => SAFETY_IDS.includes(q.id)),
+});
+
 export function findQuiz(id: QuizBank["id"]) {
   return QUIZZES.find((quiz) => quiz.id === id);
 }

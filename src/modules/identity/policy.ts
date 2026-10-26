@@ -44,7 +44,10 @@ export type Action =
   | "certificate.approve_institute"
   /** Chấm độc lập lần 2 cho dự án ≥ 90 điểm: mentor bất kỳ (không cần được phân công) hoặc admin. */
   | "final.second_review"
-  | "certificate.revoke";
+  | "certificate.revoke"
+  /** Xác nhận tay SV đã học khóa Sự AI trên meet.suai.vn. */
+  | "course.record"
+  | "course.manage_vouchers";
 
 export type Resource = {
   kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org" | "system" | "certificate";
@@ -109,6 +112,7 @@ export function can(actor: Actor, action: Action, resource: Resource): boolean {
   if (ADMIN_ACTIONS.has(action) || action === "role.grant_super_admin" || action === "system.configure") return false;
 
   if (action === "final.second_review") return has(actor, "mentor");
+  if (action === "course.record") return has(actor, "mentor") || has(actor, "ta");
 
   const assigned = isAssigned(actor, resource);
   if (has(actor, "mentor") && assigned) {
