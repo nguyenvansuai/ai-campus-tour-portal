@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FounderCard } from "@/components/brand/founder-card";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       >
         Bắt đầu học
       </Link>
+      <FounderCard />
     </main>
   );
 }
