@@ -8,6 +8,7 @@ export const AUDIT_ACTION_LABELS: Record<string, string> = {
   "user.reactivated": "Mở khóa tài khoản",
   "session.revoked_all": "Đăng xuất mọi thiết bị",
   "consent.granted": "Đồng ý điều khoản",
+  "enrollment.expired": "Lộ trình quá hạn cứng",
   "report.exported": "Xuất danh sách SV",
   "report.submitted": "SV nộp báo cáo",
   "report.prechecked": "TA kiểm hồ sơ",

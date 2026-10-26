@@ -32,6 +32,20 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
 
+  # Chạy nhắc nhở và cập nhật trạng thái mỗi 15 phút.
+  worker:
+    build:
+      context: ..
+      target: tools
+    restart: unless-stopped
+    env_file: .env.production
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-portal}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-portal}
+    command: ["sh", "-c", "while true; do pnpm --silent jobs:run; sleep 900; done"]
+    depends_on:
+      db:
+        condition: service_healthy
+
   tools:
     build:
       context: ..

@@ -8,3 +8,4 @@ export * from "@/modules/enrollment/schema";
 export * from "@/modules/learning/schema";
 export * from "@/lib/settings-schema";
 export * from "@/modules/review/schema";
+export * from "@/modules/notifications/schema";

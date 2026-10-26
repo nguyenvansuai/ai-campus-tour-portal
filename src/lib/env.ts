@@ -17,6 +17,9 @@ const EnvSchema = z.object({
   BREVO_API_KEY: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+  /** Webhook n8n nhận sự kiện thông báo (để gửi Zalo). Không đặt thì chỉ gửi email. */
+  NOTIFY_WEBHOOK_URL: z.url().optional(),
+  NOTIFY_WEBHOOK_SECRET: z.string().optional(),
   STORAGE_DRIVER: z.enum(["local", "drive"]).default("local"),
   UPLOAD_DIR: z.string().default(".uploads"),
   GOOGLE_DRIVE_ROOT_FOLDER: z.string().default("AI Campus Tour"),

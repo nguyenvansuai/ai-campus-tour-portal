@@ -71,6 +71,13 @@
       "when": 1793016423467,
       "tag": "0009_review",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793017074578,
+      "tag": "0010_notifications",
+      "breakpoints": true
     }
   ]
 }
