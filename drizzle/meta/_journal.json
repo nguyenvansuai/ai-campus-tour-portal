@@ -50,6 +50,20 @@
       "when": 1793015431902,
       "tag": "0006_enrollment",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793015826176,
+      "tag": "0007_learning",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793015911478,
+      "tag": "0008_system_setting",
+      "breakpoints": true
     }
   ]
 }

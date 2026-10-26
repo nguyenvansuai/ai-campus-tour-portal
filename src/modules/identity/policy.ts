@@ -38,10 +38,11 @@ export type Action =
   | "school_report.view"
   | "school_report.export"
   | "org.manage"
-  | "enrollment.adjust";
+  | "enrollment.adjust"
+  | "system.configure";
 
 export type Resource = {
-  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org";
+  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org" | "system";
   /** SV sở hữu dữ liệu. */
   ownerUserId?: string;
   schoolId?: string;
@@ -91,13 +92,13 @@ export function can(actor: Actor, action: Action, resource: Resource): boolean {
   if (has(actor, "super_admin")) return true;
 
   if (has(actor, "admin")) {
-    if (action === "role.grant_super_admin") return false;
+    if (action === "role.grant_super_admin" || action === "system.configure") return false;
     if (resource.targetRoles?.includes("super_admin")) return false;
     return true;
   }
 
   if (has(actor, "institute_viewer") && READ_ACTIONS.has(action)) return true;
-  if (ADMIN_ACTIONS.has(action) || action === "role.grant_super_admin") return false;
+  if (ADMIN_ACTIONS.has(action) || action === "role.grant_super_admin" || action === "system.configure") return false;
 
   const assigned = isAssigned(actor, resource);
   if (has(actor, "mentor") && assigned) {

@@ -17,12 +17,25 @@ const EnvSchema = z.object({
   BREVO_API_KEY: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
+  STORAGE_DRIVER: z.enum(["local", "drive"]).default("local"),
+  UPLOAD_DIR: z.string().default(".uploads"),
+  GOOGLE_DRIVE_ROOT_FOLDER: z.string().default("AI Campus Tour"),
 }).superRefine((value, ctx) => {
   if (value.APP_ENV === "production" && value.EMAIL_TRANSPORT !== "brevo") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "production phải dùng brevo" });
   }
   if (value.EMAIL_TRANSPORT === "brevo" && !value.BREVO_API_KEY) {
     ctx.addIssue({ code: "custom", path: ["BREVO_API_KEY"], message: "chưa được đặt (bắt buộc khi dùng brevo)" });
+  }
+  if (value.APP_ENV === "production" && value.STORAGE_DRIVER !== "drive") {
+    ctx.addIssue({ code: "custom", path: ["STORAGE_DRIVER"], message: "production phải lưu file trên Google Drive (drive)" });
+  }
+  if (value.STORAGE_DRIVER === "drive" && (!value.GOOGLE_CLIENT_ID || !value.GOOGLE_CLIENT_SECRET)) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["GOOGLE_CLIENT_SECRET"],
+      message: "chưa được đặt (lưu file trên Google Drive cần GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET)",
+    });
   }
   if (Boolean(value.GOOGLE_CLIENT_ID) !== Boolean(value.GOOGLE_CLIENT_SECRET)) {
     ctx.addIssue({ code: "custom", path: ["GOOGLE_CLIENT_SECRET"], message: "phải đặt cả GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET" });

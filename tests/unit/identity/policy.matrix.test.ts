@@ -109,6 +109,10 @@ const matrix: Row[] = [
   ["Viện KHÔNG sửa danh mục trường", institute, "org.manage", { kind: "org" }, false],
   ["QL trường KHÔNG sửa danh mục trường", managerA, "org.manage", { kind: "org", schoolId: "school-a" }, false],
   ["SV KHÔNG sửa danh mục trường", student, "org.manage", { kind: "org" }, false],
+  // Cấu hình hệ thống (kết nối Google Drive)
+  ["super_admin cấu hình hệ thống", superAdmin, "system.configure", { kind: "system" }, true],
+  ["admin KHÔNG cấu hình hệ thống", admin, "system.configure", { kind: "system" }, false],
+  ["Viện KHÔNG cấu hình hệ thống", institute, "system.configure", { kind: "system" }, false],
   // Gia hạn, bảo lưu
   ["TA được phân công gia hạn cho SV", ta, "enrollment.adjust", studentRecord(), true],
   ["TA KHÔNG gia hạn cho SV không được phân công", ta, "enrollment.adjust", studentRecord(unassigned), false],

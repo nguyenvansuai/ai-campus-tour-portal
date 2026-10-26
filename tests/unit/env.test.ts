@@ -22,9 +22,15 @@ describe("parseEnv", () => {
   it("production bắt buộc gửi email qua Brevo có API key", () => {
     expect(() => parseEnv({ ...valid, APP_ENV: "production" })).toThrowError(/EMAIL_TRANSPORT/);
     expect(() => parseEnv({ ...valid, APP_ENV: "production", EMAIL_TRANSPORT: "brevo" })).toThrowError(/BREVO_API_KEY/);
-    expect(parseEnv({ ...valid, APP_ENV: "production", EMAIL_TRANSPORT: "brevo", BREVO_API_KEY: "k" }).EMAIL_FROM).toBe(
+    expect(parseEnv({ ...valid, APP_ENV: "production", EMAIL_TRANSPORT: "brevo", BREVO_API_KEY: "k", STORAGE_DRIVER: "drive", GOOGLE_CLIENT_ID: "c", GOOGLE_CLIENT_SECRET: "s" }).EMAIL_FROM).toBe(
       "no-reply@suai.vn",
     );
+  });
+
+  it("production bắt buộc lưu file trên Google Drive (cần OAuth client)", () => {
+    const prod = { ...valid, APP_ENV: "production", EMAIL_TRANSPORT: "brevo", BREVO_API_KEY: "k" };
+    expect(() => parseEnv(prod)).toThrowError(/STORAGE_DRIVER/);
+    expect(() => parseEnv({ ...prod, STORAGE_DRIVER: "drive" })).toThrowError(/GOOGLE_CLIENT_SECRET/);
   });
 
   it("không in giá trị của biến ra thông báo lỗi", () => {

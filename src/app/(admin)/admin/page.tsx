@@ -17,6 +17,9 @@ export default function AdminHomePage() {
         <Link href="/admin/su-kien" className="text-primary underline-offset-4 hover:underline">
           Sự kiện workshop và mã kích hoạt
         </Link>
+        <Link href="/admin/luu-tru" className="text-primary underline-offset-4 hover:underline">
+          Lưu trữ file (Google Drive)
+        </Link>
         <Link href="/admin/nhat-ky" className="text-primary underline-offset-4 hover:underline">
           Nhật ký
         </Link>

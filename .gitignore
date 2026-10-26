@@ -52,3 +52,4 @@ next-env.d.ts
 /coverage/
 deploy/.env.production
 !deploy/.env.production.example
+/.uploads/

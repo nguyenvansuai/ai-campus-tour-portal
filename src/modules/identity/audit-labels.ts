@@ -8,5 +8,10 @@ export const AUDIT_ACTION_LABELS: Record<string, string> = {
   "user.reactivated": "Mở khóa tài khoản",
   "session.revoked_all": "Đăng xuất mọi thiết bị",
   "consent.granted": "Đồng ý điều khoản",
+  "system.drive_connected": "Kết nối Google Drive",
+  "enrollment.created": "SV bắt đầu lộ trình",
+  "enrollment.extended": "Gia hạn lộ trình",
+  "enrollment.paused": "Bảo lưu lộ trình",
+  "enrollment.resumed": "Tiếp tục lộ trình",
   "consent.withdrawn": "Rút đồng ý",
 };
