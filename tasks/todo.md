@@ -70,13 +70,13 @@
 **Description:** Trang `/dang-nhap`: bước 1 nhập email, bước 2 nhập mã (ô nhập 6 số, tự điền mã từ bàn phím điện thoại, nút gửi lại có đếm ngược). Phiên SV 30 ngày. Trang tạm sau đăng nhập hiện "Xin chào, <tên>" và nút đăng xuất.
 
 **Acceptance criteria:**
-- [ ] Luồng đăng nhập ≤ 3 màn hình trên khung 375px
-- [ ] Thông báo lỗi tiếng Việt rõ ràng (sai mã, hết hạn, gửi quá nhiều)
-- [ ] Phiên SV hết hạn sau 30 ngày (kiểm tra cấu hình bằng test)
+- [x] Luồng đăng nhập ≤ 3 màn hình trên khung 375px
+- [x] Thông báo lỗi tiếng Việt rõ ràng (sai mã, hết hạn, gửi quá nhiều)
+- [x] Phiên SV hết hạn sau 30 ngày (kiểm tra cấu hình bằng test)
 
 **Verification:**
-- [ ] E2E Playwright: đăng nhập OTP trên khung điện thoại, lấy mã từ transport giả
-- [ ] Kiểm tra tay trên `pnpm dev`
+- [x] E2E Playwright: đăng nhập OTP trên khung điện thoại, lấy mã từ transport giả
+- [x] Kiểm tra tay trên `pnpm dev`
 
 **Dependencies:** Task 3
 
