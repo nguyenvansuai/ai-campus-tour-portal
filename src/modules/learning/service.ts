@@ -75,7 +75,7 @@ function isHttpUrl(value: string) {
   }
 }
 
-async function folderPathFor(row: EnrollmentRow, moduleId: string) {
+export async function folderPathFor(row: EnrollmentRow, moduleId: string) {
   const [info] = await db
     .select({ schoolName: school.name, name: user.name, email: user.email })
     .from(enrollment)

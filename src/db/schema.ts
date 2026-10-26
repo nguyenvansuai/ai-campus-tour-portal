@@ -9,3 +9,4 @@ export * from "@/modules/learning/schema";
 export * from "@/lib/settings-schema";
 export * from "@/modules/review/schema";
 export * from "@/modules/notifications/schema";
+export * from "@/modules/project-certificate/schema";

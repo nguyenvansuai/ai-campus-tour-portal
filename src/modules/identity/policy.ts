@@ -39,10 +39,15 @@ export type Action =
   | "school_report.export"
   | "org.manage"
   | "enrollment.adjust"
-  | "system.configure";
+  | "system.configure"
+  | "certificate.approve_school"
+  | "certificate.approve_institute"
+  /** Chấm độc lập lần 2 cho dự án ≥ 90 điểm: mentor bất kỳ (không cần được phân công) hoặc admin. */
+  | "final.second_review"
+  | "certificate.revoke";
 
 export type Resource = {
-  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org" | "system";
+  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org" | "system" | "certificate";
   /** SV sở hữu dữ liệu. */
   ownerUserId?: string;
   schoolId?: string;
@@ -97,8 +102,13 @@ export function can(actor: Actor, action: Action, resource: Resource): boolean {
     return true;
   }
 
-  if (has(actor, "institute_viewer") && READ_ACTIONS.has(action)) return true;
+  if (has(actor, "institute_viewer") && (READ_ACTIONS.has(action) || action === "certificate.approve_institute")) return true;
+  if (action === "certificate.approve_school") {
+    return actor.roles.some((g) => g.role === "school_manager" && g.scopeType === "school" && g.scopeId === resource.schoolId);
+  }
   if (ADMIN_ACTIONS.has(action) || action === "role.grant_super_admin" || action === "system.configure") return false;
+
+  if (action === "final.second_review") return has(actor, "mentor");
 
   const assigned = isAssigned(actor, resource);
   if (has(actor, "mentor") && assigned) {

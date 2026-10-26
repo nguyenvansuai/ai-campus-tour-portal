@@ -26,7 +26,7 @@
 | `review` | Báo cáo module (tự gom minh chứng + 5 trường), hàng đợi TA kiểm hồ sơ, mentor chấm Đạt/Cần sửa theo checklist, thư viện nhận xét, phiên bản nộp lại, hạn phản hồi | learning | P0 |
 | `school-dashboard` | Tiến độ theo trường/khoa/lớp cho GV, QL trường, Viện; xuất Excel | enrollment, learning, review | P0 |
 | `notifications` | Sự kiện (hạn sắp tới, trễ hạn, 7 ngày không hoạt động, bài đã chấm…) → email + webhook n8n; job chạy theo lịch | enrollment, review | P0 |
-| `project-certificate` | Dự án cuối, rubric 100 điểm, chấm chéo khi ≥90, duyệt cấp theo lô, PDF + QR, trang `/verify/{mã}` (Trường + Viện hoặc chỉ Viện) | review, org | P1 |
+| `project-certificate` | Dự án cuối, rubric 100 điểm, chấm chéo khi ≥90, duyệt cấp theo lô, PDF + QR, trang `/xac-thuc/{mã}` (Trường + Viện hoặc chỉ Viện) | review, org | P1 |
 | `course-integration` | API nhận tiến độ/hoàn thành từ suai.vn (Tutor LMS), xác nhận thủ công khóa Zoom, miễn trắc nghiệm, suất miễn phí và voucher; plugin `aict-bridge` | learning, identity | P2 |
 | `live-sessions` | Giờ hỗ trợ trên meet.suai.vn: lịch, JWT Jitsi, điểm danh | identity, enrollment | P2 |
 

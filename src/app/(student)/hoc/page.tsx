@@ -32,7 +32,10 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
     return (
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-4 px-4 py-8">
         <h1 className="text-2xl font-bold">Lộ trình đã kết thúc</h1>
-        <p>{latest.status === "completed" ? "Chúc mừng bạn đã hoàn thành lộ trình!" : "Lộ trình của bạn đã quá hạn. Vui lòng liên hệ ban tổ chức nếu muốn học lại."}</p>
+        <p>{latest.status === "completed" ? "Chúc mừng bạn đã hoàn thành lộ trình!" : "Lộ trình của bạn đã kết thúc mà chưa hoàn thành. Vui lòng liên hệ ban tổ chức nếu muốn học lại."}</p>
+        <Link href="/hoc/du-an" className="font-medium text-primary">
+          {latest.status === "completed" ? "Xem chứng nhận →" : "Xem kết quả dự án cuối →"}
+        </Link>
       </main>
     );
   }
@@ -140,7 +143,7 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
         </p>
         {progress.unlocked.M5 ? (
           <Link href="/hoc/du-an" className="font-medium text-primary">
-            Nộp dự án cuối →
+            Dự án cuối và chứng nhận →
           </Link>
         ) : null}
       </section>

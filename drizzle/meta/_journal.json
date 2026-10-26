@@ -78,6 +78,13 @@
       "when": 1793017074578,
       "tag": "0010_notifications",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793017301700,
+      "tag": "0011_project_certificate",
+      "breakpoints": true
     }
   ]
 }

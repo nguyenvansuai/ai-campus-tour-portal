@@ -113,6 +113,18 @@ const matrix: Row[] = [
   ["super_admin cấu hình hệ thống", superAdmin, "system.configure", { kind: "system" }, true],
   ["admin KHÔNG cấu hình hệ thống", admin, "system.configure", { kind: "system" }, false],
   ["Viện KHÔNG cấu hình hệ thống", institute, "system.configure", { kind: "system" }, false],
+  // Duyệt chứng nhận
+  ["QL trường A duyệt chứng nhận cho SV trường A", managerA, "certificate.approve_school", { kind: "certificate", schoolId: "school-a" }, true],
+  ["QL trường A KHÔNG duyệt cho trường B", managerA, "certificate.approve_school", { kind: "certificate", schoolId: "school-b" }, false],
+  ["QL trường KHÔNG duyệt thay Viện", managerA, "certificate.approve_institute", { kind: "certificate", schoolId: "school-a" }, false],
+  ["Viện duyệt chứng nhận", institute, "certificate.approve_institute", { kind: "certificate" }, true],
+  ["GV KHÔNG duyệt chứng nhận", teacherSchoolA, "certificate.approve_school", { kind: "certificate", schoolId: "school-a" }, false],
+  ["admin duyệt được cả 2 lượt", admin, "certificate.approve_school", { kind: "certificate", schoolId: "school-a" }, true],
+  ["mentor bất kỳ chấm lần 2 dự án ≥ 90", mentor, "final.second_review", submission(unassigned), true],
+  ["TA KHÔNG chấm lần 2", ta, "final.second_review", submission(), false],
+  ["admin chấm lần 2", admin, "final.second_review", submission(unassigned), true],
+  ["Viện KHÔNG thu hồi chứng nhận", institute, "certificate.revoke", { kind: "certificate" }, false],
+  ["admin thu hồi chứng nhận", admin, "certificate.revoke", { kind: "certificate" }, true],
   // Gia hạn, bảo lưu
   ["TA được phân công gia hạn cho SV", ta, "enrollment.adjust", studentRecord(), true],
   ["TA KHÔNG gia hạn cho SV không được phân công", ta, "enrollment.adjust", studentRecord(unassigned), false],

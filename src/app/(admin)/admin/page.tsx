@@ -14,6 +14,15 @@ export default function AdminHomePage() {
         <Link href="/nhan-su" className="text-primary underline-offset-4 hover:underline">
           Hàng đợi chấm bài
         </Link>
+        <Link href="/nhan-su/du-an" className="text-primary underline-offset-4 hover:underline">
+          Chấm dự án cuối
+        </Link>
+        <Link href="/truong/chung-nhan" className="text-primary underline-offset-4 hover:underline">
+          Duyệt chứng nhận
+        </Link>
+        <Link href="/admin/chung-nhan" className="text-primary underline-offset-4 hover:underline">
+          Chứng nhận đã cấp
+        </Link>
         <Link href="/admin/nguoi-dung" className="text-primary underline-offset-4 hover:underline">
           Người dùng
         </Link>

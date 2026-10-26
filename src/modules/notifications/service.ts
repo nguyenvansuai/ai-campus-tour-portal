@@ -1,5 +1,5 @@
 import { createHmac } from "node:crypto";
-import { and, eq, gte, inArray, lt, lte } from "drizzle-orm";
+import { and, eq, gte, inArray, lt, lte, notInArray } from "drizzle-orm";
 import { recordAudit } from "@/lib/audit";
 import { db } from "@/lib/db";
 import { escapeHtml, sendEmail } from "@/lib/email";
@@ -11,6 +11,7 @@ import { scheduleOf } from "@/modules/enrollment/service";
 import { getConsents } from "@/modules/identity/consent";
 import { user } from "@/modules/identity/schema";
 import { moduleReport } from "@/modules/learning/schema";
+import { finalProject } from "@/modules/project-certificate/schema";
 import { reportReview } from "@/modules/review/schema";
 import { notificationLog } from "./schema";
 
@@ -199,7 +200,9 @@ export async function updateStatuses(now = new Date()) {
     .where(and(eq(enrollment.status, "active"), lte(enrollment.lastActivityAt, new Date(now.getTime() - 21 * DAY))))
     .returning({ id: enrollment.id });
   let failed = 0;
-  for (const row of await db.select().from(enrollment).where(inArray(enrollment.status, [...OPEN]))) {
+  // Dự án cuối đang chấm hoặc đã Đạt thì không đánh rớt vì hạn cứng (chờ chấm/duyệt chứng nhận).
+  const inProgress = db.select({ id: finalProject.enrollmentId }).from(finalProject).where(inArray(finalProject.status, ["submitted", "awaiting_second", "passed"]));
+  for (const row of await db.select().from(enrollment).where(and(inArray(enrollment.status, [...OPEN]), notInArray(enrollment.id, inProgress)))) {
     if (now > scheduleOf(row, now).hardDeadline) {
       await db.update(enrollment).set({ status: "failed" }).where(eq(enrollment.id, row.id));
       await recordAudit({ actorId: null, action: "enrollment.expired", targetType: "enrollment", targetId: row.id });
