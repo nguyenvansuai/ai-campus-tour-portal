@@ -166,12 +166,12 @@
 **Description:** Bảng `staff_invitation`. Admin tạo lời mời tại `/admin/nguoi-dung/moi` (email, vai trò, phạm vi). Gửi email mời. Người được mời đăng nhập bằng đúng email → vai trò được kích hoạt. Hạn 14 ngày. Ô chọn phạm vi trường/khoa/lớp tạm nhập ID; module `org` sẽ thay bằng ô chọn.
 
 **Acceptance criteria:**
-- [ ] Chỉ `super_admin`/`admin` mời được; admin không mời được `super_admin`
-- [ ] Đăng nhập lần đầu bằng email được mời → có đúng vai trò và phạm vi
-- [ ] Lời mời quá 14 ngày không kích hoạt
+- [x] Chỉ `super_admin`/`admin` mời được; admin không mời được `super_admin`
+- [x] Đăng nhập lần đầu bằng email được mời → có đúng vai trò và phạm vi
+- [x] Lời mời quá 14 ngày không kích hoạt
 
 **Verification:**
-- [ ] Integration test + E2E: admin mời → người được mời đăng nhập → thấy menu đúng vai trò
+- [x] Integration test + E2E: admin mời → người được mời đăng nhập → thấy menu đúng vai trò
 
 **Dependencies:** Task 8
 

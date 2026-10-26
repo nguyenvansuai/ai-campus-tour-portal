@@ -92,3 +92,20 @@ export const roleAssignment = pgTable(
       .where(sql`${table.revokedAt} is null`),
   ],
 );
+
+/** Lời mời nhân sự: người được mời đăng nhập bằng đúng email này thì vai trò được kích hoạt. */
+export const staffInvitation = pgTable(
+  "staff_invitation",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    email: text("email").notNull(),
+    role: text("role", { enum: ROLES }).notNull(),
+    scopeType: text("scope_type", { enum: SCOPE_TYPES }).notNull().default("global"),
+    scopeId: text("scope_id"),
+    invitedBy: text("invited_by").references(() => user.id, { onDelete: "set null" }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    acceptedAt: timestamp("accepted_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [index("staff_invitation_email_idx").on(table.email)],
+);

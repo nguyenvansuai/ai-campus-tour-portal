@@ -9,6 +9,7 @@ import { db } from "@/lib/db";
 import { renderOtpEmail, sendEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { consumeRateLimit } from "@/lib/rate-limit";
+import { acceptPendingInvitations } from "./service";
 import * as schema from "./schema";
 
 const DAY = 60 * 60 * 24;
@@ -94,6 +95,13 @@ export function createAuth(options: CreateAuthOptions = {}) {
             if (owner?.status === "suspended") {
               throw new APIError("FORBIDDEN", { message: SUSPENDED_MESSAGE });
             }
+          },
+          after: async (newSession) => {
+            const [owner] = await db
+              .select({ email: schema.user.email })
+              .from(schema.user)
+              .where(eq(schema.user.id, newSession.userId));
+            if (owner) await acceptPendingInvitations(newSession.userId, owner.email);
           },
         },
       },
