@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import type { GoogleOptions } from "better-auth/social-providers";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
@@ -14,8 +15,21 @@ const DAY = 60 * 60 * 24;
 export const OTP_EXPIRES_IN_SECONDS = 10 * 60;
 export const SUSPENDED_MESSAGE = "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ ban tổ chức.";
 
-function createAuth() {
+export type CreateAuthOptions = {
+  /** Ghi đè cấu hình Google (dùng trong test để giả lập Google). */
+  google?: GoogleOptions;
+};
+
+function googleProvider(override?: GoogleOptions): GoogleOptions | undefined {
+  if (override) return override;
+  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = env();
+  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) return undefined;
+  return { clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, prompt: "select_account" };
+}
+
+export function createAuth(options: CreateAuthOptions = {}) {
   const config = env();
+  const google = googleProvider(options.google);
   return betterAuth({
     appName: "AI Campus Tour",
     baseURL: config.APP_URL,
@@ -26,6 +40,11 @@ function createAuth() {
         phone: { type: "string", required: false, input: false },
         status: { type: "string", required: false, input: false, defaultValue: "active" },
       },
+    },
+    socialProviders: google ? { google } : {},
+    account: {
+      // Cùng một email: đăng nhập Google sẽ gắn vào tài khoản đã tạo bằng OTP (Google đã xác minh email).
+      accountLinking: { enabled: true, trustedProviders: ["google"] },
     },
     session: {
       // Sinh viên: 30 ngày, tự gia hạn khi còn dùng.
@@ -67,6 +86,10 @@ function createAuth() {
 }
 
 export type Auth = ReturnType<typeof createAuth>;
+
+export function isGoogleEnabled() {
+  return googleProvider() !== undefined;
+}
 
 let instance: Auth | undefined;
 

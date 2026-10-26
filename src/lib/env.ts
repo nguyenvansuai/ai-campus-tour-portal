@@ -15,12 +15,17 @@ const EnvSchema = z.object({
   EMAIL_FROM_NAME: z.string().default("AI Campus Tour"),
   EMAIL_OUTBOX_DIR: z.string().default(".outbox"),
   BREVO_API_KEY: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
 }).superRefine((value, ctx) => {
   if (value.APP_ENV === "production" && value.EMAIL_TRANSPORT !== "brevo") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "production phải dùng brevo" });
   }
   if (value.EMAIL_TRANSPORT === "brevo" && !value.BREVO_API_KEY) {
     ctx.addIssue({ code: "custom", path: ["BREVO_API_KEY"], message: "chưa được đặt (bắt buộc khi dùng brevo)" });
+  }
+  if (Boolean(value.GOOGLE_CLIENT_ID) !== Boolean(value.GOOGLE_CLIENT_SECRET)) {
+    ctx.addIssue({ code: "custom", path: ["GOOGLE_CLIENT_SECRET"], message: "phải đặt cả GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET" });
   }
   if (value.EMAIL_TRANSPORT === "memory" && value.NODE_ENV !== "test") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "memory chỉ dùng khi chạy test" });

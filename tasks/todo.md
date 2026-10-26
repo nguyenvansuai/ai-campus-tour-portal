@@ -89,11 +89,11 @@
 **Description:** Thêm nhà cung cấp Google vào Better Auth. Cùng email thì gắn vào tài khoản sẵn có, không tạo tài khoản mới. Nút "Tiếp tục với Google" trên `/dang-nhap`.
 
 **Acceptance criteria:**
-- [ ] Tài khoản đã tạo bằng OTP, đăng nhập Google cùng email → vẫn là 1 `user`, thêm 1 dòng `account`
-- [ ] Thiếu cấu hình Google thì ẩn nút, app vẫn chạy
+- [x] Tài khoản đã tạo bằng OTP, đăng nhập Google cùng email → vẫn là 1 `user`, thêm 1 dòng `account`
+- [x] Thiếu cấu hình Google thì ẩn nút, app vẫn chạy
 
 **Verification:**
-- [ ] Integration test gộp tài khoản (giả lập callback Google)
+- [x] Integration test gộp tài khoản (giả lập callback Google)
 - [ ] Kiểm tra tay với OAuth client thật khi Johnny cấp
 
 **Dependencies:** Task 4

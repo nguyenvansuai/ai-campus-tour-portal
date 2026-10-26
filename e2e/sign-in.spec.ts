@@ -33,6 +33,11 @@ test("nhập sai mã thì hiện lỗi tiếng Việt", async ({ page }) => {
   await expect(page.locator("form").getByRole("alert")).toHaveText("Mã không đúng. Vui lòng kiểm tra lại.");
 });
 
+test("chưa cấu hình Google thì không hiện nút Google", async ({ page }) => {
+  await page.goto("/dang-nhap");
+  await expect(page.getByRole("button", { name: "Tiếp tục với Google" })).toHaveCount(0);
+});
+
 test("chưa đăng nhập thì không vào được trang học", async ({ page }) => {
   await page.goto("/hoc");
   await expect(page).toHaveURL(/\/dang-nhap$/);
