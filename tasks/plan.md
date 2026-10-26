@@ -51,7 +51,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 - [x] Review code (5 trục: đúng, dễ đọc, kiến trúc, bảo mật, hiệu năng)
 
 ### Phase 4: Chuẩn bị deploy (không tự deploy)
-- [ ] Task 14: Dockerfile (standalone), `deploy/docker-compose.yml`, Caddyfile, hướng dẫn chạy trên VPS
+- [x] Task 14: Dockerfile (standalone), `deploy/docker-compose.yml`, Caddyfile, hướng dẫn chạy trên VPS
 
 ## Risks and Mitigations
 
