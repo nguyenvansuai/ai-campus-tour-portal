@@ -48,3 +48,4 @@ next-env.d.ts
 
 # env: chỉ commit file mẫu
 !.env.example
+/.outbox/

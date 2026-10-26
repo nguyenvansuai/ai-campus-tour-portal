@@ -27,7 +27,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 - [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` sạch; CI xanh trên GitHub
 
 ### Phase 2: Đăng nhập
-- [ ] Task 3: Better Auth + bảng tài khoản + email OTP (phía server)
+- [x] Task 3: Better Auth + bảng tài khoản + email OTP (phía server)
 - [ ] Task 4: Màn đăng nhập OTP trên điện thoại + phiên SV 30 ngày
 - [ ] Task 5: Đăng nhập Google + gộp tài khoản cùng email
 - [ ] Task 6: Giới hạn xin mã/nhập sai OTP (theo email, theo IP mức cao)

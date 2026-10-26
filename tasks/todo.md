@@ -52,12 +52,12 @@
 **Description:** Cấu hình Better Auth với plugin email OTP; bảng `user`, `session`, `account`, `verification` qua Drizzle. `EmailTransport` có 2 bản: Brevo (production, gửi từ `no-reply@suai.vn`) và transport giả cho test. Mẫu email OTP tiếng Việt.
 
 **Acceptance criteria:**
-- [ ] Xin mã → email (giả) chứa mã 6 số; nhập đúng mã → tạo phiên; mã hết hạn sau 10 phút
-- [ ] Email được chuẩn hóa chữ thường; không log mã OTP
-- [ ] Tài khoản `suspended` không đăng nhập được
+- [x] Xin mã → email (giả) chứa mã 6 số; nhập đúng mã → tạo phiên; mã hết hạn sau 10 phút
+- [x] Email được chuẩn hóa chữ thường; không log mã OTP
+- [x] Tài khoản `suspended` không đăng nhập được
 
 **Verification:**
-- [ ] Integration test cho xin mã, đăng nhập, hết hạn, tài khoản bị khóa
+- [x] Integration test cho xin mã, đăng nhập, hết hạn, tài khoản bị khóa
 
 **Dependencies:** Task 2
 

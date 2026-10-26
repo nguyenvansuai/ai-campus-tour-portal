@@ -10,6 +10,7 @@ describe("register (instrumentation)", () => {
     vi.stubEnv("NEXT_RUNTIME", "nodejs");
     vi.stubEnv("DATABASE_URL", "");
     vi.stubEnv("APP_URL", "");
+    vi.stubEnv("BETTER_AUTH_SECRET", "");
     const { register } = await import("@/instrumentation");
     expect(() => register()).toThrowError(/Cấu hình môi trường không hợp lệ/);
   });
