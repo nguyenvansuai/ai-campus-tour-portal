@@ -317,7 +317,7 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 | Database | **PostgreSQL 16** (container) + **Drizzle ORM** | Dữ liệu quan hệ, migration có kiểm soát |
 | Phân quyền | Lớp phân quyền tập trung trong code (mọi truy vấn đều lọc theo trường/lớp/người được gán) + test tự động cho ma trận quyền | Không có Supabase thì RLS kém tiện; tập trung một chỗ dễ kiểm tra hơn |
 | Auth | **Better Auth**: email OTP/magic link, Google | Tự host, không phụ thuộc dịch vụ ngoài |
-| Email | SMTP (dịch vụ gửi mail giao dịch hoặc mail server sẵn có) từ `@aicampustour.suai.vn` hoặc `@suai.vn` | Cần cấu hình SPF/DKIM để không vào spam |
+| Email | **Brevo** [Chốt]: email giao dịch (OTP, thông báo) từ `@aicampustour.suai.vn` hoặc `@suai.vn` | Phải xác thực domain trên Brevo (SPF, DKIM, DMARC) để không vào spam. Cần kiểm tra hạn mức gói miễn phí của Brevo so với đỉnh 500 SV kích hoạt cùng lúc |
 | File minh chứng | **Google Drive** [Chốt] qua Drive API, sau lớp `StorageProvider`. Chi tiết ở mục 9.2 | Không tốn ổ VPS; đội quen dùng Drive |
 | Job nền | Worker Node chạy lịch (tính hạn, đánh dấu quá hạn, kiểm tra link) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
 | Reverse proxy | **Caddy** (HTTPS tự động) | Cấp chứng chỉ SSL cho `aicampustour.suai.vn` |

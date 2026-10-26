@@ -11,7 +11,7 @@
 4. **Múi giờ Asia/Ho_Chi_Minh**: mọi hạn nộp là 23:59 giờ Việt Nam.
 5. **Test:** Vitest (unit/integration, dùng Postgres thật trong Docker) + Playwright (luồng chính). Có bộ test riêng cho **ma trận phân quyền**.
 6. **Trình quản lý gói:** pnpm. **Deploy:** Docker Compose + Caddy trên VPS, CI bằng GitHub Actions.
-7. **Email:** gửi qua SMTP; nhắc nhở bắn webhook sang n8n.
+7. **Email: Brevo** [Chốt]. Email đăng nhập (OTP/magic link) gửi thẳng từ portal qua API/SMTP của Brevo; email nhắc nhở do portal bắn webhook sang n8n rồi n8n gửi qua Brevo.
 8. **File minh chứng: lưu trên Google Drive** [Chốt]. SV nộp link (Drive/Docs/Sheets/GitHub…) hoặc tải file lên portal; portal đẩy file vào Drive của dự án qua Google Drive API và chỉ lưu `fileId`. Code đi qua một lớp lưu trữ trừu tượng (`StorageProvider`), để sau này đổi nơi lưu không phải sửa nghiệp vụ.
 
 ## Các module
@@ -43,6 +43,5 @@ Sau khi bản đồ này được duyệt, tôi viết `SPEC-identity.md` trư�
 
 ## Câu hỏi còn mở (không chặn việc viết spec)
 
-- Gửi email qua đâu: SMTP của mail server có sẵn, hay dịch vụ như Amazon SES / Resend / Brevo?
 - Cấu hình VPS và những gì đang chạy trên đó (xem `docs/PORTAL_PHAC_THAO.md` mục 9.1).
 - Ngày workshop đầu tiên, để chốt hạn P0.
