@@ -31,4 +31,5 @@ $COMPOSE $PROFILE up -d app worker $( [ -n "$PROFILE" ] && echo caddy )
 
 echo "==> Trạng thái"
 $COMPOSE $PROFILE ps
-echo "Xong. Kiểm tra: curl -sI http://127.0.0.1:3000 | head -1"
+PORT=$(grep -E "^APP_PORT=" .env.production | cut -d= -f2)
+echo "Xong. Kiểm tra: curl -sI http://127.0.0.1:${PORT:-3000} | head -1"

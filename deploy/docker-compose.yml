@@ -30,7 +30,7 @@ services:
         condition: service_healthy
     # Chỉ mở trên máy chủ; truy cập từ ngoài đi qua Caddy (hoặc reverse proxy sẵn có trên VPS).
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:${APP_PORT:-3000}:3000"
 
   # Chạy nhắc nhở và cập nhật trạng thái mỗi 15 phút.
   worker:

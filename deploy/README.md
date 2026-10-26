@@ -42,6 +42,8 @@ Secret chỉ nằm trong file này trên VPS. Không commit, không gửi qua ch
 
 Script làm: `git pull` → build image → bật database → chạy migration → bật `app` (cổng `127.0.0.1:3000`) và `worker` (nhắc hạn, cập nhật trạng thái mỗi 15 phút).
 
+Nếu cổng 3000 đã có app khác dùng (`ss -ltnp | grep :3000`), đặt `APP_PORT` (vd. `3010`) trong `.env.production` và dùng cổng đó trong cấu hình Nginx.
+
 Nếu dùng web server sẵn có, thêm cấu hình trỏ `aicampustour.suai.vn` về `http://127.0.0.1:3000`. Ví dụ Nginx:
 
 ```nginx
