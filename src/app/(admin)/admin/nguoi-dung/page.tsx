@@ -5,6 +5,7 @@ import { ROLE_LABELS, SCOPE_LABELS } from "@/modules/identity/labels";
 import { ROLES, type Role } from "@/modules/identity/policy";
 import { listUsers } from "@/modules/identity/service";
 import { requirePermission } from "@/modules/identity/session";
+import { listScopeOptions } from "@/modules/org/service";
 
 export const metadata: Metadata = { title: "Người dùng · AI Campus Tour" };
 
@@ -17,6 +18,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/nguo
   const role = typeof params.role === "string" && (ROLES as readonly string[]).includes(params.role) ? (params.role as Role) : undefined;
   const page = Math.max(1, Number(params.page) || 1);
   const result = await listUsers(actor, { q, role, page, pageSize: PAGE_SIZE });
+  const scopeLabel = new Map((await listScopeOptions()).map((o) => [o.scopeId, o.label]));
   const pages = Math.max(1, Math.ceil(result.total / PAGE_SIZE));
   const pageHref = (target: number) => `?${new URLSearchParams({ q, role: role ?? "", page: String(target) })}`;
 
@@ -57,7 +59,7 @@ export default async function UsersPage({ searchParams }: PageProps<"/admin/nguo
               <span className="text-sm">
                 {item.roles.length
                   ? item.roles
-                      .map((grant) => `${ROLE_LABELS[grant.role]}${grant.scopeId ? ` · ${SCOPE_LABELS[grant.scopeType]} ${grant.scopeId}` : ""}`)
+                      .map((grant) => `${ROLE_LABELS[grant.role]}${grant.scopeId ? ` · ${SCOPE_LABELS[grant.scopeType]} ${scopeLabel.get(grant.scopeId) ?? grant.scopeId}` : ""}`)
                       .join(", ")
                   : "Sinh viên"}
               </span>

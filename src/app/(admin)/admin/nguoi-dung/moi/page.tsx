@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { can, ROLES } from "@/modules/identity/policy";
 import { requirePermission } from "@/modules/identity/session";
 import { InviteStaffForm } from "@/modules/identity/ui/invite-staff-form";
+import { listScopeOptions } from "@/modules/org/service";
 
 export const metadata: Metadata = { title: "Mời nhân sự · AI Campus Tour" };
 
@@ -15,7 +16,7 @@ export default async function InviteStaffPage() {
       <p className="text-muted-foreground">
         Người được mời đăng nhập bằng đúng email này sẽ tự có vai trò. Lời mời có hiệu lực 14 ngày.
       </p>
-      <InviteStaffForm roles={[...roles]} />
+      <InviteStaffForm roles={[...roles]} scopes={await listScopeOptions()} />
     </main>
   );
 }

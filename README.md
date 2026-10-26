@@ -4,7 +4,7 @@ Portal đồng hành 30 ngày cho sinh viên sau workshop **AI Campus Tour** (s�
 
 - Thiết kế nghiệp vụ: [`docs/`](docs/README.md)
 - Bản đồ module: [`CAPABILITY_MAP.md`](CAPABILITY_MAP.md) · Spec từng module: `SPEC-<module>.md`
-- Kế hoạch đang làm: [`tasks/plan.md`](tasks/plan.md), [`tasks/todo.md`](tasks/todo.md)
+- Kế hoạch từng module: `tasks/<module>/plan.md`, `tasks/<module>/todo.md`
 
 ## Chạy ở máy local
 

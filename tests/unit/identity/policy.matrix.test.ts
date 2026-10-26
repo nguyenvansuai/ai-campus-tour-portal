@@ -104,6 +104,11 @@ const matrix: Row[] = [
   ["SV KHÔNG nộp bài thay SV khác", otherStudent, "submission.create", submission(), false],
   ["SV KHÔNG tự chấm bài", student, "submission.review", submission(), false],
   ["SV KHÔNG xem báo cáo trường", student, "school_report.view", schoolReportA, false],
+  // Quản lý trường/khoa/lớp/sự kiện
+  ["admin quản lý trường, sự kiện", admin, "org.manage", { kind: "org" }, true],
+  ["Viện KHÔNG sửa danh mục trường", institute, "org.manage", { kind: "org" }, false],
+  ["QL trường KHÔNG sửa danh mục trường", managerA, "org.manage", { kind: "org", schoolId: "school-a" }, false],
+  ["SV KHÔNG sửa danh mục trường", student, "org.manage", { kind: "org" }, false],
   // Tài khoản bị khóa, nhiều vai trò
   ["super_admin bị khóa thì không làm gì được", actor([g("super_admin")], { status: "suspended" }), "student_record.view", studentRecord(), false],
   ["SV bị khóa không nộp được bài", actor([], { userId: "u-sv", status: "suspended" }), "submission.create", submission(), false],

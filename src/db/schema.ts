@@ -3,3 +3,4 @@
 export * from "@/modules/identity/schema";
 export * from "@/lib/rate-limit-schema";
 export * from "@/lib/audit-schema";
+export * from "@/modules/org/schema";

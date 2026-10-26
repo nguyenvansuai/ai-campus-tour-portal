@@ -12,11 +12,15 @@ const initialState: InviteStaffState = { status: "idle", message: "" };
 const SCOPED: Role[] = ["school_manager", "teacher"];
 const selectClass = "h-12 w-full rounded-lg border border-border bg-background px-3 text-base";
 
-export function InviteStaffForm({ roles }: { roles: Role[] }) {
+export type ScopeChoice = { scopeType: "school" | "faculty" | "class"; scopeId: string; label: string };
+
+export function InviteStaffForm({ roles, scopes }: { roles: Role[]; scopes: ScopeChoice[] }) {
   const [state, formAction, pending] = useActionState(inviteStaffAction, initialState);
   const [role, setRole] = useState<Role>(roles.includes("mentor") ? "mentor" : roles[0]!);
   const scoped = SCOPED.includes(role);
   const scopeTypes: ScopeType[] = role === "school_manager" ? ["school"] : ["school", "faculty", "class"];
+  const [scopeType, setScopeType] = useState<ScopeType>("school");
+  const effectiveScopeType = scopeTypes.includes(scopeType) ? scopeType : "school";
 
   return (
     <form action={formAction} className="flex max-w-md flex-col gap-4">
@@ -39,7 +43,13 @@ export function InviteStaffForm({ roles }: { roles: Role[] }) {
         <>
           <div className="flex flex-col gap-2">
             <Label htmlFor="scopeType">Phạm vi</Label>
-            <select id="scopeType" name="scopeType" className={selectClass} defaultValue="school" key={role}>
+            <select
+              id="scopeType"
+              name="scopeType"
+              className={selectClass}
+              value={effectiveScopeType}
+              onChange={(event) => setScopeType(event.target.value as ScopeType)}
+            >
               {scopeTypes.map((value) => (
                 <option key={value} value={value}>
                   {SCOPE_LABELS[value]}
@@ -48,9 +58,19 @@ export function InviteStaffForm({ roles }: { roles: Role[] }) {
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="scopeId">Mã trường / khoa / lớp</Label>
-            <Input id="scopeId" name="scopeId" required />
-            <p className="text-xs text-muted-foreground">Tạm nhập mã; sẽ đổi thành ô chọn khi có module quản lý trường.</p>
+            <Label htmlFor="scopeId">{SCOPE_LABELS[effectiveScopeType]}</Label>
+            <select id="scopeId" name="scopeId" className={selectClass} required defaultValue="" key={effectiveScopeType}>
+              <option value="" disabled>
+                Chọn {SCOPE_LABELS[effectiveScopeType].toLowerCase()}
+              </option>
+              {scopes
+                .filter((scope) => scope.scopeType === effectiveScopeType)
+                .map((scope) => (
+                  <option key={scope.scopeId} value={scope.scopeId}>
+                    {scope.label}
+                  </option>
+                ))}
+            </select>
             {state.fieldErrors?.scopeId ? <p className="text-sm text-destructive">{state.fieldErrors.scopeId}</p> : null}
           </div>
         </>

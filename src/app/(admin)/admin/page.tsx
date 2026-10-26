@@ -11,6 +11,12 @@ export default function AdminHomePage() {
         <Link href="/admin/nguoi-dung" className="text-primary underline-offset-4 hover:underline">
           Người dùng
         </Link>
+        <Link href="/admin/truong" className="text-primary underline-offset-4 hover:underline">
+          Trường, khoa, lớp
+        </Link>
+        <Link href="/admin/su-kien" className="text-primary underline-offset-4 hover:underline">
+          Sự kiện workshop và mã kích hoạt
+        </Link>
         <Link href="/admin/nhat-ky" className="text-primary underline-offset-4 hover:underline">
           Nhật ký
         </Link>

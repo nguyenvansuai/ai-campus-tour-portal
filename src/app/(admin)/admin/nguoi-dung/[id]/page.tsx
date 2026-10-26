@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ROLE_LABELS, SCOPE_LABELS } from "@/modules/identity/labels";
 import { getUserDetail } from "@/modules/identity/service";
 import { requirePermission } from "@/modules/identity/session";
+import { listScopeOptions } from "@/modules/org/service";
 import { RevokeAllSessionsButton, RevokeRoleButton, UserStatusButton } from "@/modules/identity/ui/manage-buttons";
 
 export const metadata: Metadata = { title: "Chi tiết người dùng · AI Campus Tour" };
@@ -13,6 +14,7 @@ export default async function UserDetailPage({ params }: PageProps<"/admin/nguoi
   const { id } = await params;
   const detail = await getUserDetail(actor, id);
   if (!detail) notFound();
+  const scopeLabel = new Map((await listScopeOptions()).map((o) => [o.scopeId, o.label]));
 
   return (
     <main className="flex max-w-2xl flex-col gap-6">
@@ -32,7 +34,7 @@ export default async function UserDetailPage({ params }: PageProps<"/admin/nguoi
         {detail.roles.length === 0 ? <p className="text-muted-foreground">Không có vai trò nhân sự (sinh viên).</p> : null}
         <ul className="flex flex-col divide-y divide-border rounded-lg border border-border">
           {detail.roles.map((grant) => {
-            const label = `${ROLE_LABELS[grant.role]}${grant.scopeId ? ` · ${SCOPE_LABELS[grant.scopeType]} ${grant.scopeId}` : ""}`;
+            const label = `${ROLE_LABELS[grant.role]}${grant.scopeId ? ` · ${SCOPE_LABELS[grant.scopeType]} ${scopeLabel.get(grant.scopeId) ?? grant.scopeId}` : ""}`;
             return (
               <li key={grant.id} className="flex items-center justify-between gap-3 p-4">
                 <span>{label}</span>

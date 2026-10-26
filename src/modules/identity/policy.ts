@@ -36,10 +36,11 @@ export type Action =
   | "submission.precheck"
   | "submission.review"
   | "school_report.view"
-  | "school_report.export";
+  | "school_report.export"
+  | "org.manage";
 
 export type Resource = {
-  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report";
+  kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org";
   /** SV sở hữu dữ liệu. */
   ownerUserId?: string;
   schoolId?: string;
@@ -51,7 +52,7 @@ export type Resource = {
   targetRoles?: Role[];
 };
 
-const ADMIN_ACTIONS: ReadonlySet<Action> = new Set(["user.invite_staff", "user.view_list", "user.manage", "audit.view"]);
+const ADMIN_ACTIONS: ReadonlySet<Action> = new Set(["user.invite_staff", "user.view_list", "user.manage", "audit.view", "org.manage"]);
 const READ_ACTIONS: ReadonlySet<Action> = new Set(["student_record.view", "submission.view", "school_report.view", "school_report.export"]);
 const SCOPED_ACTIONS: ReadonlySet<Action> = new Set(["student_record.view", "submission.view", "school_report.view", "school_report.export"]);
 
