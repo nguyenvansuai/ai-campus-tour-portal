@@ -11,6 +11,12 @@ describe("describeAuthError", () => {
     expect(describeAuthError(error)).toBe(message);
   });
 
+  it("giữ nguyên thông báo giới hạn xin mã từ server (có số phút phải chờ)", () => {
+    expect(
+      describeAuthError({ status: 429, code: "OTP_SEND_LIMIT", message: "Bạn đã yêu cầu quá nhiều mã. Vui lòng thử lại sau 12 phút." }),
+    ).toBe("Bạn đã yêu cầu quá nhiều mã. Vui lòng thử lại sau 12 phút.");
+  });
+
   it("giữ nguyên thông báo tài khoản bị khóa từ server", () => {
     expect(
       describeAuthError({ status: 403, message: "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ ban tổ chức." }),

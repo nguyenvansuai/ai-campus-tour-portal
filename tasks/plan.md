@@ -30,7 +30,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 - [x] Task 3: Better Auth + bảng tài khoản + email OTP (phía server)
 - [x] Task 4: Màn đăng nhập OTP trên điện thoại + phiên SV 30 ngày
 - [x] Task 5: Đăng nhập Google + gộp tài khoản cùng email
-- [ ] Task 6: Giới hạn xin mã/nhập sai OTP (theo email, theo IP mức cao)
+- [x] Task 6: Giới hạn xin mã/nhập sai OTP (theo email, theo IP mức cao)
 
 ### Checkpoint 2
 - [ ] SV đăng nhập được bằng OTP và Google (Google kiểm tra tay với client thật nếu đã có)

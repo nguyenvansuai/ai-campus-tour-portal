@@ -107,12 +107,12 @@
 **Description:** Bảng đếm rate limit trong Postgres. Mỗi email: 5 lần xin mã/15 phút, 5 lần nhập sai/mã. Theo IP: ≥ 600 lần/15 phút.
 
 **Acceptance criteria:**
-- [ ] Vượt giới hạn theo email → lỗi "thử lại sau X phút"
-- [ ] 500 email khác nhau xin mã từ cùng 1 IP trong 5 phút → không bị chặn
-- [ ] Nhập sai 5 lần → mã bị hủy, phải xin mã mới
+- [x] Vượt giới hạn theo email → lỗi "thử lại sau X phút"
+- [x] 500 email khác nhau xin mã từ cùng 1 IP trong 5 phút → không bị chặn
+- [x] Nhập sai 5 lần → mã bị hủy, phải xin mã mới
 
 **Verification:**
-- [ ] Integration test cho từng giới hạn + test tải 500 yêu cầu cùng IP
+- [x] Integration test cho từng giới hạn + test tải 500 yêu cầu cùng IP
 
 **Dependencies:** Task 3
 

@@ -1,4 +1,5 @@
 import { eq, sql } from "drizzle-orm";
+import { resetDatabase } from "../../setup/reset";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { db, closeDb } from "@/lib/db";
 import { memoryOutbox } from "@/lib/email";
@@ -20,10 +21,7 @@ async function signIn(email: string, otp: string) {
   return auth.api.signInEmailOTP({ body: { email, otp }, returnHeaders: true });
 }
 
-beforeEach(async () => {
-  memoryOutbox.length = 0;
-  await db.execute(sql`truncate table "session", "account", "verification", "user" cascade`);
-});
+beforeEach(resetDatabase);
 
 afterAll(async () => {
   await closeDb();
