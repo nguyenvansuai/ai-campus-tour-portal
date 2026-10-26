@@ -19,6 +19,7 @@
 | 6 | **SV đăng ký tự do** (miễn phí), không bắt buộc mã workshop | Mã workshop chỉ dùng để ghi nguồn; cần cơ chế kiểm soát tải chấm |
 | 7 | Chứng nhận: SV **trường đã kết nối** → **Trường + Viện ĐT Bách Khoa**; SV trường khác → **Viện ĐT Bách Khoa** | Mẫu chứng nhận có 2 biến thể; cờ "trường đã kết nối" trên School |
 | 8 | Tutor LMS **Free**: hoàn thành khóa video → suai.vn **gọi API portal**. Khóa trên meet.suai.vn: **nhân viên portal xác nhận thủ công** | Bỏ SSO/webhook tiến độ từng bài khỏi phạm vi bắt buộc; thêm API nhận hoàn thành khóa + màn xác nhận tay |
+| 9 | Domain portal: **aicampustour.suai.vn** | DNS: CNAME về hosting (Vercel); email gửi thông báo từ cùng domain (cần cấu hình SPF/DKIM) |
 
 > Lưu ý: hồ sơ dự án cũ ghi đã chốt tên "AI Ready Campus Tour". Bản này theo quyết định mới là **AI Campus Tour**.
 
@@ -395,6 +396,6 @@ docs/
 | 5 | meet.suai.vn đã bật xác thực JWT chưa? Ai quản trị server Jitsi? | Kiểm soát vào phòng, điểm danh |
 | 6 | Giáo viên trường chỉ xem, hay được nhận xét bài? | Phân quyền |
 | 7 | Quy tắc gia hạn/bảo lưu ở mục 3 có ổn không? | Logic lịch cá nhân |
-| 8 | Domain portal (vd. aicampustour.vn)? | Thương hiệu, email gửi đi |
+| 8 | ~~Domain portal~~ | Đã chốt: aicampustour.suai.vn |
 | 9 | Ngày workshop đầu tiên | Hạn P0 |
 | 10 | Ai phát triển (bạn tự build cùng Claude hay thuê đội) và ngân sách hạ tầng/tháng? | Phạm vi P0, lựa chọn dịch vụ |
