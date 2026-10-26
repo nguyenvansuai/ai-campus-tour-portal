@@ -21,5 +21,9 @@ export default defineConfig({
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 240_000,
+    env: {
+      DATABASE_URL: process.env.DATABASE_URL_TEST ?? "postgres://portal:portal@localhost:5432/portal_test",
+      APP_URL: `http://localhost:${port}`,
+    },
   },
 });

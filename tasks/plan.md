@@ -21,7 +21,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 
 ### Phase 1: Nền móng
 - [x] Task 1: Khởi tạo dự án Next.js + công cụ chất lượng + CI
-- [ ] Task 2: Postgres dev, Drizzle, cấu hình môi trường, khung test DB
+- [x] Task 2: Postgres dev, Drizzle, cấu hình môi trường, khung test DB
 
 ### Checkpoint 1
 - [ ] `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` sạch; CI xanh trên GitHub

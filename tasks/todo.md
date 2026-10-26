@@ -28,13 +28,13 @@
 **Description:** `deploy/docker-compose.dev.yml` chạy Postgres 16. Cấu hình Drizzle + drizzle-kit, `src/lib/env.ts` kiểm tra biến môi trường bằng Zod, `src/lib/db.ts`. Khung test: tạo DB test, chạy migration, dọn dữ liệu giữa các test. CI có service Postgres.
 
 **Acceptance criteria:**
-- [ ] `pnpm db:generate` / `pnpm db:migrate` chạy được
-- [ ] Thiếu biến môi trường bắt buộc thì app báo lỗi rõ ràng khi khởi động
-- [ ] Test integration mẫu ghi/đọc Postgres thật, chạy được cả local và CI
+- [x] `pnpm db:generate` / `pnpm db:migrate` chạy được
+- [x] Thiếu biến môi trường bắt buộc thì app báo lỗi rõ ràng khi khởi động
+- [x] Test integration mẫu ghi/đọc Postgres thật, chạy được cả local và CI
 
 **Verification:**
-- [ ] `pnpm test` (gồm test integration)
-- [ ] CI xanh
+- [x] `pnpm test` (gồm test integration)
+- [x] CI xanh
 
 **Dependencies:** Task 1
 
