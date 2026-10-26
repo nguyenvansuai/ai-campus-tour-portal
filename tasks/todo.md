@@ -131,12 +131,12 @@
 **Description:** Bảng `role_assignment` (role, scope_type, scope_id, revoked_at). `can()`, `authorize()`, `scopeFilter()` là hàm thuần. Bảng test ma trận quyền ≥ 40 ca.
 
 **Acceptance criteria:**
-- [ ] Đủ 8 vai trò theo spec; một người nhiều vai trò
-- [ ] Các ca khác trường / khác khoa / khác lớp / vai trò đã thu hồi / tài khoản bị khóa đều bị từ chối
-- [ ] 100% dòng của `policy.ts` được test
+- [x] Đủ 8 vai trò theo spec; một người nhiều vai trò
+- [x] Các ca khác trường / khác khoa / khác lớp / vai trò đã thu hồi / tài khoản bị khóa đều bị từ chối
+- [x] 100% dòng của `policy.ts` được test
 
 **Verification:**
-- [ ] `pnpm test -- policy` với báo cáo coverage
+- [x] `pnpm test -- policy` với báo cáo coverage
 
 **Dependencies:** Task 2
 

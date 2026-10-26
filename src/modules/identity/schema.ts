@@ -1,4 +1,6 @@
-import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
+import { boolean, index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { ROLES, SCOPE_TYPES } from "./policy";
 
 // Bốn bảng theo mô hình dữ liệu của Better Auth; tên thuộc tính phải khớp với Better Auth.
 
@@ -64,4 +66,29 @@ export const verification = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
+);
+
+/** Vai trò của nhân sự. SV không cần gán vai trò (có hồ sơ học là SV). */
+export const roleAssignment = pgTable(
+  "role_assignment",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    role: text("role", { enum: ROLES }).notNull(),
+    // Không có khóa ngoại sang bảng của module org, để identity không phụ thuộc ngược org.
+    scopeType: text("scope_type", { enum: SCOPE_TYPES }).notNull().default("global"),
+    scopeId: text("scope_id"),
+    grantedBy: text("granted_by").references(() => user.id, { onDelete: "set null" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+  },
+  (table) => [
+    index("role_assignment_user_id_idx").on(table.userId),
+    // Mỗi người chỉ có một bản ghi còn hiệu lực cho cùng vai trò và phạm vi.
+    uniqueIndex("role_assignment_active_unique")
+      .on(table.userId, table.role, table.scopeType, sql`coalesce(${table.scopeId}, '')`)
+      .where(sql`${table.revokedAt} is null`),
+  ],
 );
