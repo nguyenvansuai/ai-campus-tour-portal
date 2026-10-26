@@ -318,7 +318,7 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 | Phân quyền | Lớp phân quyền tập trung trong code (mọi truy vấn đều lọc theo trường/lớp/người được gán) + test tự động cho ma trận quyền | Không có Supabase thì RLS kém tiện; tập trung một chỗ dễ kiểm tra hơn |
 | Auth | **Better Auth**: email OTP/magic link, Google | Tự host, không phụ thuộc dịch vụ ngoài |
 | Email | SMTP (dịch vụ gửi mail giao dịch hoặc mail server sẵn có) từ `@aicampustour.suai.vn` hoặc `@suai.vn` | Cần cấu hình SPF/DKIM để không vào spam |
-| File minh chứng | **Google Drive** [Chốt] qua Drive API, sau lớp `StorageProvider`. Chi tiết ở mục 9.4 | Không tốn ổ VPS; đội quen dùng Drive |
+| File minh chứng | **Google Drive** [Chốt] qua Drive API, sau lớp `StorageProvider`. Chi tiết ở mục 9.2 | Không tốn ổ VPS; đội quen dùng Drive |
 | Job nền | Worker Node chạy lịch (tính hạn, đánh dấu quá hạn, kiểm tra link) + **n8n** (gửi email/Zalo) | Nhắc nhở theo lịch cá nhân |
 | Reverse proxy | **Caddy** (HTTPS tự động) | Cấp chứng chỉ SSL cho `aicampustour.suai.vn` |
 | Triển khai | **Docker Compose** · GitHub Actions build image → GHCR → SSH vào VPS chạy `docker compose pull && up -d` | Deploy 1 lệnh, rollback được |
@@ -331,7 +331,7 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 - Cấu hình tối thiểu gợi ý cho portal: 2 vCPU, 4 GB RAM, 40 GB SSD (giả định, sẽ điều chỉnh theo số SV thực tế).
 - Thời điểm tải cao nhất là 300–500 SV kích hoạt trong ~5 phút. Cần chạy thử tải trước workshop đầu.
 
-### 9.4 Lưu file minh chứng trên Google Drive [Chốt hướng, chi tiết là Đề xuất]
+### 9.2 Lưu file minh chứng trên Google Drive [Chốt hướng, chi tiết là Đề xuất]
 
 **SV nộp bằng 2 cách:**
 
@@ -362,7 +362,7 @@ Không chia đợt **không làm mất đỉnh tải**: 500 SV từ cùng một 
 
 **Pháp lý:** file minh chứng có dữ liệu cá nhân (CV, ảnh). Lưu trên Google, tức máy chủ ở nước ngoài, là **chuyển dữ liệu cá nhân ra nước ngoài**. Cần ghi rõ trong điều khoản đồng ý của SV và hỏi tư vấn pháp lý về hồ sơ cần lập theo quy định bảo vệ dữ liệu cá nhân hiện hành.
 
-### 9.2 Phương án thay thế: dựng luôn trên Tutor LMS
+### 9.3 Phương án thay thế: dựng luôn trên Tutor LMS
 
 Tutor LMS (bản Pro) đã có sẵn assignment, chứng chỉ, mở bài theo ngày đăng ký (content drip) và báo cáo. Vì vậy phương án này đáng cân nhắc nếu thời gian rất gấp.
 
@@ -378,7 +378,7 @@ Tutor LMS (bản Pro) đã có sẵn assignment, chứng chỉ, mở bài theo n
 
 → **Chọn portal riêng.** Lý do chính: phân quyền theo trường, quy trình chấm do người làm, và thương hiệu AI Campus Tour tách khỏi Sự AI là 3 yêu cầu cốt lõi mà Tutor làm yếu.
 
-### 9.3 Khung repo
+### 9.4 Khung repo
 
 ```
 apps/web/                 # Next.js: (public) (student) (staff) (school) (admin)
