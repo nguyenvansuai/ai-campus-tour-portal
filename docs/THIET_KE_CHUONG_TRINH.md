@@ -93,7 +93,7 @@ Cột "Học ở đâu" giữ nguyên theo **Đề cương, mục 3–4** [Tài 
 
 Trên màn buổi học, các nguồn hiển thị **ngang hàng, đúng thứ tự trong đề cương**. N1 có nhãn "Tham khảo – tiếng Việt" và ghi số chủ đề cần xem.
 
-> **Lỗ hổng trong đề cương cần bổ sung [Đề xuất]:** đề cương ghi "mỗi kiến thức có ít nhất 2 nơi học", nhưng phần **AI trong Excel / Word / PowerPoint** (buổi 4–6) hiện chỉ có N1 dạy. N7 là trang tuyển dụng, N6 là chế độ giọng nói, nên SV không học N1 sẽ không có tài liệu cho phần này. Tương tự, buổi 9 (kết nối Gmail/Drive, đặt lịch) chỉ được N9 phủ một phần. Đề xuất thêm 1–2 nguồn miễn phí cho mỗi phần, ví dụ trang hướng dẫn chính thức của Microsoft/Anthropic về AI trong Office và connector. Cần kiểm tra link rồi cập nhật vào đề cương.
+> **Lỗ hổng trong đề cương cần bổ sung [Đề xuất]:** đề cương ghi "mỗi kiến thức có ít nhất 2 nơi học", nhưng phần **AI trong Excel / Word / PowerPoint** (buổi 4–6) hiện chỉ có N1 dạy. N7 là trang tuyển dụng, N6 là chế độ giọng nói, nên SV không học N1 sẽ không có tài liệu cho phần này. Tương tự, buổi 9 (kết nối Gmail/Drive, đặt lịch) chỉ được N9 phủ một phần. → Danh sách nguồn bổ sung, "đường miễn phí" và cách đưa nguồn vào portal: xem [`NGUON_HOC_BO_SUNG.md`](NGUON_HOC_BO_SUNG.md).
 
 ### 2.4 Kiểm tra kiến thức module (M1–M3)
 
