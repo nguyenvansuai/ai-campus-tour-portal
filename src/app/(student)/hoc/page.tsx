@@ -25,7 +25,8 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
   const row = await getOpenEnrollment(user.id);
   if (!row) {
     if (actor.roles.some((r) => r.role === "mentor" || r.role === "ta")) redirect("/nhan-su");
-    if (actor.roles.length > 0) redirect("/admin");
+    if (actor.roles.some((r) => r.role === "admin" || r.role === "super_admin")) redirect("/admin");
+    if (actor.roles.length > 0) redirect("/truong");
     const latest = await getLatestEnrollment(user.id);
     if (!latest) redirect("/bat-dau");
     return (
