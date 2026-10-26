@@ -9,7 +9,8 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 
 ## Architecture Decisions
 
-- **Một ứng dụng Next.js**, mỗi module nằm trong `src/modules/<id>/`.
+- **Một ứng dụng Next.js 16**, mỗi module nằm trong `src/modules/<id>/`. **Tắt Cache Components** (mặc định của template): gần như mọi trang đều cần phiên đăng nhập, bật lên chỉ thêm phức tạp mà không có lợi.
+- **shadcn/ui:** registry `ui.shadcn.com` bị chặn trong môi trường cloud của Claude, nên component được viết tay theo đúng khuôn shadcn (`components.json` đã có để chạy `shadcn add` ở máy local khi cần).
 - **Better Auth** quản lý OTP, Google, phiên đăng nhập; vai trò và phạm vi do module tự quản lý trong `role_assignment`, không dùng plugin phân quyền của Better Auth. Lý do: phạm vi trường/khoa/lớp là đặc thù của dự án.
 - **`policy.ts` là hàm thuần**, không truy cập DB, để test bảng ma trận quyền nhanh và đầy đủ. Việc lấy vai trò của người dùng nằm ở `requireActor()`.
 - **Gửi email qua một interface `EmailTransport`**: production dùng Brevo, test dùng transport giả lưu thư vào bộ nhớ.
@@ -19,7 +20,7 @@ Repo hiện chỉ có tài liệu, nên phải khởi tạo dự án trước (P
 ## Task List
 
 ### Phase 1: Nền móng
-- [ ] Task 1: Khởi tạo dự án Next.js + công cụ chất lượng + CI
+- [x] Task 1: Khởi tạo dự án Next.js + công cụ chất lượng + CI
 - [ ] Task 2: Postgres dev, Drizzle, cấu hình môi trường, khung test DB
 
 ### Checkpoint 1

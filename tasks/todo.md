@@ -9,13 +9,13 @@
 **Description:** Tạo ứng dụng Next.js (App Router, TypeScript strict) với Tailwind + shadcn/ui, ESLint, Vitest, Playwright, pnpm. Trang chủ tạm "AI Campus Tour – Sáng lập bởi Sự AI". GitHub Actions chạy lint, typecheck, test, build.
 
 **Acceptance criteria:**
-- [ ] `pnpm dev` mở được trang chủ tiếng Việt, hiển thị đúng trên khung 375px
-- [ ] Các lệnh `lint`, `typecheck`, `test`, `test:e2e`, `build` có trong `package.json` và chạy sạch
-- [ ] Workflow CI chạy khi push lên `main`
+- [x] `pnpm dev` mở được trang chủ tiếng Việt, hiển thị đúng trên khung 375px
+- [x] Các lệnh `lint`, `typecheck`, `test`, `test:e2e`, `build` có trong `package.json` và chạy sạch
+- [x] Workflow CI chạy khi push lên `main`
 
 **Verification:**
-- [ ] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`
-- [ ] 1 test Vitest mẫu + 1 test Playwright mở trang chủ
+- [x] `pnpm lint && pnpm typecheck && pnpm test && pnpm build`
+- [x] 1 test Vitest mẫu + 1 test Playwright mở trang chủ
 
 **Dependencies:** Không
 
