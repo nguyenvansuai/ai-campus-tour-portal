@@ -29,6 +29,13 @@
       "when": 1793012486451,
       "tag": "0003_staff_invitation",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793013250656,
+      "tag": "0004_consent",
+      "breakpoints": true
     }
   ]
 }

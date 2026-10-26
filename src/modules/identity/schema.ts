@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import { boolean, index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 import { ROLES, SCOPE_TYPES } from "./policy";
+import { CONSENT_KEYS } from "./consent-keys";
 
 // Bốn bảng theo mô hình dữ liệu của Better Auth; tên thuộc tính phải khớp với Better Auth.
 
@@ -108,4 +109,25 @@ export const staffInvitation = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => [index("staff_invitation_email_idx").on(table.email)],
+);
+
+/** Lịch sử đồng ý điều khoản dữ liệu (theo phiên bản điều khoản). */
+export const consent = pgTable(
+  "consent",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    consentKey: text("consent_key", { enum: CONSENT_KEYS }).notNull(),
+    termsVersion: text("terms_version").notNull(),
+    grantedAt: timestamp("granted_at", { withTimezone: true }).notNull().defaultNow(),
+    withdrawnAt: timestamp("withdrawn_at", { withTimezone: true }),
+  },
+  (table) => [
+    index("consent_user_id_idx").on(table.userId),
+    uniqueIndex("consent_active_unique")
+      .on(table.userId, table.consentKey, table.termsVersion)
+      .where(sql`${table.withdrawnAt} is null`),
+  ],
 );

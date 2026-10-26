@@ -237,11 +237,11 @@
 **Description:** Bảng `consent` (consent_key, terms_version, granted_at, withdrawn_at). Service ghi nhận / rút đồng ý; hàm kiểm tra người dùng đã đồng ý đủ các ô bắt buộc của phiên bản hiện hành chưa. Giao diện tick ô thuộc module `enrollment` (onboarding).
 
 **Acceptance criteria:**
-- [ ] Đổi phiên bản điều khoản → `hasRequiredConsents()` trả về false cho đến khi đồng ý lại
-- [ ] Rút đồng ý chỉ áp dụng cho ô không bắt buộc; mọi thao tác có audit
+- [x] Đổi phiên bản điều khoản → `hasRequiredConsents()` trả về false cho đến khi đồng ý lại
+- [x] Rút đồng ý chỉ áp dụng cho ô không bắt buộc; mọi thao tác có audit
 
 **Verification:**
-- [ ] Integration test
+- [x] Integration test
 
 **Dependencies:** Task 8
 
