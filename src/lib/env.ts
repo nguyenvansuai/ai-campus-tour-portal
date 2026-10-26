@@ -30,6 +30,10 @@ const EnvSchema = z.object({
     .string()
     .default("3584,3599")
     .transform((value) => value.split(",").map((id) => id.trim()).filter(Boolean)),
+  /** Máy chủ Jitsi cho giờ hỗ trợ. JITSI_APP_ID/SECRET: đặt khi meet.suai.vn bật xác thực JWT. */
+  JITSI_DOMAIN: z.string().default("meet.suai.vn"),
+  JITSI_APP_ID: z.string().optional(),
+  JITSI_APP_SECRET: z.string().optional(),
 }).superRefine((value, ctx) => {
   if (value.APP_ENV === "production" && value.EMAIL_TRANSPORT !== "brevo") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "production phải dùng brevo" });
@@ -49,6 +53,9 @@ const EnvSchema = z.object({
   }
   if (Boolean(value.GOOGLE_CLIENT_ID) !== Boolean(value.GOOGLE_CLIENT_SECRET)) {
     ctx.addIssue({ code: "custom", path: ["GOOGLE_CLIENT_SECRET"], message: "phải đặt cả GOOGLE_CLIENT_ID và GOOGLE_CLIENT_SECRET" });
+  }
+  if (Boolean(value.JITSI_APP_ID) !== Boolean(value.JITSI_APP_SECRET)) {
+    ctx.addIssue({ code: "custom", path: ["JITSI_APP_SECRET"], message: "phải đặt cả JITSI_APP_ID và JITSI_APP_SECRET" });
   }
   if (value.EMAIL_TRANSPORT === "memory" && value.NODE_ENV !== "test") {
     ctx.addIssue({ code: "custom", path: ["EMAIL_TRANSPORT"], message: "memory chỉ dùng khi chạy test" });

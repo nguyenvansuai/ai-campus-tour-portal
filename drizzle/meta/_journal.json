@@ -92,6 +92,13 @@
       "when": 1793018277131,
       "tag": "0012_course_integration",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793018771288,
+      "tag": "0013_live_sessions",
+      "breakpoints": true
     }
   ]
 }

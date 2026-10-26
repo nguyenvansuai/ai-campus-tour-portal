@@ -11,3 +11,4 @@ export * from "@/modules/review/schema";
 export * from "@/modules/notifications/schema";
 export * from "@/modules/project-certificate/schema";
 export * from "@/modules/course-integration/schema";
+export * from "@/modules/live-sessions/schema";

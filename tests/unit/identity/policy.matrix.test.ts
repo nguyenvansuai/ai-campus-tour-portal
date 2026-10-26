@@ -130,6 +130,9 @@ const matrix: Row[] = [
   ["SV KHÔNG tự xác nhận khóa", student, "course.record", { kind: "system" }, false],
   ["mentor KHÔNG nhập mã ưu đãi", mentor, "course.manage_vouchers", { kind: "system" }, false],
   ["admin nhập mã ưu đãi", admin, "course.manage_vouchers", { kind: "system" }, true],
+  ["mentor mở giờ hỗ trợ", mentor, "live_session.manage", { kind: "system" }, true],
+  ["SV KHÔNG mở giờ hỗ trợ", student, "live_session.manage", { kind: "system" }, false],
+  ["QL trường KHÔNG mở giờ hỗ trợ", managerA, "live_session.manage", { kind: "system" }, false],
   // Gia hạn, bảo lưu
   ["TA được phân công gia hạn cho SV", ta, "enrollment.adjust", studentRecord(), true],
   ["TA KHÔNG gia hạn cho SV không được phân công", ta, "enrollment.adjust", studentRecord(unassigned), false],

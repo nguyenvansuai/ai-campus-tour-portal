@@ -47,7 +47,9 @@ export type Action =
   | "certificate.revoke"
   /** Xác nhận tay SV đã học khóa Sự AI trên meet.suai.vn. */
   | "course.record"
-  | "course.manage_vouchers";
+  | "course.manage_vouchers"
+  /** Tạo/hủy giờ hỗ trợ trên meet.suai.vn. */
+  | "live_session.manage";
 
 export type Resource = {
   kind: "user_admin" | "audit_log" | "student_record" | "submission" | "school_report" | "org" | "system" | "certificate";
@@ -112,7 +114,7 @@ export function can(actor: Actor, action: Action, resource: Resource): boolean {
   if (ADMIN_ACTIONS.has(action) || action === "role.grant_super_admin" || action === "system.configure") return false;
 
   if (action === "final.second_review") return has(actor, "mentor");
-  if (action === "course.record") return has(actor, "mentor") || has(actor, "ta");
+  if (action === "course.record" || action === "live_session.manage") return has(actor, "mentor") || has(actor, "ta");
 
   const assigned = isAssigned(actor, resource);
   if (has(actor, "mentor") && assigned) {

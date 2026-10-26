@@ -139,6 +139,9 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
         );
       })}
 
+      <Link href="/hoc/ho-tro" className="rounded-lg border border-border p-3 text-sm">
+        Bị vướng? Vào giờ hỗ trợ trực tuyến với mentor/TA →
+      </Link>
       <Link href="/hoc/khoa-su-ai" className="rounded-lg border border-border p-3 text-sm">
         Đã học hoặc muốn học khóa Sự AI? Xem cách được miễn trắc nghiệm và nhận mã ưu đãi →
       </Link>
