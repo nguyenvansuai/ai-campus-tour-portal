@@ -4,4 +4,5 @@ set -e
 cp -r public .next/standalone/ 2>/dev/null || true
 mkdir -p .next/standalone/.next
 cp -r .next/static .next/standalone/.next/
-exec node .next/standalone/server.js
+# Server standalone lắng nghe theo biến HOSTNAME; trong Docker biến này là tên container, nên đặt lại.
+HOSTNAME=0.0.0.0 exec node .next/standalone/server.js
