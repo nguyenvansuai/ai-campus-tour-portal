@@ -16,7 +16,11 @@
   2. Báo cáo module: mentor chấm Đạt/Cần sửa theo tiêu chí cụ thể.
   3. Dự án cuối: mentor chấm rubric 100 điểm.
   4. Chứng nhận: Trường + Viện ĐT Bách Khoa duyệt cấp.
-- **Học ở đâu không quan trọng, làm ra gì mới quan trọng.** Hoàn thành khóa Sự AI (video qua API, khóa trên meet do nhân viên xác nhận tay) được ghi nhận như một thành tích, nhưng **không thay được** sản phẩm bắt buộc.
+- **Mỗi module có 2 phần bắt buộc:**
+  - **Cổng kiến thức**, qua bằng 1 trong 2 cách:
+    - **Cách 1:** học các chủ đề tương ứng trong khóa Sự AI (35 chủ đề; video và Zoom cùng nội dung). Hệ thống khóa học tự báo đã qua.
+    - **Cách 2:** tự học từ nguồn miễn phí rồi làm trắc nghiệm, hoặc làm thêm bài tập ở module có kỹ năng thao tác.
+  - **Sản phẩm thực hành + báo cáo module**: mọi SV đều phải nộp.
 
 ---
 
@@ -68,6 +72,30 @@ Portal nên hỗ trợ nhiều loại chương trình ngay từ thiết kế d�
 
 - Chọn **tạm** ở M0 (theo ngành học), được đổi tới **trước ngày 15**. Từ khi M3 mở thì khóa lựa chọn.
 - Buổi 7–9 hiển thị nội dung theo khối đã chọn. Các buổi khác giống nhau cho mọi khối.
+
+### 2.3 Cổng kiến thức của từng module
+
+Khóa **Ứng dụng AI cho văn phòng** của Sự AI có 35 chủ đề; bản video (Tutor LMS) và bản Zoom (meet.suai.vn) **cùng kiến thức** [Chốt]. Dưới đây là đề xuất chia 35 chủ đề vào các module, bám theo nội dung từng buổi trong đề cương.
+
+| Module | Chủ đề khóa Sự AI (Cách 1) | Cách 2: không học khóa Sự AI |
+|---|---|---|
+| **M1 · Nền tảng** | **1–11**: Giới thiệu · Làn sóng cắt giảm nhân sự · Ai bị thay thế · Từ chi tiết đến chiến lược · AI làm được gì · AI chưa làm được gì · Nguyên tắc giao việc · Chọn AI nào · Global Instruction · Memory & Chat History · Chọn Model & Effort | Học N2–N5 (Anthropic Academy) → **trắc nghiệm M1** (15 câu, ≥80%) |
+| **M2 · Xin việc** | **12–15**: Tab trình duyệt trong Claude · AI trong Excel · AI trên Word · AI trên PowerPoint | Tự học theo hướng dẫn trên portal → **trắc nghiệm M2** (10 câu) + **bài tập thao tác**: ảnh chụp AI chạy trong Excel/Word/PowerPoint (TA duyệt) |
+| **M3 · Workflow ngành** (khối A, B) | **16–25**: Tổng quan kiểm soát quy trình & AI agent · Báo cáo với Artifact · Kết nối Gmail/Drive · Schedule · Tách nhỏ agent · Vận hành 3 nhân viên AI · Giải bài tập phần 1–4 | Học N9 + hướng dẫn trên portal → **trắc nghiệm M3** (10 câu) + **bài tập**: 1 agent chạy theo lịch, kèm ảnh cấu hình (TA duyệt) |
+| **M3 · khối C (CNTT)** | Khóa Sự AI **không phủ** spec/code/deploy. Chủ đề 16–17 dùng tham khảo | **Mọi SV khối C** làm trắc nghiệm M3-C (dựa trên N11) |
+| **M4 · Dự án** (nâng cao, **tùy chọn**) | **26–35**: Skill là gì · Cài skill Anthropic · Plugin · Plugin Data & dashboard · Skill Creator (4 bài) · Plugin Creator · Plugin Trợ lý hành chính | Không bắt buộc. Làm thì được huy hiệu "Nâng cao: Skill/Plugin" |
+
+> M4 để tùy chọn vì đề cương ghi buổi 11 phần Skill/Plugin là "nâng cao (tùy chọn)" [Tài liệu]. Cách chia chủ đề ở trên là đề xuất; đội nội dung cần duyệt lại.
+
+**Quy tắc của cổng kiến thức [Đề xuất]:**
+
+- Cổng **không chặn** việc mở module sau, để SV học Zoom không bị kẹt khi nhân viên chưa kịp xác nhận. Cổng chỉ bắt buộc **trước khi xét chứng nhận**.
+- Trắc nghiệm rút ngẫu nhiên từ ngân hàng câu hỏi, được làm lại sau 30 phút, tối đa 3 lần/ngày. Chấm tự động theo đáp án cố định, không dùng AI.
+- Hai cách phải **tương đương về công sức**. Cách 2 hoàn toàn miễn phí và **không được khó hơn** Cách 1. Lý do:
+  - Đề cương đã chốt khóa Sự AI chỉ là nguồn tùy chọn.
+  - Chỉ có 20 suất miễn phí; SV còn lại phải trả phí (giảm 50%).
+  - Nếu Cách 2 nặng hơn rõ rệt, trường sẽ thấy portal đang ép mua khóa.
+- Portal trình bày hai cách ngang hàng ("Cách 1 / Cách 2"), không gọi Cách 2 là "bài bù".
 
 ---
 
@@ -138,6 +166,7 @@ Mentor tick từng tiêu chí. **Đạt hết thì Đạt**; thiếu tiêu chí 
 | Cấp | Đối tượng | Ai xác nhận | Cơ chế |
 |---|---|---|---|
 | **0 · Tự động** | M0, trắc nghiệm an toàn | Hệ thống | Trắc nghiệm có đáp án cố định (không dùng AI). Đạt ≥80%, được làm lại |
+| **0b · Cổng kiến thức** | Phần kiến thức M1–M3 | Hệ thống khóa Sự AI (video: API; Zoom: nhân viên) **hoặc** trắc nghiệm portal + TA duyệt bài tập | Xem mục 2.3 và 5.1 |
 | **1 · Tự xác nhận + minh chứng** | 12 bài học | SV tích; **TA kiểm ngẫu nhiên 10–20%** | Minh chứng không hợp lệ → bỏ tích bài + nhắc nhở; tái phạm → khóa nộp, chờ admin |
 | **2 · Mentor chấm** | 4 báo cáo module | Mentor | Checklist tiêu chí Đạt/Cần sửa + nhận xét; hạn phản hồi ≤3 ngày [Đề xuất] |
 | **3 · Rubric** | Dự án cuối | Mentor (≥90 thì 2 mentor chấm chéo) | Điểm từng tiêu chí; được sửa 1 lần nếu <70 |
@@ -147,11 +176,22 @@ Mentor tick từng tiêu chí. **Đạt hết thì Đạt**; thiếu tiêu chí 
 
 | Nguồn | Cách ghi nhận | Tác dụng trên portal |
 |---|---|---|
-| **Khóa video Sự AI (Tutor LMS Free)** [Chốt] | Hoàn thành khóa trên suai.vn → plugin gọi **API portal** báo hoàn thành (khớp theo email/mã liên kết) | Huy hiệu "Hoàn thành khóa…" trên hồ sơ; tự đánh dấu phần **Học** của các buổi liên quan đã xong |
-| **Khóa trực tuyến trên meet.suai.vn** [Chốt] | **Nhân viên portal xác nhận thủ công** trong trang admin (chọn SV, khóa, ngày hoàn thành, ghi chú) | Như trên |
-| **Anthropic Academy, Microsoft…** | SV tải chứng chỉ/ảnh hoàn thành; TA duyệt khi có thời gian (không bắt buộc) | Huy hiệu trên hồ sơ |
+| **Khóa video Sự AI (Tutor LMS Free)** [Chốt] | Plugin trên suai.vn gọi **API portal** (khớp theo email/mã liên kết) | **Qua cổng kiến thức** của module tương ứng; huy hiệu khi hoàn thành cả khóa |
+| **Khóa Zoom (meet.suai.vn)** [Chốt] | **Nhân viên portal xác nhận thủ công**. Nên xác nhận **theo lớp, hàng loạt**: chọn lớp Zoom → chọn phần đã dạy (chủ đề 1–11, 12–15…) → tick các SV đã tham gia | Như trên |
+| **Anthropic Academy, Microsoft…** | SV tải chứng chỉ/ảnh hoàn thành (không bắt buộc) | Huy hiệu trên hồ sơ; **vẫn phải làm trắc nghiệm** để qua cổng |
 
-> **Nguyên tắc:** ghi nhận ngoài **chỉ thay phần "Học"**, không bao giờ thay **Minh chứng** của bài. Như vậy SV học nguồn miễn phí và SV học khóa Sự AI được đối xử công bằng [Tài liệu: N1 chỉ là 1 nguồn tùy chọn].
+> **Nguyên tắc:** khóa Sự AI giúp **qua cổng kiến thức**, nhưng **không thay sản phẩm thực hành và báo cáo module**. Chứng nhận được cấp vì SV làm ra sản phẩm thật, không phải vì đã xem video. **[Giả định, cần bạn xác nhận]**
+
+#### Vấn đề kỹ thuật: thời điểm khóa video báo "qua"
+
+Bạn mô tả là suai.vn gọi API **khi hoàn thành cả khóa**. Nếu chỉ có tín hiệu này thì SV phải học xong cả 35 chủ đề mới qua được cổng M1, trong khi M1 chỉ kéo dài 7 ngày. Hai cách xử lý:
+
+| Phương án | Cách làm | Đánh giá |
+|---|---|---|
+| **A. Báo theo từng bài** (khuyến nghị) | Plugin bắt sự kiện hoàn thành **từng bài học** của Tutor (bản Free có hook này, cần kiểm lại tên hook theo phiên bản đang cài) và gửi về portal. Portal tự tính: xong đủ chủ đề 1–11 thì qua cổng M1 | Khớp nhịp từng module. Thêm khoảng 1 hook trong plugin |
+| **B. Chỉ báo khi xong cả khóa** | Cổng M1–M3 chờ tới khi khóa hoàn thành mới qua một lượt | Đơn giản, nhưng SV đi Cách 1 thấy "chưa qua" suốt nhiều tuần |
+
+**Nâng độ tin cậy của Cách 1 [Đề xuất]:** trên Tutor, "hoàn thành bài" chỉ là SV bấm nút. Nên thêm **1 quiz ngắn cuối mỗi phần** ngay trong khóa (Tutor Free có quiz), và chỉ coi là "qua" khi quiz đạt. Như vậy hai cách có độ tin cậy tương đương.
 
 ### 5.2 Chống gian lận (không dùng AI)
 
@@ -229,7 +269,8 @@ stateDiagram-v2
 | Thư viện nguồn N1–N11, gắn nhiều nguồn cho mỗi bài, kiểm tra link định kỳ | Đề cương yêu cầu kiểm lại link |
 | Thư viện nhận xét mẫu theo tiêu chí | Mentor chấm nhanh |
 | Ngân hàng câu hỏi trắc nghiệm an toàn | Xác nhận tự động cấp 0 |
-| Ghi nhận khóa học thủ công (khóa trên meet) | [Chốt] |
+| Ghi nhận khóa học thủ công (khóa Zoom), xác nhận hàng loạt theo lớp | [Chốt] |
+| Cấu hình cổng kiến thức: module ↔ danh sách bài Tutor (ID) ↔ trắc nghiệm/bài tập của Cách 2 | Đổi cách chia chủ đề không phải sửa code |
 | Cấu hình quy tắc thời gian (hạn, gia hạn, bảo lưu, hạn cứng) | Điều chỉnh sau đợt chạy đầu |
 
 ---
@@ -243,3 +284,7 @@ stateDiagram-v2
 | 3 | Lịch tính theo ngày đăng ký, nên hạn "Chủ nhật 23:59" trong đề cương không còn đúng | Sửa đề cương và kịch bản mục 2.6 thành "cuối ngày 7/14/21/28" |
 | 4 | Khuôn bài học, tiêu chí Đạt, trắc nghiệm an toàn ở trên là đề xuất | Đội mentor duyệt và chỉnh trước khi nhập lên portal |
 | 5 | Có cần kiểm tra đầu vào chặt hơn (bài thực hành nhỏ) thay cho tự đánh giá ở M0? | Giai đoạn đầu dùng tự đánh giá cho nhẹ |
+| 6 | SV học khóa Sự AI có **vẫn phải nộp sản phẩm + báo cáo module** không? | Có: khóa chỉ giúp qua cổng kiến thức (mục 5.1) |
+| 7 | Plugin suai.vn báo **theo từng bài** hay **chỉ khi xong khóa**? | Theo từng bài (phương án A, mục 5.1) |
+| 8 | Thời lượng 35 chủ đề (file khóa học đang để 00:00) | Cần điền để kiểm tra Cách 1 có vừa 2–3 giờ/tuần không. Riêng M3 có 10 chủ đề, dễ quá tải |
+| 9 | Cách chia 35 chủ đề vào M1–M4 (mục 2.3) | Đội nội dung duyệt |
