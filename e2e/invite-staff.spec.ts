@@ -19,7 +19,7 @@ test("Super Admin mời Admin; người được mời đăng nhập thì vào �
   const invited = await browser.newPage();
   await signInWithOtp(invited, adminEmail);
   await invited.goto("/admin");
-  await expect(invited.getByRole("heading", { name: "Quản trị" })).toBeVisible();
+  await expect(invited.getByRole("heading", { name: "Tổng quan" })).toBeVisible();
 
   // Admin thường không thấy lựa chọn Super Admin.
   await invited.goto("/admin/nguoi-dung/moi");
