@@ -4,7 +4,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { closeDb, db } from "@/lib/db";
 import { memoryOutbox } from "@/lib/email";
 import type { GoogleProfile } from "better-auth/social-providers";
-import { createAuth } from "@/modules/identity/auth";
+import { createAuth, googleOptions } from "@/modules/identity/auth";
 import { account, user } from "@/modules/identity/schema";
 
 // Giả lập Google: chấp nhận mọi id token và trả về hồ sơ cố định.
@@ -59,5 +59,14 @@ describe("Đăng nhập Google", () => {
 
   it("không bật Google khi chưa cấu hình client", () => {
     expect(createAuth().options.socialProviders?.google).toBeUndefined();
+  });
+});
+
+describe("URL đăng nhập Google", () => {
+  it("chỉ xin email và tên, không gộp quyền đã cấp trước (OAuth client dùng chung với YouTube của suai.vn)", async () => {
+    const result = await createAuth({ google: googleOptions("test-client", "test-secret") }).api.signInSocial({ body: { provider: "google", callbackURL: "/hoc" } });
+    const url = new URL(result.url!);
+    expect(url.searchParams.get("scope")?.split(" ").sort()).toEqual(["email", "openid", "profile"]);
+    expect(url.searchParams.has("include_granted_scopes")).toBe(false);
   });
 });

@@ -35,7 +35,18 @@ function googleProvider(override?: GoogleOptions): GoogleOptions | undefined {
   if (override) return override;
   const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = env();
   if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) return undefined;
-  return { clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, prompt: "select_account" };
+  return googleOptions(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
+}
+
+export function googleOptions(clientId: string, clientSecret: string): GoogleOptions {
+  return {
+    clientId,
+    clientSecret,
+    prompt: "select_account",
+    // Đăng nhập chỉ xin email và tên (openid, email, profile). Không gộp quyền đã cấp trước đó:
+    // OAuth client dùng chung với suai.vn (YouTube) và Google cấm gộp các quyền đó.
+    includeGrantedScopes: false,
+  };
 }
 
 export function createAuth(options: CreateAuthOptions = {}) {
