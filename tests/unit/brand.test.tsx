@@ -11,6 +11,12 @@ describe("Thương hiệu người sáng lập", () => {
     expect(screen.getByText(/Nguyễn Văn Sự/, { selector: "p" })).toBeInTheDocument();
   });
 
+  it("trang chủ giới thiệu Viện Đào tạo Bách Khoa là đơn vị cấp chứng nhận, có logo", () => {
+    render(<HomePage />);
+    expect(screen.getByRole("heading", { name: "Viện Đào tạo Bách Khoa" })).toBeInTheDocument();
+    expect(screen.getByAltText("Logo Viện Đào tạo Bách Khoa")).toHaveAttribute("src", expect.stringContaining("/brand/vien-dtbk-logo.webp"));
+  });
+
   it("chân trang có logo Sự AI dẫn tới suai.vn", () => {
     render(<SiteFooter />);
     expect(screen.getByText(/Sáng lập và tài trợ phát triển bởi/)).toBeInTheDocument();
