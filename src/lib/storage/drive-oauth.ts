@@ -14,7 +14,8 @@ export function driveConsentUrl(state: string) {
     scope: DRIVE_SCOPES.join(" "),
     access_type: "offline",
     prompt: "consent",
-    include_granted_scopes: "true",
+    // Không gộp quyền đã cấp trước đó: OAuth client dùng chung với suai.vn (YouTube),
+    // Google cấm gộp quyền YouTube với drive.file trong cùng một yêu cầu.
     state,
   });
   return `https://accounts.google.com/o/oauth2/v2/auth?${params}`;

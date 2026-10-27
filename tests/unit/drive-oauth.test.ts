@@ -17,6 +17,8 @@ describe("Google Drive OAuth", () => {
     expect(url.searchParams.get("prompt")).toBe("consent");
     expect(url.searchParams.get("redirect_uri")).toBe("https://aicampustour.suai.vn/api/admin/drive/callback");
     expect(url.searchParams.get("state")).toBe("st");
+    // Không gộp quyền cũ (YouTube của suai.vn) vào yêu cầu Drive.
+    expect(url.searchParams.has("include_granted_scopes")).toBe(false);
   });
 
   it("đổi mã lấy refresh token và email", async () => {
