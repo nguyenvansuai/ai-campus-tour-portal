@@ -9,7 +9,7 @@ type SavedMail = { to: string; subject: string; text: string };
 export async function latestOtpFor(email: string, timeoutMs = 10_000): Promise<string> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    const files = (await readdir(E2E_OUTBOX_DIR).catch(() => [])).sort().reverse();
+    const files = (await readdir(E2E_OUTBOX_DIR).catch(() => [])).filter((f) => f.endsWith(".json")).sort().reverse();
     for (const file of files) {
       const mail = JSON.parse(await readFile(path.join(E2E_OUTBOX_DIR, file), "utf8")) as SavedMail;
       const otp = mail.to === email.toLowerCase() ? mail.text.match(/\b(\d{6})\b/)?.[1] : undefined;

@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { env } from "@/lib/env";
 
@@ -35,7 +35,10 @@ async function sendToFile(mail: SentEmail) {
   const dir = path.resolve(env().EMAIL_OUTBOX_DIR);
   await mkdir(dir, { recursive: true });
   const name = `${mail.sentAt.getTime()}-${mail.to.replace(/[^a-z0-9@.]/gi, "_")}.json`;
-  await writeFile(path.join(dir, name), JSON.stringify(mail, null, 2));
+  // Ghi ra file tạm rồi đổi tên, để người đọc không bao giờ gặp file viết dở.
+  const target = path.join(dir, name);
+  await writeFile(`${target}.tmp`, JSON.stringify(mail, null, 2));
+  await rename(`${target}.tmp`, target);
 }
 
 export async function sendEmail(mail: OutgoingEmail) {
