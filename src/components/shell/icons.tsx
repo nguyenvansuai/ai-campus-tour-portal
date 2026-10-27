@@ -18,6 +18,7 @@ const PATHS = {
   list: "M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
   device: "M5 4h14v11H5zM2 20h20M9 15v5m6-5v5",
   menu: "M4 6h16M4 12h16M4 18h16",
+  lock: "M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4",
   close: "M6 6l12 12M18 6 6 18",
   logout: "M15 4h4v16h-4M10 8l-4 4 4 4m-4-4h11",
 } as const;

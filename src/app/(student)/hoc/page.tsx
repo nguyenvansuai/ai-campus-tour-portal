@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LESSONS, MODULES } from "@/modules/curriculum/content/program";
+import { Icon } from "@/components/shell/icons";
 import { TRACK_LABELS, type Track } from "@/modules/curriculum/types";
 import { getLatestEnrollment, getOpenEnrollment } from "@/modules/enrollment/service";
 import { requireSession } from "@/modules/identity/session";
@@ -83,15 +84,22 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
         const report = progress.reports.get(m.id as "M1");
         const quiz = m.id === "M1" || m.id === "M2" || m.id === "M3" ? quizzes[m.id] : null;
         const open = progress.unlocked[m.id];
+        const previous = MODULES[MODULES.findIndex((x) => x.id === m.id) - 1]!.id;
         return (
           <section key={m.id} className="flex flex-col gap-3">
             <div className="flex items-baseline justify-between gap-2">
-              <h2 className="text-lg font-semibold">
+              <h2 className={open ? "text-lg font-semibold" : "flex items-center gap-2 text-lg font-semibold text-muted-foreground"}>
+                {!open ? <Icon name="lock" className="size-5" /> : null}
                 {m.id} · {m.title}
               </h2>
               <span className="text-xs text-muted-foreground">Ngày {m.startDay}–{m.endDay}</span>
             </div>
-            {!open ? <p className="text-sm text-muted-foreground">Mở sau khi bạn nộp báo cáo module trước.</p> : null}
+            {!open ? (
+              <p className="flex items-center gap-2 rounded-lg bg-foreground/5 px-3 py-2 text-sm">
+                <Icon name="lock" className="size-4 shrink-0" />
+                Nộp báo cáo {previous} để mở module này.
+              </p>
+            ) : null}
             <ul className="flex flex-col divide-y divide-border rounded-lg border border-border">
               {LESSONS.filter((l) => l.moduleId === m.id).map((lesson) => {
                 const completed = progress.completedLessons.has(lesson.number);
@@ -105,8 +113,11 @@ export default async function StudentHomePage({ searchParams }: PageProps<"/hoc"
                         <span className={completed ? "text-green-700" : "text-muted-foreground"}>{completed ? "✓" : "○"}</span>
                       </Link>
                     ) : (
-                      <span className="flex p-3 text-muted-foreground">
-                        Buổi {lesson.number}: {lesson.title}
+                      <span className="flex items-center justify-between gap-3 p-3 text-muted-foreground">
+                        <span>
+                          Buổi {lesson.number}: {lesson.title}
+                        </span>
+                        <Icon name="lock" className="size-4 shrink-0" />
                       </span>
                     )}
                   </li>
